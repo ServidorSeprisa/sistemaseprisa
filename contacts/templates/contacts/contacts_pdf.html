@@ -1,0 +1,46 @@
+
+
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        table, th, td {
+            border: 1px solid black;
+        }
+        th, td {
+            padding: 10px;
+            text-align: left;
+        }
+    </style>
+</head>
+<body>
+    <h2>Contactos</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Correo Electrónico</th>
+                <th>Fecha de Nacimiento</th>
+                <th>Teléfono</th>
+                <th>Fecha de Registro</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for contact in contacts %}
+            <tr>
+                <td>{{ contact.name }}</td>
+                <td>{{ contact.email }}</td>
+                <td>{{ contact.birth }}</td>
+                <td>{{ contact.phone }}</td>
+                <td>{{ contact.created|date:"d/m/Y h:i A" }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <h2>© Queda prohibida la reproducción total o parcial de este documento por cualquier medio, así como transportarlo fuera de las instalaciones SEPRISA S.A. DE C.V., sin autorización previa del Director General</h2>
+</body>
+</html>

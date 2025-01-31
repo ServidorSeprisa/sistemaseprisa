@@ -1,0 +1,63 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Listado de Etiquetas</title>
+    <link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.min.css' %}">
+</head>
+<body class="container py-5">
+    <h1 class="fw-bold text-primary">Listado de Etiquetas</h1>
+    
+    <table class="table table-bordered mt-3">
+        <thead>
+            <tr>
+                <th>Material</th>
+                <th>No. Análisis</th>
+                <th>Proveedor o cliente SKU</th>
+                <th>No. Lote de Proveedor</th>
+                <th>No. Lote Interno</th>
+                <th>P. Bruto</th>
+                <th>P. Tara</th>
+                <th>P. Neto</th>
+                <th>SKU</th>
+                <th>Contenedor</th>
+                <th>de</th>
+                <th>Realizó</th>
+                <th>Verificó</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for etiqueta in etiquetas %}
+            <tr>
+                <td>{{ etiqueta.materiaprima }}</td>
+                <td>{{ etiqueta.noanalisis }}</td>
+                <td>{{ etiqueta.claveproveedor }}</td>
+                <td>{{ etiqueta.noloteproveedor }}</td>
+                <td>{{ etiqueta.nocontenedores }}</td>
+                <td>{{ etiqueta.pesobruto }}</td>
+                <td>{{ etiqueta.pesotara }}</td>
+                <td>{{ etiqueta.pesoneto }}</td>
+                <td>{{ etiqueta.sku }}</td>
+                <td>{{ etiqueta.contenedor }}</td>
+                <td>{{ etiqueta.de }}</td>
+                <td>{{ etiqueta.realizo }}</td>
+                <td>{{ etiqueta.verifico }}</td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="13">No hay datos disponibles.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{% url 'tu_vista_guardar' %}" class="btn btn-outline-primary mt-3">Agregar Nueva Etiqueta</a>
+    <a href="{% url 'etiquetas' %}?id={{ etiqueta.id }}" class="btn btn-outline-primary">Editar</a>
+
+    <script src="{% static 'bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+</body>
+</html>

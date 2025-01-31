@@ -1,0 +1,81 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Listado de Etiquetas</title>
+    <link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.min.css' %}">
+</head>
+<body class="container py-5">
+    <h1 class="fw-bold text-primary">Listado de Etiquetas</h1>
+    
+    <table class="table table-bordered mt-3">
+        <thead>
+            <tr>
+                <th>Materia Prima</th>
+                <th>Producto Terminado</th>
+                <th>Material de Empaque</th>
+                <th>No. De Análisis:</th>
+                <th>Fecha y hora de entrada:</th>
+                <th>No de lote:</th>
+                <th>Cantidad recibida:</th>
+                <th>No. de contenedores:</th>
+                <th>Producto:</th>
+                <th>Solicitante:</th>
+                <th>Recibe C.C.:</th>
+                <th>Muestreo:</th>
+                <th>Fecha y hora de muestreo:</th>
+                <th>Observaciones:</th>
+                <th>Analista:</th>
+                <th>Fecha y hora de Dictamen:</th>
+                <th>Dictamen:</th>
+                <th>Aprobado:</th>
+                <th>Rechazado:</th>
+                <th>Observaciones:</th>
+                <th>Fecha y hora de la entrega de resultados:</th>
+                <th>Enterado de resultado:</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for etiqueta in etiquetas %}
+            <tr>
+                <td>{{ item.materiaprima }}</td>
+                <td>{{ item.productoterminado }}</td>
+                <td>{{ item.materialempaque }}</td>
+                <td>{{ item.noanalisis }}</td>
+                <td>{{ item.fechahoraentrada|date:'d/m/Y h:i A'}}</td>
+                <td>{{ item.nolote }}</td>
+                <td>{{ item.cantidadrecibida }}</td>
+                <td>{{ item.nocontenedores }}</td>
+                <td>{{ item.producto }}</td>
+                <td>{{ item.solicitante }}</td>
+                <td>{{ item.recibecc }}</td>
+                <td>{{ item.muestreo }}</td>
+                <td>{{ item.fechahoramuestreo|date:'d/m/Y h:i A'}}</td>
+                <td>{{ item.observaciones }}</td>
+                <td>{{ item.analista }}</td>
+                <td>{{ item.fechahoradictamen|date:'d/m/Y h:i A'}}</td>
+                <td>{{ item.dictamen }}</td>
+                <td>{{ item.aprobado }}</td>
+                <td>{{ item.rechazado }}</td>
+                <td>{{ item.observaciones }}</td>
+                <td>{{ item.fechahoraentregaresultados|date:'d/m/Y h:i A'}}</td>
+                <td>{{ item.enteradoresultado }}</td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="13">No hay datos disponibles.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{% url 'tu_vista_guardar' %}" class="btn btn-outline-primary mt-3">Agregar Nueva Etiqueta</a>
+    <a href="{% url 'etiquetas' %}?id={{ etiqueta.id }}" class="btn btn-outline-primary">Editar</a>
+
+    <script src="{% static 'bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+</body>
+</html>

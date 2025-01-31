@@ -1,0 +1,180 @@
+{% extends 'contacts/basemenudesplegableprueba.html' %}  
+
+{% load static %}
+
+{% block content %}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BITÁCORA DE PRODUCTO TERMINADO</title>
+    <link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.min.css' %}">
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+        .header {
+            background-color: #007bff;
+            color: white;
+            padding: 20px;
+            border-radius: 5px;
+        }
+        .form-label {
+            font-weight: bold;
+        }
+        .table th {
+            background-color: #e9ecef;
+        }
+        .table-hover tbody tr:hover {
+            background-color: #f1f1f1;
+        }
+        
+    </style>
+</head>
+<body class="container py-5">
+    <div class="header mb-4">
+        <h1 class="fw-bold">BITÁCORA DE PRODUCTO TERMINADO</h1>
+        <p>Busca el material que requieres y agrega la información solicitada. Consulta, crea, actualiza y elimina tus etiquetas de forma fácil y segura.</p>
+    </div>
+
+    <div class="d-flex justify-content-between mb-3">
+        <form action="{% url 'buscar_orden_produccion' %}" method="get" style="max-width: 450px;">
+            <div class="input-group">
+                <input type="text" class="form-control" placeholder="Buscar por orden de producción" name="q" value="{{ request.GET.q }}">
+                <button class="btn btn-primary">Buscar</button>
+            </div>
+        </form>
+        <div>
+            <a href="{% url 'orden_produccion2' %}" class="btn btn-outline-primary">Siguiente</a>
+            <a href="{% url 'export_orden_produccion_pdf' %}" class="btn btn-outline-primary">Descargar Orden de Producción</a>
+        </div>
+    </div>
+
+   
+
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5 class="mb-0">BITÁCORA DE PRODUCTO TERMINADO</h5>
+            </div>
+            <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="fecha_caducidad" class="form-label">Fecha de entrada:</label>
+                            <input type="date" id="fecha_caducidad" name="fecha_caducidad" class="form-control" value="{% if OrdenProduccion %}{{ OrdenProduccion.fechacaducidad }}{% endif %}" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="clavesku_maquila" class="form-label">Producto:</label>
+                            <input type="text" id="clavesku_maquila" name="clavesku_maquila" class="form-control" value="{% if OrdenProduccion %}{{ OrdenProduccion.claveskumaquila }}{% endif %}" placeholder="CLAVE/SKU Maquila" required>
+                        </div>
+                    </div>
+        
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="presentacion" class="form-label">Lote:</label>
+                            <input type="text" id="presentacion" name="presentacion" class="form-control" value="{% if OrdenProduccion %}{{ OrdenProduccion.presentacion }}{% endif %}" placeholder="Presentación" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="noorden_produccion" class="form-label">SKU:</label>
+                            <input type="text" id="noorden_produccion" name="noorden_produccion" class="form-control" value="{% if OrdenProduccion %}{{ etiqueta.noordenproduccion }}{% endif %}" placeholder="No. Orden de Producción" required>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="numero_lote" class="form-label">Presentacion:</label>
+                            <input type="text" id="numero_lote" name="numero_lote" class="form-control" value="{% if OrdenProduccion %}{{ OrdenProduccion.numerolote }}{% endif %}" placeholder="Número de Lote" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="fecha_caducidad" class="form-label">Contenedores:</label>
+                            <input type="text" id="fecha_caducidad" name="fecha_caducidad" class="form-control" value="{% if OrdenProduccion %}{{ OrdenProduccion.fechacaducidad }}{% endif %}" required>
+                        </div>
+                    </div>
+        
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="fechainicio_proceso" class="form-label">Cliente:</label>
+                            <input type="text" id="fechainicio_proceso" name="fechainicio_proceso" class="form-control" value="{% if OrdenProduccion %}{{ OrdenProduccion.fechainicioproceso }}{% endif %}" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="fechatermino_proceso" class="form-label">No. Análisis:</label>
+                            <input type="text" id="fechatermino_proceso" name="fechatermino_proceso" class="form-control" value="{% if OrdenProduccion %}{{ OrdenProduccion.fechaterminoproceso }}{% endif %}" required>
+                        </div>
+                    </div>
+        
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="fecha_caducidad" class="form-label">Fecha de caducidad:</label>
+                            <input type="date" id="fecha_caducidad" name="fecha_caducidad" class="form-control" value="{% if OrdenProduccion %}{{ OrdenProduccion.fechacaducidad }}{% endif %}" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="rendimiento_real" class="form-label">Recibe:</label>
+                            <input type="number" id="rendimiento_real" name="rendimiento_real" class="form-control" value="{% if OrdenProduccion %}{{ OrdenProduccion.rendimientoreal }}{% endif %}" placeholder="Rendimiento real" required>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="rendimiento_teorico" class="form-label">Observaciones:</label>
+                            <input type="text" id="rendimiento_teorico" name="rendimiento_teorico" class="form-control" value="{% if etiqueta %}{{ OrdenProduccion.rendimientoteorico }}{% endif %}" placeholder="Rendimiento teorico" required>
+                        </div>
+                    </div>
+        
+                    <div class="d-flex justify-content-between">
+                        <button type="submit" class="btn btn-primary">Guardar</button>
+                        <a href="{% url 'Menu' %}" class="btn btn-secondary">Volver</a>
+                    </div>
+                </form>
+            </div>
+        </div>        
+    </form>
+
+    <div class="table-responsive">
+        <table class="table table-hover mt-5">
+            <thead>
+                <tr>
+                    <th>Fecha de entrada</th>
+                    <th>Producto</th>
+                    <th>Lote</th>
+                    <th>SKU</th>
+                    <th>Presentacion</th>
+                    <th>Contenedores</th>
+                    <th>Cliente</th>
+                    <th>No. Análisis</th>
+                    <th>Fecha Caducidad</th>
+                    <th>Recibe</th>
+                    <th>Observaciones</th>
+
+                </tr>
+            </thead>
+            <tbody>
+                {% for DetalleOrden in object_list %}
+                <tr>
+                    <td>{{ DetalleOrden.skump|default:'-' }}</td>
+                    <td>{{ DetalleOrden.material|default:'-' }}</td>
+                    <td>{{ DetalleOrden.nolote|default:'-' }}</td>
+                    <td>{{ DetalleOrden.unidad|default:'-' }}</td>
+                    <td>{{ DetalleOrden.cantidad|default:'-' }}</td>
+                    <td>{{ DetalleOrden.surtio|default:'-' }}</td>
+                    <td>{{ DetalleOrden.verifico|default:'-' }}</td>
+                    <td>{{ DetalleOrden.verifico|default:'-' }}</td>
+                    <td>{{ DetalleOrden.verifico|default:'-' }}</td>
+                    <td>{{ DetalleOrden.verifico|default:'-' }}</td>
+                    <td>{{ DetalleOrden.verifico|default:'-' }}</td>
+                    <td>
+                        <div class="btn-group btn-group-sm">
+                            <a href="{% url 'ordenproduccion_edit' DetalleOrden.pk %}" class="btn btn-primary">Editar</a>
+                            <a href="{% url 'ordenproduccion_delete' DetalleOrden.pk %}" class="btn btn-danger">Eliminar</a>
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <script src="{% static 'bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+</body>
+</html>
+
+{% endblock content %}

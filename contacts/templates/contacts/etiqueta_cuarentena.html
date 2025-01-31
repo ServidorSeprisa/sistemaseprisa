@@ -1,0 +1,65 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <title>ETIQUETA CUARENTENA</title>
+
+    <link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.min.css' %}">
+</head>
+<body class="container py-5">
+
+    <div class="p5 border border-1 shadow">
+        <h1 class="fw-bold text-primary">ETIQUETA CUARENTENA</h1>
+        <h2>Busca el material que requieres y agrega la información solicitada.</h2>
+        
+        <p>Consulta, crea, actualiza y elimina tus etiquetas de forma fácil y segura.</p>
+    </div>
+
+    <div class = "mt-5">
+
+        <div class="mt-3 d-flex justify-content-between">
+            
+            <form action="{% url 'etiquetas' %}" method="get">
+                <div class="input-group">
+                    <input type="text" class="form-control" placeholder="Buscar por material" name="q" value="{{ request.GET.q }}">
+                    <button class="btn btn-primary">
+                        Buscar
+                    </button>
+                </div>
+            </form>
+            
+            <a href="{% url 'export_etiqueta_cuarentena_pdf' %}" class="btn btn-outline-primary">
+                Descargar Etiqueta
+            </a> 
+        </div>
+    </div>
+
+    <form method="post" action="{% url 'tu_vista_guardar' %}">
+        {% csrf_token %}
+        <input type="hidden" name="id" value="{{ etiqueta.id }}">
+        
+
+        <div>
+            <tr>
+                <th>NOMBRE</th>
+                <td><input type="text" name="material" class="form-control" value="{{ etiqueta.materiaprima }}" placeholder="Material"></td>
+                <th>No. Análisis</th>
+                <td><input type="text" name="no_analisis" class="form-control" value="{{ etiqueta.noanalisis }}" placeholder="No. Análisis"></td>
+                <th>FIRMA</th>
+                <td><input type="text" name="proveedor_sku" class="form-control" value="{{ etiqueta.claveproveedor }}" placeholder="Proveedor o cliente SKU"></td>
+            </tr>
+        </div>
+
+        <div class="mt-3 d-flex justify-content-between">
+            <button type="submit" class="btn btn-outline-primary">Guardar</button>
+            <a href="{% url 'Menu' %}" class="btn btn-outline-secondary">Volver</a>
+        </div>
+    </form>
+
+    <script src="{% static 'bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+</body>
+</html>

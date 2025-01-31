@@ -1,0 +1,72 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Listado de Etiquetas</title>
+    <link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.min.css' %}">
+</head>
+<body class="container py-5">
+    <h1 class="fw-bold text-primary">Listado de Etiquetas</h1>
+
+    {% if messages %}  
+        {% for message in messages %}
+            <div class="alert alert-success">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
+
+    
+
+    <table class="table table-bordered mt-3">
+        <thead>
+            <tr>
+                <th>Material</th>
+                <th>No. Análisis</th>
+                <th>Proveedor o cliente SKU</th>
+                <th>No. Lote de Proveedor</th>
+                <th>No. Lote Interno</th>
+                <th>P. Bruto</th>
+                <th>P. Tara</th>
+                <th>P. Neto</th>
+                <th>SKU</th>
+                <th>Contenedor</th>
+                <th>de</th>
+                <th>Realizó</th>
+                <th>Verificó</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for EtiquetaIdentificacionMateriales in object_list %}
+            <tr>
+                <td>{{ EtiquetaIdentificacionMateriales.material }}</td>
+                <td>{{ EtiquetaIdentificacionMateriales.noanalisis }}</td>
+                <td>{{ EtiquetaIdentificacionMateriales.proveedorclientesku }}</td>
+                <td>{{ EtiquetaIdentificacionMateriales.noloteproveedor }}</td>
+                <td>{{ EtiquetaIdentificacionMateriales.noloteinterno }}</td>
+                <td>{{ EtiquetaIdentificacionMateriales.pbruto }}</td>
+                <td>{{ EtiquetaIdentificacionMateriales.ptara }}</td>
+                <td>{{ EtiquetaIdentificacionMateriales.pneto }}</td>
+                <td>{{ EtiquetaIdentificacionMateriales.sku }}</td>
+                <td>{{ EtiquetaIdentificacionMateriales.contenedor }}</td>
+                <td>{{ EtiquetaIdentificacionMateriales.de }}</td>
+                <td>{{ EtiquetaIdentificacionMateriales.realizo }}</td>
+                <td>{{ EtiquetaIdentificacionMateriales.verifico }}</td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="13">No hay datos disponibles.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{% url 'tu_vista_guardars' %}" class="btn btn-outline-primary mt-3">Agregar Nueva Etiqueta</a>
+
+    <script src="{% static 'bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+</body>
+</html>

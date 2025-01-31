@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cargando...</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<style>
+    body {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+        font-family: Arial, sans-serif;
+    }
+    
+    .loader {
+        font-size: 24px;
+    }
+    
+    .dots {
+        animation: dot 1s infinite;
+    }
+    
+    @keyframes dot {
+        0%, 20% {
+            content: '';
+        }
+        40% {
+            content: '.';
+        }
+        60% {
+            content: '..';
+        }
+        80% {
+            content: '...';
+        }
+    }
+    
+</style>
+<body>
+    <div id="loader" class="loader">Cargando<span class="dots">...</span></div>
+    <div id="content" style="display: none;">
+        <h1>¡Bienvenido a mi página!</h1>
+        <p>Aquí está el contenido que se estaba cargando.</p>
+    </div>
+
+    <script>
+        window.onload = function() {
+            document.getElementById('loader').style.display = 'none'; // Ocultar el loader
+            document.getElementById('content').style.display = 'block'; // Mostrar el contenido
+        };
+    </script>
+</body>
+</html>

@@ -1,0 +1,218 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MENU DESPLEGABLE</title>
+    <link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.min.css' %}">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #e9ecef; /* Nuevo color de fondo */
+            margin: 0;
+            padding: 0;
+        }
+            
+        menu {
+            position: relative; /* Asegúrate de que el menú sea el contenedor relativo */
+            background-color: #87CEEB;
+            display: flex; /* Asegura que el menú sea un contenedor flexible */
+            align-items: center; /* Centra verticalmente los elementos */
+            padding: 10px; /* Agrega un poco de espacio alrededor */
+        }
+        
+        menu img {
+            height: 50px; /* Ajusta la altura del logo */
+            margin-right: 20px; /* Espacio entre el logo y el menú */
+        }
+        
+        menu ul {
+            display: flex;
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        
+        menu li {
+            position: relative; /* Necesario para el submenú */
+            margin: 0 15px; /* Espacio entre elementos del menú */
+        }
+        
+        menu a {
+            color: white;
+            text-decoration: none;
+            padding: 10px;
+            display: block;
+        }
+        
+        menu a:hover {
+            background-color: #1E90FF;
+        }
+        
+        menu div {
+            display: none; /* Ocultar el submenú por defecto */
+            position: absolute;
+            left: 0; /* Alinea el submenú al inicio del elemento padre */
+            top: 100%; /* Coloca el submenú justo debajo del elemento padre */
+            background-color: #495057;
+            z-index: 1;
+            min-width: 200px;
+        }
+        
+        menu li:hover > div {
+            display: block; /* Mostrar el submenú al pasar el ratón sobre el elemento padre */
+        }
+        
+        menu div ul {
+            list-style: none; /* Eliminar viñetas */
+            padding: 0;
+            margin: 0;
+        }
+        
+        menu div li {
+            margin: 0;
+        }
+        
+        menu div a {
+            padding: 10px;
+            display: block; /* Mostrar como bloque para todo el ancho */
+            color: white; /* Color del texto */
+        }
+        
+        .container {
+            padding: 20px;
+        }
+        
+        .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        .dropdown button {
+            background-color: #87CEEB; /* Color del botón */
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            cursor: pointer;
+        }
+
+        .dropdown button:hover {
+            background-color: #1E90FF; /* Color al pasar el ratón */
+        }
+
+        .dropdown-menu {
+            display: none; /* Ocultar el menú por defecto */
+            position: absolute;
+            left: 0;
+            top: 100%;
+            background-color: #495057;
+            z-index: 1;
+            min-width: 200px;
+            border-radius: 5px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .dropdown:hover .dropdown-menu {
+            display: block; /* Mostrar el menú al pasar el ratón */
+        }
+
+        .dropdown-item {
+            color: white;
+            padding: 10px;
+            text-decoration: none;
+            display: block;
+        }
+
+        .dropdown-item:hover {
+            background-color: #1E90FF; /* Color al pasar el ratón sobre los ítems */
+        }
+
+{% comment %}     
+    /* Agrega margen superior al submenú para evitar superposición con el contenido */
+    menu div {
+        margin-top: 10px; /* Espacio entre el menú y el submenú */
+    } {% endcomment %}
+    
+    </style>
+</head>
+<body>
+  
+    <menu>
+        <img src="{% static 'images/logoSEPRISA4.png' %}" alt="Logo">
+        <ul>
+            <li>
+                <a href="#">Formato recepción de entrada</a>
+                <div>
+                    <ul>
+                        <li><a href="#">Registrar recepción de materias primas consideradas alérgenos</a></li>
+                        <li><a href="#">Registrar recepción de material de empaque</a></li>
+                        <li><a href="#">Registrar recepción de materia prima</a></li>
+                        <li><a href="#">Solicitud de análisis</a></li>
+                        <li><a href="#">KARDEX</a></li>
+                    </ul>
+                </div>
+            </li>
+            <li>
+                <a href="#">Etiqueta de entrada</a>
+                <div>
+                    <ul>
+                        <li><a href="#">Crear Etiqueta de Identificación de materiales</a></li>
+                        <li><a href="#">Crear Etiqueta de Cuarentena</a></li>
+                    </ul>
+                </div>
+            </li>
+            <li>
+                <a href="#">Lista Contactos/Proveedores</a>
+                <div>
+                    <ul>
+                        <!-- Añade aquí los elementos del menú -->
+                    </ul>
+                </div>
+            </li>
+            <li>
+                <a href="#">Orden de Producción</a>
+                <div>
+                    <ul>
+                        <!-- Añade aquí los elementos del menú -->
+                    </ul>
+                </div>
+            </li>
+        </ul>
+        
+      </div>
+      <button type="button" class="btn btn-square btn-outline-primary m-2"><i class="fa fa-home"></i></button>
+
+    </menu>
+    <menu>
+        <img src="{% static 'images/logoSEPRISA4.png' %}" alt="Logo">
+        <ul>
+            <li>
+                <a href="#">Formato recepción de entrada</a>
+                <div>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="#">Formato recepción de entrada</a></li>
+                        <li><a class="dropdown-item" href="#">Registrar recepción de materias primas consideradas alérgenos</a></li>
+                        <li><a class="dropdown-item" href="#">Registrar recepción de material de empaque</a></li>
+                        <li><a class="dropdown-item" href="#">Registrar recepción de materia prima</a></li>
+                        <li><a class="dropdown-item" href="#">Solicitud de análisis</a></li>
+                        <li><a class="dropdown-item" href="#">KARDEX</a></li>
+                    </ul>
+                </div>
+            </li>
+        </ul>
+        
+        <button type="button" class="btn btn-square btn-outline-primary m-2"><i class="fa fa-home"></i></button>
+    </menu>
+    
+    <div class="container">
+        {% block content %}
+        {% endblock %}
+    </div>
+
+    <script src="{% static 'bootstrap/js/bootstrap.min.js' %}"></script>
+    <script src="https://kit.fontawesome.com/2cb25f2c39.js"></script>
+</body>
+</html>

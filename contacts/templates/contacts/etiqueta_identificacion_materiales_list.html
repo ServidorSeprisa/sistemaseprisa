@@ -1,0 +1,177 @@
+{% extends 'contacts/base.html' %}  
+
+{% comment %} {% load static%}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agenda Virtual</title>
+
+    <link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.min.css' %}">
+    
+</head>
+<body class = "container py-5">
+    <div class="p5 border border-1 shadow">
+        <h1 class="fw-bold text-primary">Bienvenido a la Agenda!</h1>
+        <h2> Con esta aplicación podrás gestionar tu Agenda!</h2>
+        
+        <p>
+            Consulta, crea, actualiza y elimina tus contactos de forma fácil y segura.
+        </p>
+    </div> {% endcomment %}
+    
+{% load static %}
+    
+{% block content %}
+
+    <div class = "mt-5">
+        <h3> Contactos </h3>
+
+        {% comment %} <div class = "text-end"> {% endcomment %}
+
+        <div class="mt-3 d-flex justify-content-between">
+            
+            <form action="" style="max-width: 450px;">
+                <div class="input-group">
+                    <input type="text" class="form-control" placeholder="Buscar por nombre" name="q" value="{{ request.GET.q }}">
+                    <button class="btn btn-primary">
+                        Buscar
+                    </button>
+                </div>
+            </form>
+
+            <a href="{% url 'contact_new' %}" class="btn btn-outline-primary">
+                Registrar contacto
+            </a>
+
+            <a href="{% url 'Menu' %}" class="btn btn-outline-primary">
+                Menu
+            </a>
+
+            <a href="{% url 'export_contacts_pdf' %}" class="btn btn-outline-primary">
+                Descargar PDF
+            </a>
+            
+
+        </div>
+    </div>
+
+    <div class="table-responsive">
+        <table class="mt-5 table table-hover">
+            <thead>
+                <tr>
+                    <th>Nombre(s)</th>
+                    <th>F. de Nacimiento</th>
+                    <th>Celular</th>
+                    <th>F. de registro</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for contact in object_list %}
+                <tr>
+                    {% comment %} <td>{{ contact.name }}</td> {% endcomment %}
+                    <td> 
+                        <div class="fw-bold">{{contact.name}}</div>
+                        <div>{{ contact.email}}</div>
+
+                        {% comment %} <div class="d-flex gap-2">
+                            {% if contact.avatar %}
+                            <img src="{{ contact.avatar.url }}" alt="" class="rounded" style="max-width: 64px;">
+                            {% endif %}
+                            <div>
+                                <div class="fw-bold">{{contact.name}}</div>
+                                <div>{{ contact.email}}</div>
+                            </div>
+                        </div> {% endcomment %}
+                
+                    </td>
+                    <td>{{ contact.birth|default:'-' }}</td>
+                    <td>{{ contact.phone|default:'-' }}</td>
+                    <td>{{ contact.created|date:'d/m/Y h:i A' }}</td>
+                    <td>
+                        <div class="btn-group btn-group-sm">
+                            <a href="{% url 'contact_edit' contact.pk %}" class ="btn btn-primary">Editar</a>
+                            <a href="{% url 'contact_delete' contact.pk %}" class ="btn btn-danger">Eliminar</a>
+                        </div>
+                    </td>
+                </tr>
+                <div></div>
+                {% endfor %}
+            </tbody>
+                
+        </table>
+    </div>
+
+    {% comment %} Añadido para la paginación {% endcomment %}
+    <div class="text-end mb-5">
+        {{ page_obj.paginator.count }} resultado{{ page_obj.paginator.count|pluralize }}
+    </div>
+    
+    <div class="d-flex justify-content-between align-items-center">
+        <small class="d-none d-sm-inline-block text-body">
+            Página {{ page_obj.number }} de {{ page_obj.paginator.num_pages }}
+        </small>
+    
+        <nav aria-label="Page navigation">
+            <ul class="pagination justify-content-center">
+                {% if page_obj.has_previous %}
+                    <li class="page-item">
+                        <a class="page-link" href="{% url 'contact_list' %}?page={{ page_obj.previous_page_number }}"
+                           aria-label="Anterior">
+                            <span aria-hidden="true">
+                                <<
+                            </span>
+                        </a>
+                    </li>
+                {% else %}
+                    <li class="page-item disabled">
+                        <a class="page-link" href="#" aria-label="Anterior">
+                            <span aria-hidden="true">
+                                <<
+                            </span>
+                        </a>
+                    </li>
+                {% endif %}
+    
+                {% for page in page_obj.adjusted_elided_pages %}
+                    <li class="page-item {% if page_obj.number == page %}active{% endif %}">
+                        <a class="page-link" href="{% url 'contact_list' %}?page={{ page }}">
+                            {{ page }}
+                        </a>
+                    </li>
+                {% endfor %}
+    
+                {% if page_obj.has_next %}
+                    <li class="page-item">
+                        <a class="page-link" href="{% url 'contact_list' %}?page={{ page_obj.next_page_number }}"
+                           aria-label="Siguiente">
+                            <span aria-hidden="true">
+                                >>
+                            </span>
+                        </a>
+                    </li>
+                {% else %}
+                    <li class="page-item disabled">
+                        <a class="page-link" href="#" aria-label="Siguiente">
+                            <span aria-hidden="true">
+                                >>
+                            </span>
+                        </a>
+                    </li>
+                {% endif %}
+            </ul>
+        </nav>
+    </div>
+
+{% endblock content %}
+
+
+
+    {% comment %} <script src="{%static 'bootstrap/js/bootstrap.min.js'%}"></script>
+
+</body>
+</html> {% endcomment %}

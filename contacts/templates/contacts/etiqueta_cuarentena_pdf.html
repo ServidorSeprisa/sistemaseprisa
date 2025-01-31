@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+        th, td {
+            border: 1px solid black; /* Bordes exteriores */
+            padding: 2px; /*cambiar si se quiere mas lejos del borde aumentar mas cerca reducir*/
+            text-align: left;
+        }
+        
+        .cuerpo {
+            text-align: center;
+        }
+        .cuerpo2 {
+            text-align: center;
+            font-weight: bold; /* Hace que el texto esté en negrita */
+            font-size: 3em; /* Aumenta el tamaño del texto (ajusta el valor según tus necesidades) */
+            border-top: none; /* Elimina el borde superior de la tabla */
+        }
+        
+        .img-small {
+            width: 100px; /* Ajusta el ancho según tus necesidades */
+            height: auto; /* Mantiene la relación de aspecto */
+            padding: 1px;
+
+        }
+        .no-border{
+            border-top: none; /* Elimina el borde superior */
+        }
+        .uno {
+            border-bottom: none; /* Elimina el borde inferior de las celdas compartidas */
+
+        }
+        .dos {
+            border-right: none; /* Elimina el borde derecho */
+        }
+        .tres {
+            border-left: none; /* Elimina el borde izquierdo */
+        }
+
+    </style>
+</head>
+<body>
+    <table>
+       
+            <thead>
+                <tr>
+                    
+                    <th colspan="2" >
+                        <img src="C:/Users/AMD/Documents/Proyecto/logoSEPRISA4.png" alt="Logo" class="img-small">
+                    </th>
+                    <th colspan="4" class="cuerpo">
+                        SEPRISA, SERVICIOS Y PRODUCTOS<br>
+                        INTEGRALES PARA LA SALUD S.A DE C.V.<br>
+                        <text class="cuerpo2">
+                            CUARENTENA
+                        </text><br>
+                    </th>
+                </tr>
+
+            </thead>
+            <tbody>
+                <tr>
+                    <th class="uno dos">NOMBRE</th>
+                    <th colspan="5" class="tres">{{ FormatoRecepcionMateriaPrima.nombre|default:'-'}}</th>
+                </tr>
+                <tr>
+                    <th colspan="4" class="uno no-border"> </th>
+                    <th colspan="2" class="uno">No. Análisis:</th>
+                </tr>
+
+                <tr>
+                    <th class="no-border dos">FIRMA</th>
+                    <th colspan="3" class="no-border tres">{{ FormatoRecepcionMateriaPrima.firma|default:'-'}}</th>
+                    <th colspan="2" class = "no-border">AN-0{{ FormatoRecepcionMateriaPrima.no_analisis|default:'-'}}</th>
+                </tr>
+            </tbody>
+    </table>
+</body>
+</html>
