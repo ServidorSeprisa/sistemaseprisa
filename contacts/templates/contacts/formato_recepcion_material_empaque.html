@@ -1,4 +1,6 @@
 {% extends 'contacts/menuprueba3.html' %}  
+
+{% comment %} {% extends 'contacts/formato_recepcion_material_empaque_base.html' %}   {% endcomment %}
     
 {% load static %}
     
@@ -18,7 +20,13 @@
                 </div>
             </form>
 
-            
+            <a href="{% url 'formatorecepcionmaterialempaque_new' %}" class="btn btn-outline-primary">
+                Registrar material empaque
+            </a>
+
+            {% comment %} <a href="{% url 'export_formato_recepcion_msteria_prima_pdf' %}" class="btn btn-outline-primary">
+                Descargar PDF
+            </a>  {% endcomment %}
         </div>
     </div>
 
@@ -56,6 +64,12 @@
                     <td>{{ FormatoRecepcionMaterialEmpaque.noloteproveedor|default:'-' }}</td>
                     <td>{{ FormatoRecepcionMaterialEmpaque.recibe|default:'-' }}</td>
 
+                    {% comment %} <td>
+                        <div class="btn-group btn-group-sm">
+                            <a href="{% url 'formatorecepcionmateriaalergenos_edit' formatorecepcionmateriaalergenos.pk %}" class ="btn btn-primary">Editar</a>
+                            <a href="{% url 'formatorecepcionmateriaalergenos_delete' formatorecepcionmateriaalergenos.pk %}" class ="btn btn-danger">Eliminar</a>
+                        </div>
+                    </td> {% endcomment %}
                 </tr>
                 <div></div>
                 {% endfor %}
@@ -64,6 +78,7 @@
         </table>
     </div>
 
+    {% comment %} Añadido para la paginación {% endcomment %}
     <div class="text-end mb-5">
         {{ page_obj.paginator.count }} resultado{{ page_obj.paginator.count|pluralize }}
     </div>
