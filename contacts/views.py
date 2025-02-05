@@ -26,10 +26,18 @@ from django.contrib.auth import authenticate, login
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib import messages
 
+<<<<<<< HEAD
 # USUARIOS
 class RegistroUsuarioListView(generic.ListView):
     model = RegistroUsuario
     paginate_by = 15
+=======
+
+# USUARIOS
+class RegistroUsuarioListView(generic.ListView):
+    model = RegistroUsuario
+    paginate_by = 5
+>>>>>>> dc6207173c0460dd2b2f113d83acd4edcca0d851
     template_name = 'contacts/registro_usuario.html'
     
 
@@ -61,16 +69,20 @@ class RegistroUsuarioUpdateView(generic.UpdateView):
     success_url = reverse_lazy('registrousuario_list')
     template_name = 'contacts/registro_usuario_form.html'
 
+<<<<<<< HEAD
     def form_valid(self, form):
         if form.cleaned_data['contraseña'] != form.cleaned_data['confirmacioncontraseña']:
             form.add_error('confirmacioncontraseña', 'Las contraseñas no coinciden.')
             return self.form_invalid(form)
         return super().form_valid(form)
 
+=======
+>>>>>>> dc6207173c0460dd2b2f113d83acd4edcca0d851
 
 class RegistroUsuarioDeleteView(generic.DeleteView):
     model = RegistroUsuario
     success_url = reverse_lazy('registrousuario_list')
+<<<<<<< HEAD
     template_name='contacts/registro_usuario_confirm_delete.html'
 
 from django.contrib.auth import authenticate, login
@@ -104,6 +116,8 @@ class CustomLoginView(LoginView):
         messages.error(self.request, "Usuario o contraseña incorrectos")
         return super().form_invalid(form)
 
+=======
+>>>>>>> dc6207173c0460dd2b2f113d83acd4edcca0d851
 
 # CONTACTOS ---------------------------------------------
 
@@ -272,6 +286,7 @@ from django.views.generic import ListView
     
 class FormatoRecepcionMaterialEmpaqueListView(ListView):
     model = FormatoRecepcionMaterialEmpaque
+<<<<<<< HEAD
     template_name = 'contacts/formato_recepcion_material_empaque.html'
     context_object_name = "object_list"
     paginate_by = 15  # Número de elementos por página
@@ -338,13 +353,63 @@ class FormatoRecepcionMaterialEmpaqueListViewView(generic.ListView):
     model = FormatoRecepcionMaterialEmpaque
     paginate_by = 15
     template_name = 'contacts/formato_recepcion_material_empaque_view.html'
+=======
+    paginate_by = 15
+    template_name = 'contacts/formato_recepcion_material_empaque.html'
+>>>>>>> dc6207173c0460dd2b2f113d83acd4edcca0d851
 
     def get_queryset(self) -> QuerySet[Any]:
         q = self.request.GET.get('q')
 
         if q:
+<<<<<<< HEAD
             return FormatoRecepcionMaterialEmpaque.objects.filter(material__icontains=q)
         return super().get_queryset()
+=======
+            return FormatoRecepcionMaterialEmpaqueListView.objects.filter(materiaprima__icontains=q)
+        return super().get_queryset()
+    
+def formato_recepcion_material_empaque_list(request):
+    query = request.GET.get("q", "")
+    page = int(request.GET.get("page", 1))
+    items_per_page = 15
+    start = (page - 1) * items_per_page
+    end = start + items_per_page
+
+    # Filtrar los datos
+    queryset = FormatoRecepcionMaterialEmpaque.objects.filter(
+        Q(material__icontains=query) |
+        Q(claveproveedor__icontains=query)
+    )[start:end]
+    
+    # Renderizar solo el cuerpo de la tabla
+    table_html = render_to_string("partials/formato_recepcion_table_body.html", {"object_list": queryset})
+    
+    # Preparar la respuesta JSON
+    return JsonResponse({
+        "table_body": table_html,
+        "has_next": len(queryset) == items_per_page,  # Si quedan más páginas
+        "has_previous": page > 1
+    })
+        
+class FormatoRecepcionMaterialEmpaqueCreateView(generic.CreateView):
+    model = FormatoRecepcionMaterialEmpaque
+    fields = ('material','loteseprisa','pesobruto','pesoneto','nocontenedores','claveproveedor','noanalisis','sku','noloteproveedor','recibe',)
+
+    success_url = reverse_lazy('formatorecepcionmaterialempaque_list')
+    template_name='contacts/formato_recepcion_material_empaque_form.html'
+
+class FormatoRecepcionMaterialEmpaqueUpdateView(generic.UpdateView):
+    model = FormatoRecepcionMaterialEmpaque
+    fields = ('material','loteseprisa','pesobruto','pesoneto','nocontenedores','claveproveedor','noanalisis','sku','noloteproveedor','recibe',)
+    success_url = reverse_lazy('formatorecepcionmaterialempaque_list')
+    template_name='contacts/formato_recepcion_material_empaque_form.html'
+
+class FormatoRecepcionMaterialEmpaqueDeleteView(generic.DeleteView):
+    model = FormatoRecepcionMaterialEmpaque
+    success_url = reverse_lazy('formatorecepcionmaterialempaque_list')
+    template_name='contacts/formato_recepcion_material_empaque_confirm_delete.html'
+>>>>>>> dc6207173c0460dd2b2f113d83acd4edcca0d851
 
 # FORMATO RECEPCION MATERIA PRIMA ------------------------------------------------------
 

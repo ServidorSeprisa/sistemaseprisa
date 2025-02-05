@@ -1,4 +1,11 @@
+<<<<<<< HEAD
 {% extends 'contacts/menuprueba3.html' %}
+=======
+{% extends 'contacts/menuprueba3.html' %}  
+
+{% comment %} {% extends 'contacts/formato_recepcion_material_empaque_base.html' %}   {% endcomment %}
+    
+>>>>>>> dc6207173c0460dd2b2f113d83acd4edcca0d851
 {% load static %}
 {% block content %}
 <style>
@@ -26,9 +33,21 @@
         float: right;
     }
 
+<<<<<<< HEAD
     .table-container table td:nth-child(1) {
         width: 5%;
     }
+=======
+            <a href="{% url 'formatorecepcionmaterialempaque_new' %}" class="btn btn-outline-primary">
+                Registrar material empaque
+            </a>
+
+            {% comment %} <a href="{% url 'export_formato_recepcion_msteria_prima_pdf' %}" class="btn btn-outline-primary">
+                Descargar PDF
+            </a>  {% endcomment %}
+        </div>
+    </div>
+>>>>>>> dc6207173c0460dd2b2f113d83acd4edcca0d851
 
     .table-container table td:nth-child(2) {
         width: 20%;
@@ -177,21 +196,40 @@
                     <td>{{ FormatoRecepcionMaterialEmpaque.noloteproveedor|default:'-' }}</td>
                     <td>{{ FormatoRecepcionMaterialEmpaque.recibe|default:'-' }}</td>
 
+<<<<<<< HEAD
                     <td>
                         <div class="btn-group btn-group-sm">
                             <a href="{% url 'formatorecepcionmaterialempaque_edit' FormatoRecepcionMaterialEmpaque.pk %}" class ="btn btn-primary">Editar</a>
                             <a href="{% url 'formatorecepcionmaterialempaque_delete' FormatoRecepcionMaterialEmpaque.pk %}" class ="btn btn-danger">Eliminar</a>
                         </div>
                     </td>
+=======
+                    {% comment %} <td>
+                        <div class="btn-group btn-group-sm">
+                            <a href="{% url 'formatorecepcionmateriaalergenos_edit' formatorecepcionmateriaalergenos.pk %}" class ="btn btn-primary">Editar</a>
+                            <a href="{% url 'formatorecepcionmateriaalergenos_delete' formatorecepcionmateriaalergenos.pk %}" class ="btn btn-danger">Eliminar</a>
+                        </div>
+                    </td> {% endcomment %}
+>>>>>>> dc6207173c0460dd2b2f113d83acd4edcca0d851
                 </tr>
                 {% endfor %}
             </tbody>
         </table>
     </div>
 
+<<<<<<< HEAD
     <!-- Paginación -->
     <div class="d-flex justify-content-between align-items-center mt-4">
         <small class="text-muted">
+=======
+    {% comment %} Añadido para la paginación {% endcomment %}
+    <div class="text-end mb-5">
+        {{ page_obj.paginator.count }} resultado{{ page_obj.paginator.count|pluralize }}
+    </div>
+    
+    <div class="d-flex justify-content-between align-items-center">
+        <small class="d-none d-sm-inline-block text-body">
+>>>>>>> dc6207173c0460dd2b2f113d83acd4edcca0d851
             Página {{ page_obj.number }} de {{ page_obj.paginator.num_pages }}
         </small>
 
