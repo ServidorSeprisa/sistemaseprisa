@@ -1,0 +1,166 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ETIQUETA DE IDENTIFICACIÓN DE MATERIALES</title>
+    <link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.min.css' %}">
+</head>
+<body class="container py-5">
+
+    <div class="p5 border border-1 shadow">
+        <h1 class="fw-bold text-primary">ETIQUETA DE IDENTIFICACIÓN DE MATERIALES</h1>
+        <h2>Busca el material que requieres y agrega la información solicitada.</h2>
+        <p>Consulta, crea, actualiza y elimina tus etiquetas de forma fácil y segura.</p>
+    </div>
+
+    <div class="mt-5">
+        <div class="mt-3 d-flex justify-content-between">
+            <form action="{% url 'buscar_etiqueta' %}" method="get">
+                <div class="input-group">
+                    <input type="text" class="form-control" placeholder="Buscar por material" name="q" value="{{ request.GET.q }}">
+                    <button class="btn btn-primary">Buscar</button>
+                </div>
+            </form>
+            
+
+            <a href="{% url 'export_etiqueta_identificacion_materiales_pdf' %}" class="btn btn-outline-primary">Descargar Etiqueta</a>
+        </div>
+    </div>
+
+    <form method="post" action="{% url 'guardar_etiqueta' %}">
+        {% csrf_token %}
+        <input type="hidden" name="id" value="{% if etiqueta %}{{ etiqueta.id }}{% endif %}">
+
+        <div class="mt-3">
+            <div class="row">
+                <div class="col-md-6">
+                    <label for="material" class="form-label">Material</label>
+                    <input type="text" id="material" name="material" class="form-control" value="{% if etiqueta %}{{ etiqueta.materiaprima }}{% endif %}" placeholder="Material">
+                </div>
+                <div class="col-md-6">
+                    <label for="no_analisis" class="form-label">No. Análisis</label>
+                    <input type="text" id="no_analisis" name="no_analisis" class="form-control" value="{% if etiqueta %}{{ etiqueta.noanalisis }}{% endif %}" placeholder="No. Análisis">
+                </div>
+            </div>
+
+            <div class="row mt-3">
+                <div class="col-md-6">
+                    <label for="proveedor_sku" class="form-label">Proveedor o cliente SKU</label>
+                    <input type="text" id="proveedor_sku" name="proveedor_sku" class="form-control" value="{% if etiqueta %}{{ etiqueta.claveproveedor }}{% endif %}" placeholder="Proveedor o cliente SKU">
+                </div>
+                <div class="col-md-6">
+                    <label for="lote_proveedor" class="form-label">No. Lote de Proveedor</label>
+                    <input type="text" id="lote_proveedor" name="lote_proveedor" class="form-control" value="{% if etiqueta %}{{ etiqueta.noloteproveedor }}{% endif %}" placeholder="No. Lote de Proveedor">
+                </div>
+            </div>
+
+            <div class="row mt-3">
+                <div class="col-md-6">
+                    <label for="lote_interno" class="form-label">No. Lote Interno</label>
+                    <input type="text" id="lote_interno" name="lote_interno" class="form-control" value="{% if etiqueta %}{{ etiqueta.loteseprisa }}{% endif %}" placeholder="No. Lote Interno">
+                </div>
+                <div class="col-md-6">
+                    <label for="pbruto" class="form-label">P. Bruto</label>
+                    <input type="text" id="pbruto" name="pbruto" class="form-control" value="{% if etiqueta %}{{ etiqueta.pesobruto }}{% endif %}" placeholder="P. Bruto">
+                </div>
+                <div class="col-md-6">
+                    <label for="ptara" class="form-label">P. Tara</label>
+                    <input type="text" id="ptara" name="ptara" class="form-control" value="{% if etiqueta %}{{ etiqueta.pesotara }}{% endif %}" placeholder="P. Tara">
+                </div>
+                <div class="col-md-6">
+                    <label for="pneto" class="form-label">P. Neto</label>
+                    <input type="text" id="pneto" name="pneto" class="form-control" value="{% if etiqueta %}{{ etiqueta.pesoneto }}{% endif %}" placeholder="P. Neto" requerid>
+                </div>
+            </div>
+
+            <div class="row mt-3">
+                <div class="col-md-6">
+                    <label for="sku" class="form-label">SKU</label>
+                    <input type="text" id="sku" name="sku" class="form-control" value="{% if etiqueta %}{{ etiqueta.sku }}{% endif %}" placeholder="SKU">
+                </div>
+            </div>
+
+            <div class="row mt-3">
+                <div class="col-md-6">
+                    <label for="contenedor" class="form-label">Contenedor</label>
+                    <input type="text" id="contenedor" name="contenedor" class="form-control" value="{% if etiqueta %}{{ etiqueta.contenedor }}{% endif %}" placeholder="Contenedor">
+                </div>
+                <div class="col-md-6">
+                    <label for="de" class="form-label">de</label>
+                    <input type="text" id="de" name="de" class="form-control" value="{% if etiqueta %}{{ etiqueta.nocontenedores }}{% endif %}" placeholder="de">
+                </div>
+            </div>
+
+            <div class="row mt-3">
+                <div class="col-md-6">
+                    <label for="realizo" class="form-label">Realizó</label>
+                    <input type="text" id="realizo" name="realizo" class="form-control" value="{% if etiqueta %}{{ etiqueta.realizo }}{% endif %}" placeholder="Realizó">
+                </div>
+                <div class="col-md-6">
+                    <label for="verifico" class="form-label">Verificó</label>
+                    <input type="text" id="verifico" name="verifico" class="form-control" value="{% if etiqueta %}{{ etiqueta.verifico }}{% endif %}" placeholder="Verificó">
+                </div>
+            </div>
+            {% if error %}
+                <div class="alert alert-danger">{{ error }}</div>
+            {% endif %}
+        </div>
+
+        <div class="mt-3 d-flex justify-content-between">
+            <button type="submit" class="btn btn-outline-primary">Guardar</button>
+            <a href="{% url 'Menu' %}" class="btn btn-outline-secondary">Volver</a>
+        </div>
+    </form>
+
+    <div class="table-responsive">
+        <table class="mt-5 table table-hover">
+            <thead>
+                <tr>
+                    <th>Material</th>
+                    <th>No. Análisis</th>
+                    <th>Proveedor o cliente SKU</th>
+                    <th>No. Lote de Proveedor</th>
+                    <th>No. Lote Interno</th>
+                    <th>P. Bruto</th>
+                    <th>P. Tara</th>
+                    <th>P. Neto</th>
+                    <th>SKU</th>
+                    <th>Contenedor</th>
+                    <th>de</th>
+                    <th>Realizó</th>
+                    <th>Verificó</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for EtiquetaIdentificacionMateriales in object_list %}
+                <tr>
+                    <td>{{ EtiquetaIdentificacionMateriales.material|default:'-'}}</td>
+                    <td>{{ EtiquetaIdentificacionMateriales.noanalisis|default:'-' }}</td>
+                    <td>{{ EtiquetaIdentificacionMateriales.proveedorclientesku|default:'-' }}</td>
+                    <td>{{ EtiquetaIdentificacionMateriales.noloteproveedor|default:'-' }}</td>
+                    <td>{{ EtiquetaIdentificacionMateriales.noloteinterno|default:'-' }}</td>
+                    <td>{{ EtiquetaIdentificacionMateriales.pbruto|default:'-' }}</td>
+                    <td>{{ EtiquetaIdentificacionMateriales.ptara|default:'-' }}</td>
+                    <td>{{ EtiquetaIdentificacionMateriales.pneto|default:'-' }}</td>
+                    <td>{{ EtiquetaIdentificacionMateriales.sku|default:'-' }}</td>
+                    <td>{{ EtiquetaIdentificacionMateriales.contenedor |default:'-' }}</td>
+                    <td>{{ EtiquetaIdentificacionMateriales.de|default:'-' }}</td>
+                    <td>{{ EtiquetaIdentificacionMateriales.realizo|default:'-' }}</td>
+                    <td>{{ EtiquetaIdentificacionMateriales.verifico|default:'-' }}</td>
+
+                </tr>
+                <div></div>
+                {% endfor %}
+            </tbody>
+                
+        </table>
+    </div>
+
+    <script src="{% static 'bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+</body>
+</html>

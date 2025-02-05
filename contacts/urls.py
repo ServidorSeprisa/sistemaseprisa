@@ -34,17 +34,19 @@ urlpatterns = [
     path('formatorecepcionmateriaalergenos/new/', views.FormatoRecepcionMateriaAlergenosCreateView.as_view(),name='formatorecepcionmateriaalergenos_new'),
     path('formatorecepcionmateriaalergenos/<int:pk>/edit/',views.FormatoRecepcionMateriaAlergenosUpdateView.as_view(),name='formatorecepcionmateriaalergenos_edit'),
     path('formatorecepcionmateriaalergenos/<int:pk>/delete/',views.FormatoRecepcionMateriaAlergenosDeleteView.as_view(),name='formatorecepcionmateriaalergenos_delete'),
+    # path("formatorecepcionmateriaalergenoslistview/",views.FormatoRecepcionMateriaAlergenosListViewView.as_view(),name='formatorecepcionmateriaalergenos_listview'),
     path('formatorecepcionmateriaalergenos/pdf/', views.export_formato_recepcion_materia_alergenos_pdf, name='export_formato_recepcion_materia_alergenos_pdf'),
-    path('formatorecepcionmateriaalergenosview/',views.FormatoRecepcionMateriaAlergenosListViewView.as_view(),name='formato_recepcion_materia_alergenos_view'),
+    # path('pruebatabla/', PruebaTablaListView.as_view(), name='formato_recepcion_list'),
+        path('formatorecepcionmateriaalergenosview/',views.FormatoRecepcionMateriaAlergenosListViewView.as_view(),name='formato_recepcion_materia_alergenos_view'),
 
 
     # Vista Formato Recepcion Material Empaque
     path("formatorecepcionmaterialempaque/", views.FormatoRecepcionMaterialEmpaqueView.as_view(),name='formato_recepcion_material_empaque'),
     path("formarorecepcionmaterialempaquelist/",views.FormatoRecepcionMaterialEmpaqueListView.as_view(),name='formatorecepcionmaterialempaque_list'),
-<<<<<<< HEAD
     path('formatorecepcionmaterialempaque/new/', views.FormatoRecepcionMaterialEmpaqueCreateView.as_view(),name='formatorecepcionmaterialempaque_new'),
     path('formatorecepcionmaterialempaque/<int:pk>/edit/',views.FormatoRecepcionMaterialEmpaqueUpdateView.as_view(),name='formatorecepcionmaterialempaque_edit'),
     path('formatorecepcionmaterialempaque/<int:pk>/delete/',views.FormatoRecepcionMaterialEmpaqueDeleteView.as_view(),name='formatorecepcionmaterialempaque_delete'),
+    # path("formarorecepcionmaterialempaquelistview/",views.FormatoRecepcionMaterialEmpaqueListViewView.as_view(),name='formatorecepcionmaterialempaque_listview'),
     path('formatorecepcionmaterialempaque/pdf/', views.export_formato_recepcion_material_empaque_pdf, name='export_formato_recepcion_material_empaque_pdf'),
     path('formatorecepcionmaterialempaqueview/',views.FormatoRecepcionMaterialEmpaqueListViewView.as_view(),name='formato_recepcion_material_empaque_view'),
 
@@ -73,13 +75,6 @@ urlpatterns = [
 
     path('login/', views.LoginView.as_view(), name='login'),
 
-    # Vista Formato Recepcion Materia Prima
-=======
-    path('registrousuarios/',views.RegistroUsuarioListView.as_view(),name='registrousuario_list'),
-    path('registrousuarios/new/', views.RegistroUsuarioCreateView.as_view(),name='registrousuario_new'),
-    path('registrousuarios/<int:pk>/edit/',views.RegistroUsuarioUpdateView.as_view(),name='registrousuario_edit'),
-    path('registrousuarios/<int:pk>/delete/',views.RegistroUsuarioDeleteView.as_view(),name='registrousuario_delete'),
->>>>>>> dc6207173c0460dd2b2f113d83acd4edcca0d851
     path('formatorecepcionmateriaprima/',views.FormatoRecepcionMateriaPrimaListView.as_view(),name='formato_recepcion_materia_prima'),
     path('formatorecepcionmateriaprima/new/', views.FormatoRecepcionMateriaPrimaCreateView.as_view(),name='formatorecepcionmateriaprima_new'),
     path('formatorecepcionmateriaprima/<int:pk>/edit/',views.FormatoRecepcionMateriaPrimaUpdateView.as_view(),name='formatorecepcionmateriaprima_edit'),
@@ -90,7 +85,6 @@ urlpatterns = [
 
     # Vista Etiqueta Identificacion de Materiales
     path('etiq/', views.etiquetas.as_view(), name='etiquetas'),
-
     
     path('buscar/', buscar_etiqueta_identificacion_materiales, name='buscar_etiqueta'),
     path('guardar/', views.GuardarEtiquetaView.as_view(), name='guardar_etiqueta'),
@@ -115,10 +109,13 @@ urlpatterns = [
     path('kardex/<int:pk>/edit/',views.KardexUpdateView.as_view(),name='kardex_edit'),
     path('kardex/<int:pk>/delete/',views.KardexDeleteView.as_view(),name='kardex_delete'),
     path('kardex/buscar/', buscar_kardex, name='buscar_kardex'),
+    # path('guardar-kardex/', guardar_kardex, name='guardar_kardex'),
     path('kardex/guardar/', views.GuardarKardexView.as_view(), name='guardar_kardex'),
 
+    # path('download-pdf/', views.generate_pdf.as_view(), name='download_pdf'),
 
     path('export/pdf/', views.export_contacts_pdf, name='export_contacts_pdf'),
+    # path('export-pdf/', export_formato_recepcion_materia_prima_pdf, name='export_formato_recepcion_msteria_prima_pdf'),
     path('exportformatorecepcionmateriaprima/pdf/', views.export_formato_recepcion_materia_prima_pdf, name='export_formato_recepcion_msteria_prima_pdf'),
     path('exportetiquetaidentificacionmateriales/pdf', views.export_etiqueta_identificacion_materiales_pdf, name='export_etiqueta_identificacion_materiales_pdf'),
     path('exportetiquetacuarentena/pdf', views.export_etiqueta_cuarentena_pdf, name='export_etiqueta_cuarentena_pdf'),
