@@ -121,7 +121,7 @@
     
 </style>
 <div class="container mt-5">
-    <h3>MATERIAL DE EMPAQUE</h3>
+    <h3>MATERIA PRIMA</h3>
 
     <!-- Formulario de búsqueda -->
     <form method="get" class="mt-3 d-flex justify-content-between">
@@ -129,11 +129,9 @@
         <button type="submit" class="btn btn-primary ms-2">Buscar</button>
     </form>
     <button id="download-pdf" class="btn btn-outline-primary">
-        Descargar PDF
+        Descargar PDF Seleccionado
     </button>
-    <a href="{% url 'formatorecepcionmaterialempaque_new' %}" class="btn btn-outline-primary">
-        Registrar material de empaque
-    </a>
+    
     
 
     <!-- Tabla de datos -->
@@ -143,48 +141,95 @@
                 <tr>
                     <th><input type="checkbox" id="select-all" /></th> <!-- Checkbox para seleccionar todos -->
                     <th>F. de entrada</th>
-                    <th>Material</th>
+                    <th>Materia prima</th>
                     <th>Lote SEPRISA</th>
+                    <!-- Otras columnas -->
                     <th>Peso Bruto</th>
                     <th>Peso Neto</th>
                     <th>No. Contenedores</th>
                     <th>Clave del proveedor</th>
-                    <th>No. analisis</th>
+                    <th>No. análisis</th>
                     <th>SKU</th>
                     <th>Lote proveedor</th>
+                    <th>F. de caducidad</th>
                     <th>Recibe</th>
                     <th>Acciones</th>
                     <th></th>
                 </tr>
             </thead>
             <tbody>
-                {% for FormatoRecepcionMaterialEmpaque in object_list %}
+                {% for FormatoRecepcionMateriaPrima in object_list %}
                 <tr>
                     <td>
-                        <input type="checkbox" class="select-row" value="{{ FormatoRecepcionMaterialEmpaque.pk }}" />
+                        <input type="checkbox" class="select-row" value="{{ FormatoRecepcionMateriaPrima.pk }}" />
                     </td>
-                    <td>{{ FormatoRecepcionMaterialEmpaque.fechaentrada|date:'d/m/Y h:i A' }}</td>
-                    <td>{{ FormatoRecepcionMaterialEmpaque.material|default:'-'}}</td>
-                    {% comment %} <td>{{ FormatoRecepcionMaterialEmpaque.fechaentrada }}</td> {% endcomment %}
-                    {% comment %} <td>{{ FormatoRecepcionMaterialEmpaque.material|default:'-' }}</td> {% endcomment %}
-                    <td>{{ FormatoRecepcionMaterialEmpaque.loteseprisa|default:'-' }}</td>
-                    <td>{{ FormatoRecepcionMaterialEmpaque.pesobruto|default:'-' }}</td>
-                    <td>{{ FormatoRecepcionMaterialEmpaque.pesoneto|default:'-' }}</td>
-                    <td>{{ FormatoRecepcionMaterialEmpaque.nocontenedores|default:'-' }}</td>
-                    <td>{{ FormatoRecepcionMaterialEmpaque.claveproveedor|default:'-' }}</td>
-                    <td>{{ FormatoRecepcionMaterialEmpaque.noanalisis|default:'-' }}</td>
-                    <td>{{ FormatoRecepcionMaterialEmpaque.sku|default:'-' }}</td>
-                    <td>{{ FormatoRecepcionMaterialEmpaque.noloteproveedor|default:'-' }}</td>
-                    <td>{{ FormatoRecepcionMaterialEmpaque.recibe|default:'-' }}</td>
+                    <td>{{ FormatoRecepcionMateriaPrima.fechaentrada|date:'d/m/Y h:i A' }}</td>
+                    <td>{{ FormatoRecepcionMateriaPrima.materiaprima|default:'-' }}</td>
+                    <td>{{ FormatoRecepcionMateriaPrima.loteseprisa|default:'-' }}</td>
+                    <!-- Otras columnas -->
+                    <td>{{ FormatoRecepcionMateriaPrima.pesobruto|default:"-" }}</td>
+                    <td>{{ FormatoRecepcionMateriaPrima.pesoneto|default:"-" }}</td>
+                    <td>{{ FormatoRecepcionMateriaPrima.nocontenedores|default:"-" }}</td>
+                    <td>{{ FormatoRecepcionMateriaPrima.claveproveedor|default:"-" }}</td>
+                    <td>{{ FormatoRecepcionMateriaPrima.noanalisis|default:"-" }}</td>
+                    <td>{{ FormatoRecepcionMateriaPrima.sku|default:"-" }}</td>
+                    <td>{{ FormatoRecepcionMateriaPrima.noloteproveedor|default:"-" }}</td>
+                    <td>{{ FormatoRecepcionMateriaPrima.fechacaducidad|default:"-" }}</td>
+                    <td>{{ FormatoRecepcionMateriaPrima.recibe|default:"-" }}</td>
 
                     <td>
                         <div class="btn-group btn-group-sm">
-                            <a href="{% url 'formatorecepcionmaterialempaque_edit' FormatoRecepcionMaterialEmpaque.pk %}" class ="btn btn-primary">Editar</a>
-                            <a href="{% url 'formatorecepcionmaterialempaque_delete' FormatoRecepcionMaterialEmpaque.pk %}" class ="btn btn-danger">Eliminar</a>
+                            <a href="{% url 'formatorecepcionmateriaprima_edit' FormatoRecepcionMateriaPrima.pk %}" class ="btn btn-primary">Editar</a>
+                            <a href="{% url 'formatorecepcionmateriaprima_delete' FormatoRecepcionMateriaPrima.pk %}" class ="btn btn-danger">Eliminar</a>
                         </div>
                     </td>
                 </tr>
                 {% endfor %}
+            </tbody>
+            
+            {% comment %} <thead>
+                <tr>
+                    <th>F. de entrada</th>
+                    <th>Materia prima</th>
+                    <th>Lote SEPRISA</th>
+                    <th>Peso Bruto</th>
+                    <th>Peso Neto</th>
+                    <th>No. Contenedores</th>
+                    <th>Clave del proveedor</th>
+                    <th>No. análisis</th>
+                    <th>SKU</th>
+                    <th>Lote proveedor</th>
+                    <th>F. de caducidad</th>
+                    <th>Recibe</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in object_list %}
+                <tr>
+                    <td>{{ item.fechaentrada|date:"d/m/Y h:i A" }}</td>
+                    <td>{{ item.materiaprima|default:"-" }}</td>
+                    <td>{{ item.loteseprisa|default:"-" }}</td>
+                    <td>{{ item.pesobruto|default:"-" }}</td>
+                    <td>{{ item.pesoneto|default:"-" }}</td>
+                    <td>{{ item.nocontenedores|default:"-" }}</td>
+                    <td>{{ item.claveproveedor|default:"-" }}</td>
+                    <td>{{ item.noanalisis|default:"-" }}</td>
+                    <td>{{ item.sku|default:"-" }}</td>
+                    <td>{{ item.noloteproveedor|default:"-" }}</td>
+                    <td>{{ item.fechacaducidad|default:"-" }}</td>
+                    <td>{{ item.recibe|default:"-" }}</td>
+                    <td>
+                        <a href="{% url 'formatorecepcionmateriaprima_edit' item.pk %}" class="btn btn-sm btn-primary">Editar</a>
+                        <a href="{% url 'formatorecepcionmateriaprima_delete' item.pk %}" class="btn btn-sm btn-danger">Eliminar</a>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="13" class="text-center">No se encontraron resultados.</td>
+                </tr>
+                {% endfor %} {% endcomment %}
+
             </tbody>
         </table>
     </div>
@@ -234,7 +279,7 @@
             return;
         }
     
-        fetch('{% url "export_formato_recepcion_material_empaque_pdf" %}', {
+        fetch('{% url "export_formato_recepcion_msteria_prima_pdf" %}', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -253,7 +298,7 @@
             const url = window.URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
-            a.download = 'material_empaque.pdf';
+            a.download = 'materia_prima_seleccionada.pdf';
             a.click();
             window.URL.revokeObjectURL(url);
         })
@@ -263,4 +308,5 @@
 </script>
 
 {% endblock %}
+
 

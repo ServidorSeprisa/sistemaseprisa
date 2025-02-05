@@ -11,6 +11,30 @@ class Contact(models.Model):
 
     def __str__(self) -> str:
         return self.name
+
+class RegistroUsuario(models.Model):
+    TIPO_USUARIO_CHOICES = [
+        ('admin', 'Administrador'),
+        ('admin2', 'Administrador2'),
+        ('alm', 'Almacen'),
+        ('prod','Produccion'),
+        ('cal','calidad'),
+    ]
+
+    nombre = models.CharField(max_length=100, verbose_name='Nombre')
+    apellidopaterno = models.CharField(max_length=100, verbose_name='Apellido Paterno')
+    apellidomaterno = models.CharField(max_length=100, verbose_name='Apellido Materno')
+    tipousuario = models.CharField(
+        max_length=100,
+        verbose_name='Tipo Usuario',
+        choices=TIPO_USUARIO_CHOICES,
+    )
+    correo = models.CharField(max_length=100, verbose_name='Correo',null=True,blank=True)
+    contraseña = models.CharField(max_length=100, verbose_name='Contraseña')
+    confirmacioncontraseña = models.CharField(max_length=100, verbose_name='Confirmacion Contraseña')
+
+    def __str__(self) -> str:
+        return self.nombre
     
 class FormatoRecepcionMateriaAlergenos(models.Model):
 

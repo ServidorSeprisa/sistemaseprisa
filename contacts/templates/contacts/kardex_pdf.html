@@ -1,9 +1,13 @@
+
 <!DOCTYPE html>
-<html>
+<html lang="es">
 <head>
+    <meta charset="UTF-8">
+    <title>Kardex Report</title>
     <style>
         @page {
             size: A4 landscape; /* Configura la orientación horizontal */
+            {% comment %} margin: 25mm; /* Ajusta los márgenes según sea necesario */ {% endcomment %}
             margin-top: 15mm;
             margin-bottom: 15mm;
             margin-left: 25mm;
@@ -78,7 +82,7 @@
         <thead>
             <tr>
                 <th rowspan="4" class="left">
-                    <img src="C:/Users/AMD/Documents/Proyecto/logoSEPRISA4.png" alt="Logo">
+                    <img src="C:\Users\ceci2\OneDrive\Escritorio\copia\copia\contactlist\static\images\logoSEPRISA4.png" alt="Logo">
                 </th>
             
                 <th rowspan="4" class="large-cell">
@@ -91,7 +95,9 @@
             
                 <th class="right">
                     CÓDIGO: 
-                    
+                    {% comment %} VERSIÓN: <br>
+                    FECHA DE REVISIÓN: <br>
+                    PÁGINAS: <br> {% endcomment %}
                 </th>
             </tr>
         </thead>
@@ -107,30 +113,39 @@
             </tr>
         </tbody>
     </table>
-    <p>ENTRADAS</p>
+
+    {% comment %} <h1>Kardex Report - SEPRISA</h1>
+    {% if etiqueta %}
+    <p><strong>Materia Prima:</strong> {{ etiqueta.materiaprima }}</p>
+    <p><strong>Fecha de Caducidad:</strong> {{ etiqueta.fechacaducidad }}</p>
+    <p><strong>SKU:</strong> {{ etiqueta.sku }}</p>
+    {% else %}
+    <p>No se encontró información.</p>
+    {% endif %} {% endcomment %}
+    <h2 class="section-title">Entradas</h2>
     <table>
         <thead>
             <tr>
                 <th>Materia Prima:</th>
-                <th> </th>
+                <th><p>{{ etiqueta.materiaprima }}</p></th>
             </tr>
             <tr>
                 <th>Fecha de Caducidad:</th>
-                <th> </th>
+                <th>{{ etiqueta.fechacaducidad }}</th>
                 <th>No. de Lote SEPRISA: </th>
-                <th> </th>
+                <th>{{ etiqueta.loteseprisa }}</th>
             </tr>
             <tr>
                 <th>Fecha de Entrada:</th>
-                <th> </th>
+                <th>{{ etiqueta.fechaentrada }}</th>
                 <th>Cantidad Neto: </th>
-                <th> </th>
+                <th>{{ etiqueta.pesoneto }}</th>
             </tr>
             <tr>
                 <th>Código del Proveedor/Cliente:</th>
-                <th> </th>
+                <th>{{ etiqueta.claveproveedor }}</th>
                 <th>SKU: </th>
-                <th> </th>
+                <th>{{ etiqueta.sku }}</th>
             </tr>
             
         </thead>
@@ -147,35 +162,37 @@
             {% endfor %}
         </tbody>
     </table>
-    <p>SALIDAS</P>
-    <table class="orden">
+
+    <h2 class="section-title">Salidas</h2>
+    <table>
         <thead>
             <tr>
                 <th>Fecha Salida</th>
-                <th>Cliente/Uso interno</th>
+                <th>Cliente/Uso Interno</th>
                 <th># Lote Proveedor</th>
-                <th>Cantidad sale</th>
-                <th>Cantidad queda</th>
+                <th>Cantidad Sale</th>
+                <th>Cantidad Queda</th>
                 <th>Realizó</th>
                 <th>Observaciones</th>
             </tr>
         </thead>
         <tbody>
-            
-            <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
-            <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
-            <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
-            <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
-            <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
-            <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
-            <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
-            <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
-            <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
-            <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+            {% for salida in salidas %}
+            <tr>
+                <td>{{ salida.fechasalida|date:"d/m/Y" }}</td>
+                <td>{{ salida.clienteusointerno }}</td>
+                <td>{{ salida.noloteproveedor }}</td>
+                <td>{{ salida.cantidadsale }}</td>
+                <td>{{ salida.cantidadqueda }}</td>
+                <td>{{ salida.realizo }}</td>
+                <td>{{ salida.observaciones }}</td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="7">No hay registros disponibles.</td>
+            </tr>
+            {% endfor %}
         </tbody>
     </table>
-    
-
-    <h2>© Queda prohibida la reproducción total o parcial de este documento por cualquier medio, así como transportarlo fuera de las instalaciones SEPRISA S.A. DE C.V., sin autorización previa del Director General</h2>
 </body>
 </html>

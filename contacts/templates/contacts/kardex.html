@@ -1,3 +1,4 @@
+<!-- kardex.html -->
 {% extends 'contacts/menuprueba3.html' %}
 {% load static %}
 
@@ -18,10 +19,11 @@
                 </div>
             </form>
             
-            <a href="{% url 'export_kardex_pdf' %}" class="btn btn-outline-primary">Descargar Kardex</a>
+            <a href="{% url 'export_kardex_pdf' %}?q={{ request.GET.q }}" class="btn btn-outline-primary">Descargar Kardex</a>
         </div>
     </div>
 
+    <!-- Formulario de Entrada y Salida -->
     <form method="post" action="{% url 'guardar_kardex' %}">
         {% csrf_token %}
         <input type="hidden" name="id" value="{% if etiqueta %}{{ etiqueta.id }}{% endif %}">
@@ -92,12 +94,17 @@
                     <label for="cantidad_sale" class="form-label">Cantidad Salida</label>
                     <input type="double" id="cantidad_sale" name="cantidad_sale" class="form-control">
                 </div>
+                
             </div>
 
             <div class="row mt-3">
-                <div class="col-md-6">
+                {% comment %} <div class="col-md-6">
                     <label for="cantidad_queda" class="form-label">Cantidad Queda</label>
                     <input type="double" id="cantidad_queda" name="cantidad_queda" class="form-control">
+                </div> {% endcomment %}
+                <div class="col-md-6">
+                    <label for="cantidad_queda" class="form-label">Cantidad Queda</label>
+                    <input type="text" id="cantidad_queda" name="cantidad_queda" class="form-control" value="{{ etiqueta.cantidadqueda }}" readonly>
                 </div>
                 <div class="col-md-6">
                     <label for="realizo" class="form-label">Realizó</label>
@@ -165,20 +172,26 @@
             const cantidadNeto = parseFloat(document.getElementById('cantidad_neto').value) || 0; // Valor de cantidad neta
             const cantidadSale = parseFloat(document.getElementById('cantidad_sale').value) || 0; // Valor de cantidad salida
             
+            // Calcula la cantidad que queda
             const cantidadQueda = cantidadNeto - cantidadSale;
     
+            // Verifica si la cantidad de salida excede la cantidad neta, si es así, evita la actualización
             if (cantidadQueda < 0) {
+                // Si la cantidad de salida es mayor que la cantidad neta, mostramos un mensaje de advertencia
                 alert('La cantidad de salida no puede ser mayor que la cantidad neta disponible.');
                 document.getElementById('cantidad_sale').value = 0; // Resetea el campo de cantidad de salida
                 document.getElementById('cantidad_queda').value = cantidadNeto; // Vuelve a mostrar la cantidad neta en 'Cantidad Queda'
             } else {
+                // Si todo es correcto, actualizamos la cantidad que queda
                 document.getElementById('cantidad_queda').value = cantidadQueda;
             }    
         }
     
+        // Este evento se ejecuta cuando la página carga para actualizar el valor de 'Cantidad Queda' con el valor inicial de 'Cantidad Neto'.
         window.onload = function() {
-            updateCantidadQueda();  
+            updateCantidadQueda();  // Llama a la función al cargar la página para inicializar el valor de 'Cantidad Queda'
             
+            // Escucha cambios en el campo 'Cantidad Sale' y actualiza 'Cantidad Queda'
             document.getElementById('cantidad_sale').addEventListener('input', updateCantidadQueda);
         }
     </script>

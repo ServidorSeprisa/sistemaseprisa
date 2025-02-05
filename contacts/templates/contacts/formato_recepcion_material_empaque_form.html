@@ -1,0 +1,42 @@
+{% extends 'contacts/formato_recepcion_material_empaque_base.html' %}  
+
+{% load static crispy_forms_tags %}
+
+{% block content %}
+
+    <div class="mt-5">
+        <h3> 
+            {% if form.instance.pk %}
+            Editar
+            {% else %}
+            Nuevo
+            {% endif %}
+            Contacto 
+        </h3>
+    </div> 
+
+    <form action="" method="post" class="mt-5 mx-auto" style="max-width: 420px;" enctype="multipart/form-data" novalidate>
+        {% csrf_token %}
+        {{ form|crispy }}
+
+        <div class="text-end mt-3">
+            <a href="{% url 'formato_recepcion_material_empaque' %}" class="btn btn-light me-1">
+                Cancelar
+            </a>
+            <button class="btn btn-primary">
+                {% if form.instance.pk %}
+                Actualizar
+                {% else %}
+                Crear
+                {% endif %}
+                Materia Prima
+            </button>
+        </div>
+    </form> 
+
+{% endblock content %}
+
+
+
+
+

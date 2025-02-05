@@ -1,3 +1,38 @@
+{% comment %} <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <title>Dropdown Example</title>
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" href="#">Navbar</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav">
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Entrada
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <a class="dropdown-item" href="about.html">Entrada 1</a>
+                    <a class="dropdown-item" href="about.html">Entrada 2</a>
+                </div>
+            </li>
+        </ul>
+    </div>
+</nav>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+</body>
+</html> {% endcomment %}
 {% load static %}
 
 <!DOCTYPE html>
@@ -6,6 +41,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    {% comment %} <title>Medi</title> {% endcomment %}
 
     <link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.min.css' %}">
     <style>
@@ -100,11 +136,21 @@
       
       .hero_area {
         background-color:rgb(0,0,0,0.8);
+        {% comment %} background-image: url("{% static 'images/fondo5.jpg' %}"); /* Cambia la ruta a tu imagen de fondo principal */ {% endcomment %}
         background-size: cover; /* Ajusta el tamaño de la imagen */
         background-attachment: fixed; /* Hace que la imagen de fondo se mantenga fija al desplazarse */
         height: 98vh; /* Ajusta la altura según sea necesario */
       }
- 
+      
+{% comment %}         
+        
+        /*header section*/
+        .hero_area {
+          height: 98vh;
+          background-image: url(../images/hero.jpg);
+          background-size: cover;
+          background-attachment: fixed;
+        } {% endcomment %}
         /*header section*/
         /* .hero_area {
           height: 98vh;
@@ -292,7 +338,10 @@
         <header class="header_section">
             <div class="container-fluid">
                 <nav class="navbar navbar-expand-lg custom_nav-container">
-                    
+                    {% comment %} <a class="navbar-brand" href="index.html">
+                        <img src="{% static 'images/logoSEPRISAsf.png' %}" alt="" />
+                        <span>SEPRISA</span>
+                    </a> {% endcomment %}
                     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                         <span class="navbar-toggler-icon"></span>
                     </button>
@@ -313,10 +362,10 @@
                                     {% comment %} <a class="dropdown-item" href="{% url 'formato_recepcion_materia' %}">Entrada 1</a>
                                     <a class="dropdown-item" href="entrada2.html">Entrada 2</a> {% endcomment %}
                                     <a class="dropdown-item" href="{% url 'formato_recepcion_materia' %}">Registrar recepción de materias primas consideradas alérgenos</a>
-                                    <a class="dropdown-item" href="{% url 'formato_recepcion_material_empaque' %}">Registrar recepción de material de empaque</a>
-                                    <a class="dropdown-item" href="{% url 'formato_recepcion_materia_prima' %}">Registrar recepción de materia prima</a>
-                                    <a class="dropdown-item" href="{% url 'formato_solicitud_analisis' %}">Solicitud de análisis</a>
-                                    <a class="dropdown-item" href="{% url 'kardex' %}">KARDEX</a>
+                                    <a class="dropdown-item" href="{% url 'formatorecepcionmaterialempaque_list' %}">Registrar recepción de material de empaque</a>
+                                    <a class="dropdown-item" href="{% url 'formato_recepcion_list' %}">Registrar recepción de materia prima</a>
+                                    {% comment %} <a class="dropdown-item" href="{% url 'formato_solicitud_analisis' %}">Solicitud de análisis</a>
+                                    <a class="dropdown-item" href="{% url 'kardex' %}">KARDEX</a> {% endcomment %}
                                 </div>
                             </li>
                             <li class="nav-item dropdown">
@@ -335,11 +384,26 @@
                               </a>
                               <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                                   <a class="dropdown-item" href="{% url 'orden_produccion_view' %}">Orden de Produccion</a>
+                                  {% comment %} <a class="dropdown-item" href="{% url 'control_aseguramiento_view' %}">Control de Aseguramiento</a> {% endcomment %}
+
+                              </div>
+                            </li>
+                            <li class="nav-item dropdown">
+                              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                  Calidad
+                              </a>
+                              <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                  {% comment %} <a class="dropdown-item" href="{% url 'orden_produccion_view' %}">Orden de Produccion</a> {% endcomment %}
                                   <a class="dropdown-item" href="{% url 'control_aseguramiento_view' %}">Control de Aseguramiento</a>
 
                               </div>
                             </li>
-                            
+                            {% comment %} <li class="nav-item">
+                                <a class="nav-link" href="product.html">Almacen</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="client.html">Produccion</a>
+                            </li> {% endcomment %}
                             <li class="nav-item">
                                 <a class="nav-link" href="{% url 'login' %}">Login</a>
                             </li>

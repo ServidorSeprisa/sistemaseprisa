@@ -11,10 +11,9 @@
   <link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.min.css' %}">
   <style>
       /* Aquí van tus estilos personalizados */
-     
       
       .hero_area {/*fondo de la pagina*/
-        background-image: url("{% static 'images/fondo2.jpg' %}");
+        background-color: #0f94d1;
         background-size: cover; 
         background-attachment: fixed; 
         min-height: 100vh; /* Asegúrate de que ocupe toda la página */
@@ -116,7 +115,7 @@
           background-size: cover; /* Ajusta el tamaño de la imagen */
           background-position: center; /* Centra la imagen */
       }
-        
+      
         .sub_page .hero_area {
           height: auto;
         }
@@ -293,7 +292,6 @@
               <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
-              
               <ul class="navbar-nav ml-auto">
                 <li class="nav-item active">
                   <a class="nav-link" href="{% url 'Menu' %}">Inicio <span class="sr-only">(current)</span></a>
@@ -303,12 +301,9 @@
                     Entrada
                   </a>
                   <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                    
                     <a class="dropdown-item" href="{% url 'formato_recepcion_materia' %}">Registrar recepción de materias primas consideradas alérgenos</a>
-                    <a class="dropdown-item" href="{% url 'formato_recepcion_material_empaque' %}">Registrar recepción de material de empaque</a>
-                    <a class="dropdown-item" href="{% url 'formato_recepcion_materia_prima' %}">Registrar recepción de materia prima</a>
-                    <a class="dropdown-item" href="{% url 'formato_solicitud_analisis' %}">Solicitud de análisis</a>
-                    <a class="dropdown-item" href="{% url 'kardex' %}">KARDEX</a>
+                    <a class="dropdown-item" href="{% url 'formatorecepcionmaterialempaque_list' %}">Registrar recepción de material de empaque</a>
+                    <a class="dropdown-item" href="{% url 'formato_recepcion_list' %}">Registrar recepción de materia prima</a>
                   </div>
                 </li>
                 <li class="nav-item dropdown">
@@ -326,13 +321,22 @@
                   </a>
                   <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                     <a class="dropdown-item" href="{% url 'orden_produccion_view' %}">Orden de Produccion</a>
-                    <a class="dropdown-item" href="{% url 'control_aseguramiento_view' %}">Control de Aseguramiento</a>
+                  </div>
+                </li>
+                <li class="nav-item dropdown">
+                  <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                      Calidad
+                  </a>
+                  <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                      <a class="dropdown-item" href="{% url 'control_aseguramiento_view' %}">Control de Aseguramiento</a>
 
                   </div>
                 </li>
-                
                 <li class="nav-item">
                   <a class="nav-link" href="{% url 'login' %}">Login</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="{% url 'registrousuario_list' %}">Registro Usuarios</a>
                 </li>
               </ul>
             </div>
@@ -366,14 +370,12 @@
             </span>
           </h1>
           <h3>
-            Servicios Y Productos Integrales Para La Salud S.A.de C.V.
+            Servicios Y Productos Integrales Para La Salud S.A. de C.V.
           </h2>
         </div>
-        
       </section>
     </div>
   </div>
-  
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   
   <script type="text/javascript" src="{% static 'js/bootstrap.js' %}"></script>
