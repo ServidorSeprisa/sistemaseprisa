@@ -111,12 +111,11 @@
             
             <form action="{% url 'login' %}" method="POST">
                 {% csrf_token %}
-                
-                <input type="text" class="input-field" placeholder="Correo Electrónico" name="username" required><br>
+                <input type="email" class="input-field" placeholder="Correo Electrónico" name="username" required><br>
                 <input type="password" class="input-field" placeholder="Contraseña" name="password" required><br>
-                
                 <button type="submit" class="btn-login">Iniciar sesión</button>
             </form>
+            
             
             {% comment %} <div class="mt-3">
                 <a href="{% url 'password_reset' %}" class="text-primary">¿Olvidaste tu contraseña?</a>

@@ -1254,18 +1254,18 @@ class FormatoBitacoraProductoTerminadoCreateView(generic.CreateView):
     model = FormatoBitacoraProductoTerminado
     fields = ('fechaentrada','producto','lote','sku','presentacion','contenedores','cliente','noanalisis','fechacaducidad','recibe','contenedores',)
 
-    success_url = reverse_lazy('bitacora_producto_terminado_view')
+    success_url = reverse_lazy('formato_bitacora_producto_terminado')
     template_name='contacts/formato_bitacora_producto_terminado_form.html'
 
 class FormatoBitacoraProductoTerminadoUpdateView(generic.UpdateView):
     model = FormatoRecepcionMateriaPrima
     fields = ('fechaentrada','producto','lote','sku','presentacion','contenedores','cliente','noanalisis','fechacaducidad','recibe','contenedores',)
-    success_url = reverse_lazy('bitacora_producto_terminado_view')
+    success_url = reverse_lazy('formato_bitacora_producto_terminado')
     template_name='contacts/formato_bitacora_producto_terminado_form.html'
 
 class FormatoBitacoraProductoTerminadoDeleteView(generic.DeleteView):
     model = FormatoRecepcionMateriaPrima
-    success_url = reverse_lazy('bitacora_producto_terminado_view')
+    success_url = reverse_lazy('formato_bitacora_producto_terminado')
     template_name='contacts/formato_bitacora_producto_terminado_confirm_delete.html'
 
 class kardex(View):

@@ -29,7 +29,6 @@
     </style>
 <body >
     <div class="container py-5">
-
     <div class="d-flex justify-content-between mb-3">
         <form action="{% url 'buscar_orden_produccion' %}" method="get" style="max-width: 450px;">
             <div class="input-group">
@@ -118,7 +117,10 @@
                 </form>
             </div>
         </div>
-</form>
+    </form>
+    <a href="{% url 'detalleorden_new' %}" class="btn btn-outline-primary">
+        Registrar materia
+    </a>
 
     <div class="table-responsive">
         <table class="table table-hover mt-5">

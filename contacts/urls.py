@@ -50,28 +50,16 @@ urlpatterns = [
     path('formatorecepcionmaterialempaque/pdf/', views.export_formato_recepcion_material_empaque_pdf, name='export_formato_recepcion_material_empaque_pdf'),
     path('formatorecepcionmaterialempaqueview/',views.FormatoRecepcionMaterialEmpaqueListViewView.as_view(),name='formato_recepcion_material_empaque_view'),
 
-
-
-    # path('registrousuarios/',views.RegistroUsuarioListView.as_view(),name='registrousuario_list'),
-    # path('registrousuarios/new/', views.RegistroUsuarioCreateView.as_view(),name='registrousuario_new'),
-    # path('registrousuarios/<int:pk>/edit/',views.RegistroUsuarioUpdateView.as_view(),name='registrousuario_edit'),
-    # path('registrousuarios/<int:pk>/delete/',views.RegistroUsuarioDeleteView.as_view(),name='registrousuario_delete'),
-
-    # # Vista Login
-    # path("login/", views.LoginView.as_view(), name='login'),
-
-
     path('registrousuarios/', views.RegistroUsuarioListView.as_view(), name='registrousuario_list'),
     path('registrousuarios/new/', views.RegistroUsuarioCreateView.as_view(), name='registrousuario_new'),
     path('registrousuarios/<int:pk>/edit/', views.RegistroUsuarioUpdateView.as_view(), name='registrousuario_edit'),
     path('registrousuarios/<int:pk>/delete/', views.RegistroUsuarioDeleteView.as_view(), name='registrousuario_delete'),
 
+    # # Vista Login
+    # path("login/", views.LoginView.as_view(), name='login'),
     
-
     path('login/', views.CustomLoginView.as_view(), name='login'),
     # path('logout/', LogoutView.as_view(next_page='login'), name='logout'),
-
-
 
     path('login/', views.LoginView.as_view(), name='login'),
 
