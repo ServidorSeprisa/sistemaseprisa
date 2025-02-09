@@ -37,7 +37,7 @@ urlpatterns = [
     # path("formatorecepcionmateriaalergenoslistview/",views.FormatoRecepcionMateriaAlergenosListViewView.as_view(),name='formatorecepcionmateriaalergenos_listview'),
     path('formatorecepcionmateriaalergenos/pdf/', views.export_formato_recepcion_materia_alergenos_pdf, name='export_formato_recepcion_materia_alergenos_pdf'),
     # path('pruebatabla/', PruebaTablaListView.as_view(), name='formato_recepcion_list'),
-        path('formatorecepcionmateriaalergenosview/',views.FormatoRecepcionMateriaAlergenosListViewView.as_view(),name='formato_recepcion_materia_alergenos_view'),
+    path('formatorecepcionmateriaalergenosview/',views.FormatoRecepcionMateriaAlergenosListViewView.as_view(),name='formato_recepcion_materia_alergenos_view'),
 
 
     # Vista Formato Recepcion Material Empaque

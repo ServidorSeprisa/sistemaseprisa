@@ -158,6 +158,8 @@ class KardexRecepcionMateriaPrimaAlmacen(models.Model):
     realizo = models.CharField(max_length=100, verbose_name='Realizo', null=True, blank=True)
     observaciones = models.CharField(max_length=255, verbose_name='Observaciones', null=True, blank=True)
     
+    # formato_recepcion = models.ForeignKey(FormatoRecepcionMateriaPrima, on_delete=models.CASCADE, null=True, blank=True)
+    # formato_recepcion = models.ForeignKey(FormatoRecepcionMateriaPrima, on_delete=models.CASCADE, related_name='kardexes') BIIIIIIIENNNNN EXFELENTEEEEEEEEEE
     formato_recepcion = models.ForeignKey(FormatoRecepcionMateriaPrima, on_delete=models.CASCADE, null=True, blank=True)
 
     def __str__(self) -> str:

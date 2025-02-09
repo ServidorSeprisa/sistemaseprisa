@@ -115,7 +115,7 @@ class CustomLoginView(LoginView):
         elif usuario.tipousuario == 'alm':
             return redirect('MenuAlmacen')  # Ruta del menú de almacén
         elif usuario.tipousuario == 'prod':
-            return redirect('produccion_menu')  # Ruta del menú de producción
+            return redirect('MenuProduccion')  # Ruta del menú de producción
         elif usuario.tipousuario == 'cal':
             return redirect('MenuCalidad')  # Ruta del menú de producción
         else:
@@ -125,6 +125,7 @@ class CustomLoginView(LoginView):
         # Si la autenticación falla, puedes agregar un mensaje de error
         messages.error(self.request, "Usuario o contraseña incorrectos")
         return super().form_invalid(form)
+
 
 # CONTACTOS ---------------------------------------------
 
@@ -204,7 +205,7 @@ class MenuPCalidad(View):
 class FormatoRecepcionMateriaAlergenosView(View):
     def get(self, request, *args, **kwargs):
         return render(request, 'contacts/formato_recepcion_materia.html')
-    
+
 from django.views.generic import ListView
     
 class FormatoRecepcionMateriaAlergenosListView(ListView):
@@ -236,16 +237,13 @@ def formato_recepcion_material_alergenos_list(request):
     start = (page - 1) * items_per_page
     end = start + items_per_page
 
-    # Filtrar los datos
     queryset = FormatoRecepcionMateriaAlergenos.objects.filter(
         Q(materiaprima__icontains=query) |
         Q(claveproveedor__icontains=query)
     )[start:end]
     
-    # Renderizar solo el cuerpo de la tabla
     table_html = render_to_string("partials/formato_recepcion_table_body.html", {"object_list": queryset})
     
-    # Preparar la respuesta JSON
     return JsonResponse({
         "table_body": table_html,
         "has_next": len(queryset) == items_per_page,  # Si quedan más páginas
@@ -294,7 +292,7 @@ class FormatoRecepcionMaterialEmpaqueListView(ListView):
     model = FormatoRecepcionMaterialEmpaque
     template_name = 'contacts/formato_recepcion_material_empaque.html'
     context_object_name = "object_list"
-    paginate_by = 15  # Número de elementos por página
+    paginate_by = 15  
 
     def get_queryset(self):
         query = self.request.GET.get("q")
@@ -319,19 +317,16 @@ def formato_recepcion_material_empaque_list(request):
     start = (page - 1) * items_per_page
     end = start + items_per_page
 
-    # Filtrar los datos
     queryset = FormatoRecepcionMaterialEmpaque.objects.filter(
         Q(materiaprima__icontains=query) |
         Q(claveproveedor__icontains=query)
     )[start:end]
     
-    # Renderizar solo el cuerpo de la tabla
     table_html = render_to_string("partials/formato_recepcion_table_body.html", {"object_list": queryset})
     
-    # Preparar la respuesta JSON
     return JsonResponse({
         "table_body": table_html,
-        "has_next": len(queryset) == items_per_page,  # Si quedan más páginas
+        "has_next": len(queryset) == items_per_page,  
         "has_previous": page > 1
     })
 
@@ -408,7 +403,7 @@ class PruebaTablaListView(ListView):
     model = FormatoRecepcionMateriaPrima
     template_name = 'contacts/pruebatabla.html'
     context_object_name = "object_list"
-    paginate_by = 15  # Número de elementos por página
+    paginate_by = 15  
 
     def get_queryset(self):
         query = self.request.GET.get("q")
@@ -433,19 +428,16 @@ def formato_recepcion_list(request):
     start = (page - 1) * items_per_page
     end = start + items_per_page
 
-    # Filtrar los datos
     queryset = FormatoRecepcionMateriaPrima.objects.filter(
         Q(materiaprima__icontains=query) |
         Q(claveproveedor__icontains=query)
     )[start:end]
     
-    # Renderizar solo el cuerpo de la tabla
     table_html = render_to_string("partials/formato_recepcion_table_body.html", {"object_list": queryset})
     
-    # Preparar la respuesta JSON
     return JsonResponse({
         "table_body": table_html,
-        "has_next": len(queryset) == items_per_page,  # Si quedan más páginas
+        "has_next": len(queryset) == items_per_page,  
         "has_previous": page > 1
     })
 
@@ -515,11 +507,9 @@ def buscar_etiqueta_identificacion_materiales(request):
 
 class GuardarEtiquetaView(View):
     def post(self, request, *args, **kwargs):
-        # Obtén el ID del formato de recepción de materia prima
         formato_id = request.POST.get('id')
         formato_recepcion = get_object_or_404(FormatoRecepcionMateriaPrima, id=formato_id)
 
-        # Crea una nueva instancia de EtiquetaIdentificacionMateriales
         etiqueta = EtiquetaIdentificacionMateriales(
             material=formato_recepcion.materiaprima,
             noanalisis=formato_recepcion.noanalisis,
@@ -540,7 +530,6 @@ class GuardarEtiquetaView(View):
             etiqueta.save()
         except Exception as e:
             print("Error al guardar la etiqueta:", e)
-            # O alguna otra forma de manejar el error
         return redirect('etiquetas')
     
 class orden_produccion(View):
@@ -711,9 +700,6 @@ class GuardarSolicitudAnalisisView(View):
             'observaciones': request.POST.get('observaciones'),
             'fechahoraentregaresultados': request.POST.get('fechahoraentregaresultados'),
             'enteradoresultado': request.POST.get('enteradoresultado'),
-
-
-
         }
 
         if id:
@@ -858,17 +844,14 @@ def export_formato_recepcion_materia_prima_pdf(request):
         if not selected_ids:
             return JsonResponse({"error": "No IDs provided"}, status=400)
 
-        # Filtrar los datos seleccionados
         objects = FormatoRecepcionMateriaPrima.objects.filter(pk__in=selected_ids)
 
-        # Renderizar la plantilla HTML
         template_path = 'contacts/formato_recepcion_materia_prima_pdf.html'
         context = {'FormatoRecepcionMateriaPrimax': objects}
 
         template = get_template(template_path)
         html = template.render(context)
 
-        # Generar el PDF a partir del HTML renderizado
         response = HttpResponse(content_type='application/pdf')
         response['Content-Disposition'] = 'attachment; filename="FormatoRecepcionMateriaPrima.pdf"'
 
@@ -896,17 +879,14 @@ def export_formato_recepcion_material_empaque_pdf(request):
         if not selected_ids:
             return JsonResponse({"error": "No IDs provided"}, status=400)
 
-        # Filtrar los datos seleccionados
         objects = FormatoRecepcionMaterialEmpaque.objects.filter(pk__in=selected_ids)
 
-        # Renderizar la plantilla HTML
         template_path = 'contacts/formato_recepcion_material_empaque_pdf.html'
         context = {'FormatoRecepcionMaterialEmpaquex': objects}
 
         template = get_template(template_path)
         html = template.render(context)
 
-        # Generar el PDF a partir del HTML renderizado
         response = HttpResponse(content_type='application/pdf')
         response['Content-Disposition'] = 'attachment; filename="FormatoRecepcionMaterialEmpaque.pdf"'
 
@@ -933,17 +913,14 @@ def export_formato_recepcion_materia_alergenos_pdf(request):
         if not selected_ids:
             return JsonResponse({"error": "No IDs provided"}, status=400)
 
-        # Filtrar los datos seleccionados
         objects = FormatoRecepcionMateriaAlergenos.objects.filter(pk__in=selected_ids)
 
-        # Renderizar la plantilla HTML
         template_path = 'contacts/formato_recepcion_materia_alergenos_pdf.html'
         context = {'FormatoRecepcionMateriaAlergenosx': objects}
 
         template = get_template(template_path)
         html = template.render(context)
 
-        # Generar el PDF a partir del HTML renderizado
         response = HttpResponse(content_type='application/pdf')
         response['Content-Disposition'] = 'attachment; filename="FormatoRecepcionMateriaAlergenos.pdf"'
 
@@ -1055,10 +1032,8 @@ class OrdenProduccionCreateView(generic.CreateView):
             'rendimientoreal': request.POST.get('rendimiento_real'),
         }
 
-        # Crear un nuevo objeto de OrdenProduccion
         OrdenProduccion.objects.create(**data)
 
-        # Redirigir a una URL específica después de guardar
         return redirect('orden_produccion_view')    
     
 class OrdenProduccionListView(generic.ListView):
@@ -1091,8 +1066,10 @@ class OrdenProduccionDeleteView(generic.DeleteView):
     success_url = reverse_lazy('ordenproduccion_list')
     template_name='contacts/orden_produccion_form.html'
 
-def buscar_orden_produccion(request):
 
+
+def buscar_orden_produccion(request):
+ 
     OrdenProduccion = ' '
     if 'q' in request.GET:
         query = request.GET['q']
@@ -1101,7 +1078,6 @@ def buscar_orden_produccion(request):
     return render(request, 'contacts/orden_produccion.html', {'OrdenProduccion': OrdenProduccion})
 
 def buscar_material(request):
-
     OrdenProduccion = ' '
     if 'q' in request.GET:
         query = request.GET['q']
@@ -1111,7 +1087,6 @@ def buscar_material(request):
 
 class DetalleOrdenCreateView(generic.CreateView): 
     def get(self, request):
-        # Si necesitas mostrar el formulario vacío
         return render(request, 'contacts/orden_produccion.html')
 
     def post(self, request):
@@ -1126,10 +1101,8 @@ class DetalleOrdenCreateView(generic.CreateView):
             'observaciones': request.POST.get('observaciones'),
         }
 
-        # Crear un nuevo objeto de OrdenProduccion
         OrdenProduccion.objects.create(**data)
 
-        # Redirigir a una URL específica después de guardar
         return redirect('orden_produccion_view')    
     
 class DetalleOrdenListView(generic.ListView):
@@ -1152,7 +1125,6 @@ class DetalleOrdenCreateListView(generic.CreateView):
     template_name = 'contacts/formato_recepcion_materia_prima_form.html'
 
 def orden_produccion_view(request):
-    # Lógica de la vista
     return render(request, 'orden_produccion.html')
 
 class ControlAseguramientoView(View):
@@ -1234,21 +1206,59 @@ def export_bitacora_producto_terminado_pdf(request):
     response.write(result.getvalue())
     return response
 
+class kardex(View):
+    def get(self, request, *args, **kwargs):
+        return render(request, 'contacts/kardex.html')
+    
+
+
 class FormatoBitacoraProductoTerminadoView(View):
     def get(self, request, *args, **kwargs):
         return render(request, 'contacts/formato_bitacora_producto_terminado.html')
-
-class FormatoBitacoraProductoTerminadoListView(generic.ListView):
+    
+from django.views.generic import ListView
+    
+class FormatoBitacoraProductoTerminadoListView(ListView):
     model = FormatoBitacoraProductoTerminado
-    paginate_by = 15
     template_name = 'contacts/formato_bitacora_producto_terminado.html'
+    context_object_name = "object_list"
+    paginate_by = 15  
 
-    def get_queryset(self) -> QuerySet[Any]:
-        q = self.request.GET.get('q')
+    def get_queryset(self):
+        query = self.request.GET.get("q")
+        queryset = super().get_queryset()
+        if query:
+            queryset = queryset.filter(
+                Q(producto__icontains=query) |
+                Q(lote__icontains=query) |
+                Q(sku__icontains=query)
+            )
+        return queryset
 
-        if q:
-            return FormatoBitacoraProductoTerminado.objects.filter(producto__icontains=q)
-        return super().get_queryset()
+from django.http import JsonResponse
+from django.template.loader import render_to_string
+from .models import FormatoBitacoraProductoTerminado
+from django.db.models import Q
+
+def formato_bitacora_producto_terminado_list(request):
+    query = request.GET.get("q", "")
+    page = int(request.GET.get("page", 1))
+    items_per_page = 15
+    start = (page - 1) * items_per_page
+    end = start + items_per_page
+
+    queryset = FormatoBitacoraProductoTerminado.objects.filter(
+        Q(materiaprima__icontains=query) |
+        Q(claveproveedor__icontains=query)
+    )[start:end]
+    
+    table_html = render_to_string("partials/formato_recepcion_table_body.html", {"object_list": queryset})
+    
+    return JsonResponse({
+        "table_body": table_html,
+        "has_next": len(queryset) == items_per_page,  
+        "has_previous": page > 1
+    })
 
 class FormatoBitacoraProductoTerminadoCreateView(generic.CreateView):
     model = FormatoBitacoraProductoTerminado
@@ -1258,19 +1268,28 @@ class FormatoBitacoraProductoTerminadoCreateView(generic.CreateView):
     template_name='contacts/formato_bitacora_producto_terminado_form.html'
 
 class FormatoBitacoraProductoTerminadoUpdateView(generic.UpdateView):
-    model = FormatoRecepcionMateriaPrima
+    model = FormatoBitacoraProductoTerminado
     fields = ('fechaentrada','producto','lote','sku','presentacion','contenedores','cliente','noanalisis','fechacaducidad','recibe','contenedores',)
     success_url = reverse_lazy('formato_bitacora_producto_terminado')
     template_name='contacts/formato_bitacora_producto_terminado_form.html'
 
 class FormatoBitacoraProductoTerminadoDeleteView(generic.DeleteView):
-    model = FormatoRecepcionMateriaPrima
+    model = FormatoBitacoraProductoTerminado
     success_url = reverse_lazy('formato_bitacora_producto_terminado')
     template_name='contacts/formato_bitacora_producto_terminado_confirm_delete.html'
 
-class kardex(View):
-    def get(self, request, *args, **kwargs):
-        return render(request, 'contacts/kardex.html')
+
+class FormatoBitacoraProductoTerminadoListViewView(generic.ListView):
+    model = FormatoBitacoraProductoTerminado
+    paginate_by = 15
+    template_name = 'contacts/formato_bitacora_producto_terminado_view.html'
+
+    def get_queryset(self) -> QuerySet[Any]:
+        q = self.request.GET.get('q')
+
+        if q:
+            return FormatoBitacoraProductoTerminado.objects.filter(material__icontains=q)
+        return super().get_queryset()
 
 from django.shortcuts import render
 from .models import KardexRecepcionMateriaPrimaAlmacen
@@ -1279,7 +1298,7 @@ def buscar_kardex(request):
     etiqueta = ' '
     if 'q' in request.GET:
         query = request.GET['q']
-        etiqueta = FormatoRecepcionMateriaPrima.objects.filter(materiaprima__icontains=query).first()
+        etiqueta = FormatoRecepcionMateriaPrima.objects.filter(materiaprima__icontains=query).first() #AGREGAR BUSCAR POR LOTE INTERNO
     
     return render(request, 'contacts/kardex.html', {'etiqueta': etiqueta})
 
@@ -1292,10 +1311,8 @@ from datetime import datetime
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import KardexRecepcionMateriaPrimaAlmacen, FormatoRecepcionMateriaPrima
 
-
 class GuardarKardexView(View):
     def post(self, request, *args, **kwargs):
-        # Obtén el ID del formato de recepción de materia prima
         formato_id = request.POST.get('id')
         
         if not formato_id:
@@ -1303,12 +1320,10 @@ class GuardarKardexView(View):
 
         formato_recepcion = get_object_or_404(FormatoRecepcionMateriaPrima, id=formato_id)
 
-        # Validar si los datos obligatorios están presentes
         fechasalida = request.POST.get('fecha_salida', None)
         if not fechasalida:
             return render(request, 'contacts/kardex.html', {'error': 'La fecha de salida es obligatoria.'})
         
-        # Crear y guardar el objeto KardexRecepcionMateriaPrimaAlmacen
         try:
             kardex = KardexRecepcionMateriaPrimaAlmacen(
                 materiaprima=formato_recepcion.materiaprima,  
@@ -1319,20 +1334,18 @@ class GuardarKardexView(View):
                 codigoproveedorcliente=formato_recepcion.claveproveedor,
                 sku=formato_recepcion.sku,
 
-                # Datos de salida
-                fechasalida=fechasalida,  # Usamos la variable ya validada
+                fechasalida=fechasalida,  
                 clienteusointerno=request.POST.get('cliente_usointerno', ''),
                 noloteproveedor=request.POST.get('lote_proveedor', ''),
-                cantidadsale=request.POST.get('cantidad_sale', 0),  # Asegúrate de que sea el tipo correcto
+                cantidadsale=request.POST.get('cantidad_sale', 0),  
                 cantidadqueda=request.POST.get('cantidad_queda', 0),
                 realizo=request.POST.get('realizo', ''),
                 observaciones=request.POST.get('observaciones', ''), 
 
-                # Asocia la salida con la entrada a través del campo 'formato_recepcion'
                 formato_recepcion=formato_recepcion
             )
             kardex.save()
-            return redirect('kardex_list')  # Redirige al listado de Kardex después de guardar
+            return redirect('kardex_list')  
         except Exception as e:
             return render(request, 'contacts/kardex.html', {'error': f'No se pudo guardar el kardex: {e}'})
 
@@ -1342,11 +1355,11 @@ class KardexView(View):
     
 def buscar_kardex(request):
     etiqueta = None
-    object_list = []  # Lista de salidas relacionadas
+    object_list = [] 
 
     if 'q' in request.GET:
         query = request.GET['q']
-        etiqueta = FormatoRecepcionMateriaPrima.objects.filter(materiaprima__icontains=query).first()
+        KardexRecepcionMateriaPrimaAlmacen.objects.filter(clienteusocliente__nombre__icontains=R)
 
         if etiqueta:
             object_list = KardexRecepcionMateriaPrimaAlmacen.objects.filter(formato_recepcion=etiqueta)
