@@ -3,7 +3,7 @@ from django.urls import path
 # from .views import generate_pdf
 from contacts import views
 
-from .views import tu_vista_guardar, buscar_etiqueta_identificacion_materiales, buscar_orden_produccion, buscar_material,buscar_kardex, PruebaTablaListView
+from .views import tu_vista_guardar, buscar_etiqueta_identificacion_materiales, buscar_orden_produccion, buscar_material,buscar_kardex, PruebaTablaListView,kardex_listlist
 # from .views import orden_produccion_view, menu_desplegable_view
 
 
@@ -99,6 +99,9 @@ urlpatterns = [
     path('kardex/buscar/', buscar_kardex, name='buscar_kardex'),
     # path('guardar-kardex/', guardar_kardex, name='guardar_kardex'),
     path('kardex/guardar/', views.GuardarKardexView.as_view(), name='guardar_kardex'),
+    path('kardexview/',views.KardexListViewView.as_view(),name='kardex_view'),
+    path('exportkardex/pdf/', views.export_formato_kardex_pdf2, name='export_formato_kardex_pdf2'),
+    path('kardexlist/', kardex_listlist, name='kardex_listlist'),
 
     # path('download-pdf/', views.generate_pdf.as_view(), name='download_pdf'),
 

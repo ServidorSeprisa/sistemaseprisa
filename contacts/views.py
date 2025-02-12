@@ -73,28 +73,6 @@ class RegistroUsuarioDeleteView(generic.DeleteView):
     success_url = reverse_lazy('registrousuario_list')
     template_name='contacts/registro_usuario_confirm_delete.html'
 
-
-# LOGIN ----------------------------------
-
-# class LoginView(View):
-
-#     def get(self, request):
-#         form = AuthenticationForm()
-#         return render(request, 'contacts/login.html', {'form': form})
-
-#     def post(self, request):
-#         form = AuthenticationForm(request, data=request.POST)
-#         if form.is_valid():
-#             username = form.cleaned_data['username']
-#             password = form.cleaned_data['password']
-#             user = authenticate(request, username=username, password=password)
-#             if user is not None:
-#                 login(request, user)
-#                 return redirect('Menu') 
-#             else:
-#                 messages.error(request, 'Credenciales incorrectas')
-#         return render(request, 'contacts/login.html')
-
 from django.contrib.auth import authenticate, login
 from django.shortcuts import render, redirect
 from django.contrib.auth.views import LoginView
@@ -104,25 +82,22 @@ class CustomLoginView(LoginView):
     template_name = "contacts/login.html"
 
     def form_valid(self, form):
-        # Autenticar al usuario
         usuario = form.get_user()
 
-        # Aquí se puede agregar la lógica para redirigir según el tipo de usuario
         if usuario.tipousuario == 'admin':
-            return redirect('MenuAdmin')  # Ruta del menú del administrador
+            return redirect('MenuAdmin')  
         elif usuario.tipousuario == 'ent':
-            return redirect('MenuEntrada')  # Ruta del menú de almacén
+            return redirect('MenuEntrada') 
         elif usuario.tipousuario == 'alm':
-            return redirect('MenuAlmacen')  # Ruta del menú de almacén
+            return redirect('MenuAlmacen')  
         elif usuario.tipousuario == 'prod':
-            return redirect('MenuProduccion')  # Ruta del menú de producción
+            return redirect('MenuProduccion') 
         elif usuario.tipousuario == 'cal':
-            return redirect('MenuCalidad')  # Ruta del menú de producción
+            return redirect('MenuCalidad') 
         else:
-            return redirect('login')  # Ruta por defecto para otros usuarios
+            return redirect('login') 
 
     def form_invalid(self, form):
-        # Si la autenticación falla, puedes agregar un mensaje de error
         messages.error(self.request, "Usuario o contraseña incorrectos")
         return super().form_invalid(form)
 
@@ -1015,7 +990,6 @@ class OrdenProduccionView(View):
     
 class OrdenProduccionCreateView(generic.CreateView): 
     def get(self, request):
-        # Si necesitas mostrar el formulario vacío
         return render(request, 'contacts/orden_produccion.html')
 
     def post(self, request):
@@ -1294,22 +1268,6 @@ class FormatoBitacoraProductoTerminadoListViewView(generic.ListView):
 from django.shortcuts import render
 from .models import KardexRecepcionMateriaPrimaAlmacen
 
-def buscar_kardex(request):
-    etiqueta = ' '
-    if 'q' in request.GET:
-        query = request.GET['q']
-        etiqueta = FormatoRecepcionMateriaPrima.objects.filter(materiaprima__icontains=query).first() #AGREGAR BUSCAR POR LOTE INTERNO
-    
-    return render(request, 'contacts/kardex.html', {'etiqueta': etiqueta})
-
-from .models import KardexRecepcionMateriaPrimaAlmacen, FormatoRecepcionMateriaPrima
-
-from django.shortcuts import render, redirect
-from .models import KardexRecepcionMateriaPrimaAlmacen, FormatoRecepcionMateriaPrima
-from datetime import datetime
-
-from django.shortcuts import render, redirect, get_object_or_404
-from .models import KardexRecepcionMateriaPrimaAlmacen, FormatoRecepcionMateriaPrima
 
 class GuardarKardexView(View):
     def post(self, request, *args, **kwargs):
@@ -1345,29 +1303,46 @@ class GuardarKardexView(View):
                 formato_recepcion=formato_recepcion
             )
             kardex.save()
-            return redirect('kardex_list')  
+            return redirect('kardex_list') 
         except Exception as e:
             return render(request, 'contacts/kardex.html', {'error': f'No se pudo guardar el kardex: {e}'})
 
 class KardexView(View):
     def get(self, request, *args, **kwargs):
         return render(request, 'contacts/kardex.html')
-    
-def buscar_kardex(request):
-    etiqueta = None
-    object_list = [] 
 
-    if 'q' in request.GET:
-        query = request.GET['q']
-        KardexRecepcionMateriaPrimaAlmacen.objects.filter(clienteusocliente__nombre__icontains=R)
+from django.shortcuts import render, get_object_or_404
+from .models import FormatoRecepcionMateriaPrima
 
-        if etiqueta:
-            object_list = KardexRecepcionMateriaPrimaAlmacen.objects.filter(formato_recepcion=etiqueta)
+def kardex_listlist(request):
+    id = request.GET.get('id')
 
-    return render(request, 'contacts/kardex.html', {
-        'etiqueta': etiqueta,
-        'object_list': object_list
-    })
+    if id:
+        etiqueta = get_object_or_404(FormatoRecepcionMateriaPrima, pk=id)
+        
+        salidas = etiqueta.kardexrecepcionmateriaprimaalmacen_set.all()
+        
+        return render(request, 'contacts/kardex.html', {'etiqueta': etiqueta, 'salidas': salidas})
+    else:
+        return render(request, 'contacts/kardex.html', {'error': 'ID no proporcionado'})
+
+
+
+from django.shortcuts import render, get_object_or_404
+from .models import FormatoRecepcionMateriaPrima
+
+def kardex_listlist(request):
+    id = request.GET.get('id')
+
+    if id:
+        etiqueta = get_object_or_404(FormatoRecepcionMateriaPrima, pk=id)
+        
+        salidas = etiqueta.kardexrecepcionmateriaprimaalmacen_set.all()
+        
+        return render(request, 'contacts/kardex.html', {'etiqueta': etiqueta, 'salidas': salidas})
+    else:
+        return render(request, 'contacts/kardex.html', {'error': 'ID no proporcionado'})
+
 
 
 class KardexListView(generic.ListView):
@@ -1376,11 +1351,46 @@ class KardexListView(generic.ListView):
     template_name = 'contacts/kardex.html'
 
     def get_queryset(self) -> QuerySet[Any]:
-        R = self.request.GET.get('q')
+        q = self.request.GET.get('q')
 
-        if R:
-            return KardexRecepcionMateriaPrimaAlmacen.objects.filter(clienteusocliente__icontains=R)
+        if q:
+            return KardexRecepcionMateriaPrimaAlmacen.objects.filter(materiaprima__icontains=q)
         return super().get_queryset()
+    
+class KardexListViewView(generic.ListView):
+    model = FormatoRecepcionMateriaPrima
+    paginate_by = 15
+    template_name = 'contacts/kardex2.html'
+
+    def get_queryset(self) -> QuerySet[Any]:
+        q = self.request.GET.get('q')
+
+        queryset = FormatoRecepcionMateriaPrima.objects.all()
+
+        if q:
+            queryset = queryset.filter(materiaprima__icontains=q)
+
+        queryset = queryset.prefetch_related('kardexrecepcionmateriaprimaalmacen_set')
+
+        return queryset
+
+
+
+def buscar_kardex(request):
+    etiqueta = None
+    object_list = [] 
+
+    if 'q' in request.GET:
+        query = request.GET['q']
+        etiqueta = FormatoRecepcionMateriaPrima.objects.filter(materiaprima__icontains=query).first()
+
+        if etiqueta:
+            object_list = KardexRecepcionMateriaPrimaAlmacen.objects.filter(formato_recepcion=etiqueta)
+
+    return render(request, 'contacts/kardex.html', {
+        'etiqueta': etiqueta,
+        'object_list': object_list
+    })
 
 class KardexCreateView(generic.CreateView):
     model = KardexRecepcionMateriaPrimaAlmacen
@@ -1404,3 +1414,49 @@ class KardexDeleteView(generic.DeleteView):
     model = KardexRecepcionMateriaPrimaAlmacen
     success_url = reverse_lazy('kardex_list')
     template_name='contacts/kardex_confirm_delete.html'
+
+
+import json
+from io import BytesIO
+from django.http import HttpResponse, JsonResponse
+from django.template.loader import get_template
+from xhtml2pdf import pisa
+from .models import FormatoRecepcionMateriaPrima, KardexRecepcionMateriaPrimaAlmacen
+
+def export_formato_kardex_pdf2(request):
+    if request.method == 'POST':
+        data = json.loads(request.body)
+        selected_ids = data.get('ids', [])
+
+        if not selected_ids:
+            return JsonResponse({"error": "No IDs provided"}, status=400)
+
+        formatos = FormatoRecepcionMateriaPrima.objects.filter(pk__in=selected_ids)
+        kardexs = KardexRecepcionMateriaPrimaAlmacen.objects.filter(pk__in=selected_ids)
+
+        template_path = 'contacts/kardex_pdf2.html'
+        context = {
+            'FormatoRecepcionMateriaPrimax': formatos,
+            'KardexRecepcionMateriaPrimaAlmacens': kardexs
+        }
+
+        template = get_template(template_path)
+        html = template.render(context)
+
+        response = HttpResponse(content_type='application/pdf')
+        response['Content-Disposition'] = 'attachment; filename="KARDEX.pdf"'
+
+        result = BytesIO()
+        pisa_status = pisa.CreatePDF(
+            BytesIO(html.encode("UTF-8")),
+            dest=result,
+            encoding='UTF-8'
+        )
+
+        if pisa_status.err:
+            return HttpResponse('Error generando el PDF', status=500)
+
+        response.write(result.getvalue())
+        return response
+
+    return JsonResponse({"error": "Invalid request"}, status=400)
