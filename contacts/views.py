@@ -1328,20 +1328,20 @@ def kardex_listlist(request):
 
 
 
-from django.shortcuts import render, get_object_or_404
-from .models import FormatoRecepcionMateriaPrima
+# from django.shortcuts import render, get_object_or_404
+# from .models import FormatoRecepcionMateriaPrima
 
-def kardex_listlist(request):
-    id = request.GET.get('id')
+# def kardex_listlist(request):
+#     id = request.GET.get('id')
 
-    if id:
-        etiqueta = get_object_or_404(FormatoRecepcionMateriaPrima, pk=id)
+#     if id:
+#         etiqueta = get_object_or_404(FormatoRecepcionMateriaPrima, pk=id)
         
-        salidas = etiqueta.kardexrecepcionmateriaprimaalmacen_set.all()
+#         salidas = etiqueta.kardexrecepcionmateriaprimaalmacen_set.all()
         
-        return render(request, 'contacts/kardex.html', {'etiqueta': etiqueta, 'salidas': salidas})
-    else:
-        return render(request, 'contacts/kardex.html', {'error': 'ID no proporcionado'})
+#         return render(request, 'contacts/kardex.html', {'etiqueta': etiqueta, 'salidas': salidas})
+#     else:
+#         return render(request, 'contacts/kardex.html', {'error': 'ID no proporcionado'})
 
 
 
