@@ -164,7 +164,7 @@
                     <td>
                         <input type="checkbox" class="select-row" value="{{ FormatoRecepcionMateriaAlergenos.pk }}" />
                     </td>
-                    <td>{{ FormatoRecepcionMateriaAlergenos.fechaentrada }}</td>
+                    <td>{{ FormatoRecepcionMateriaAlergenos.fechaentrada|date:'d/m/Y h:i A'  }}</td>
                     <td>{{ FormatoRecepcionMateriaAlergenos.materiaprima|default:'-'}}</td>
                     {% comment %} <td>{{ FormatoRecepcionMateriaAlergenos.fechaentrada }}</td>
                     <td>{{ FormatoRecepcionMateriaAlergenos.materiaprima|default:'-' }}</td> {% endcomment %}
