@@ -87,3 +87,4 @@
 /env/Lib/site-packages/xhtml2pdf
 /env/Lib/site-packages/xhtml2pdf-0.2.16.dist-info
 /env/Lib/site-packages/yaml
+db.sqlite3
