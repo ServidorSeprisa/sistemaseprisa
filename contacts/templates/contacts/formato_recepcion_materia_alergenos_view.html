@@ -164,9 +164,10 @@
                     <td>
                         <input type="checkbox" class="select-row" value="{{ FormatoRecepcionMateriaAlergenos.pk }}" />
                     </td>
-                    <td>{{ FormatoRecepcionMateriaAlergenos.materiaprima|default:'-'}}</td>
                     <td>{{ FormatoRecepcionMateriaAlergenos.fechaentrada }}</td>
-                    <td>{{ FormatoRecepcionMateriaAlergenos.materiaprima|default:'-' }}</td>
+                    <td>{{ FormatoRecepcionMateriaAlergenos.materiaprima|default:'-'}}</td>
+                    {% comment %} <td>{{ FormatoRecepcionMateriaAlergenos.fechaentrada }}</td>
+                    <td>{{ FormatoRecepcionMateriaAlergenos.materiaprima|default:'-' }}</td> {% endcomment %}
                     <td>{{ FormatoRecepcionMateriaAlergenos.loteseprisa|default:'-' }}</td>
                     <td>{{ FormatoRecepcionMateriaAlergenos.pesobruto|default:'-' }}</td>
                     <td>{{ FormatoRecepcionMateriaAlergenos.pesoneto|default:'-' }}</td>

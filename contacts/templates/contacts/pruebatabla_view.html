@@ -154,7 +154,7 @@
                     <th>Lote proveedor</th>
                     <th>F. de caducidad</th>
                     <th>Recibe</th>
-                    <th>Acciones</th>
+                    {% comment %} <th>Acciones</th> {% endcomment %}
                     <th></th>
                 </tr>
             </thead>
@@ -178,12 +178,12 @@
                     <td>{{ FormatoRecepcionMateriaPrima.fechacaducidad|default:"-" }}</td>
                     <td>{{ FormatoRecepcionMateriaPrima.recibe|default:"-" }}</td>
 
-                    <td>
+                    {% comment %} <td>
                         <div class="btn-group btn-group-sm">
                             <a href="{% url 'formatorecepcionmateriaprima_edit' FormatoRecepcionMateriaPrima.pk %}" class ="btn btn-primary">Editar</a>
                             <a href="{% url 'formatorecepcionmateriaprima_delete' FormatoRecepcionMateriaPrima.pk %}" class ="btn btn-danger">Eliminar</a>
                         </div>
-                    </td>
+                    </td> {% endcomment %}
                 </tr>
                 {% endfor %}
             </tbody>
