@@ -26,80 +26,228 @@ from django.contrib.auth import authenticate, login
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib import messages
 
-# USUARIOS
-class RegistroUsuarioListView(generic.ListView):
+from django.shortcuts import render, redirect
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth import logout
+from .forms import RegistroUsuarioCreationForm
+from django.contrib.auth import authenticate, login
+
+
+# Create your views here.
+def home(request):
+    return render(request, 'contacts/home.html')
+
+# Create your views here.
+def menu_principal(request):
+    return render(request, 'contacts/menu_principal.html')
+
+# def RegistroUsuarios(request):
+#     if request.method == 'POST':
+#         form = RegistroUsuarioCreationForm(request.POST)
+#         if form.is_valid():
+#             user = form.save()
+#             login(request, user)  # Iniciar sesión automáticamente después del registro
+#             return redirect(assign_dashboard(user))  # Redirigir según su tipo de usuario
+#     else:
+#         form = RegistroUsuarioCreationForm()
+#     return render(request, 'contacts/registro_usuarios.html', {'form': form})
+
+# def assign_dashboard(user):
+#     """ Asigna la vista del dashboard según el tipo de usuario """
+#     dashboard_urls = {
+#         'admin': 'menu_admin',
+#         'alm': 'menu_almacen',
+#         'prod': 'menu_produccion',
+#         'cal': 'menu_calidad',
+#         'entrada': 'menu_entrada'
+#     }
+#     return dashboard_urls.get(user.user_type, 'menu_principal')  # Redirige al home si no hay coincidencia
+
+def register(request):
+    if request.method == 'POST':
+        form = RegistroUsuarioCreationForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            login(request, user)  # Iniciar sesión automáticamente después del registro
+            return redirect(assign_dashboard(user))  # Redirigir según su tipo de usuario
+    else:
+        form = RegistroUsuarioCreationForm()
+    return render(request, 'contacts/register.html', {'form': form})
+
+def assign_dashboard(user):
+    """ Asigna la vista del dashboard según el tipo de usuario """
+    dashboard_urls = {
+        'admin': 'menu_admin',
+        'alm': 'menu_almacen',
+        'prod': 'menu_produccion',
+        'cal': 'menu_calidad',
+        'entrada': 'menu_entrada'
+    }
+    return dashboard_urls.get(user.user_type, 'home')  # Redirige al home si no hay coincidencia
+
+from django.urls import reverse
+from django.contrib.auth.views import LoginView
+from django.contrib.auth import logout
+
+class LoginView(LoginView):
+    template_name = 'contacts/login.html'
+
+    def form_valid(self, form):
+        """ Redirige al menú según el tipo de usuario autenticado """
+        usuario = form.get_user()
+        login(self.request, usuario)  # Autentica al usuario correctamente
+
+        # 🔍 Verifica en la consola si el usuario se autentica y qué tipo de usuario tiene
+        print(f"Usuario autenticado: {usuario.username} - Tipo: {usuario.user_type}")  
+
+        # Diccionario de rutas de redirección según el tipo de usuario
+        dashboard_urls = {
+            'admin': 'menu_admin',
+            'alm': 'menu_almacen',
+            'prod': 'menu_produccion',
+            'cal': 'menu_calidad',
+            'entrada': 'menu_entrada'
+        }
+
+        # Obtiene la URL de redirección según el tipo de usuario
+        redirect_url = dashboard_urls.get(usuario.user_type, 'home')
+
+        return redirect(redirect_url)
+
+from django.views.generic import ListView
+
+# class RegistroUsuariosListView(ListView):
+class UserListView(ListView):
     model = RegistroUsuario
-    paginate_by = 15
-    template_name = 'contacts/registro_usuario.html'
+    template_name = 'contacts/registro_usuarios_list.html'  # Crea este template
+    context_object_name = 'usuarios'
+
+
+from django.shortcuts import render, get_object_or_404, redirect
+from django.views.generic import UpdateView, DeleteView
+from django.urls import reverse_lazy
+from .models import RegistroUsuario
+from .forms import RegistroUsuarioCreationForm  # Crea este formulario
+
+# class RegistroUsuariosEditView(UpdateView):
+class UserEditView(UpdateView):
+    model = RegistroUsuario
+    form_class = RegistroUsuarioCreationForm
+    template_name = 'contacts/registro_usuarios_edit.html'
+    success_url = reverse_lazy('registro_usuarios_list')  # Redirige a la lista después de editar
+
+
+from django.views.generic import DeleteView
+
+# class RegistroUsuariosDeleteView(DeleteView):
+class UserDeleteView(DeleteView):
+    model = RegistroUsuario
+    template_name = 'contacts/registro_usuarios_confirm_delete.html'
+    success_url = reverse_lazy('registro_usuarios_list')
+
+@login_required
+def menu_admin(request):
+    # Agrega el contenido del dashboard del administrador
+    return render(request, 'contacts/menu_admin.html')
+
+@login_required
+def menu_entrada(request):
+    # Agrega el contenido del dashboard del administrador
+    return render(request, 'contacts/menu_entrada.html')
+
+@login_required
+def menu_almacen(request):
+    # Agrega el contenido del dashboard del administrador
+    return render(request, 'contacts/menu_almacen.html')
+
+@login_required
+def menu_produccion(request):
+    # Agrega el contenido del dashboard del administrador
+    return render(request, 'contacts/menu_produccion.html')
+
+@login_required
+def menu_almacen(request):
+    # Agrega el contenido del dashboard del administrador
+    return render(request, 'contacts/menu_almacen.html')
+
+@login_required
+def menu_calidad(request):
+    # Agrega el contenido del dashboard del administrador
+    return render(request, 'contacts/menu_calidad.html')
+# # USUARIOS
+# class RegistroUsuarioListView(generic.ListView):
+#     model = RegistroUsuario
+#     paginate_by = 15
+#     template_name = 'contacts/registro_usuario.html'
     
 
-    def get_queryset(self) -> QuerySet[Any]:
-        q = self.request.GET.get('q')
+#     def get_queryset(self) -> QuerySet[Any]:
+#         q = self.request.GET.get('q')
 
-        if q:
-            return RegistroUsuario.objects.filter(name__icontains=q)
+#         if q:
+#             return RegistroUsuario.objects.filter(name__icontains=q)
 
-        return super().get_queryset() 
+#         return super().get_queryset() 
 
-class RegistroUsuarioCreateView(generic.CreateView): 
-    model = RegistroUsuario 
-    fields = ('nombre', 'apellidopaterno', 'apellidomaterno', 'tipousuario', 'correo','contraseña', 'confirmacioncontraseña')
-    success_url = reverse_lazy('registrousuario_list')
-    template_name = 'contacts/registro_usuario.html'
-
-
-    def form_valid(self, form):
-        if form.cleaned_data['contraseña'] != form.cleaned_data['confirmacioncontraseña']:
-            form.add_error('confirmacioncontraseña', 'Las contraseñas no coinciden.')
-            return self.form_invalid(form)
-        return super().form_valid(form)
+# class RegistroUsuarioCreateView(generic.CreateView): 
+#     model = RegistroUsuario 
+#     fields = ('nombre', 'apellidopaterno', 'apellidomaterno', 'tipousuario', 'correo','contraseña', 'confirmacioncontraseña')
+#     success_url = reverse_lazy('registrousuario_list')
+#     template_name = 'contacts/registro_usuario.html'
 
 
-class RegistroUsuarioUpdateView(generic.UpdateView):
-    model = RegistroUsuario
-    fields = ('nombre','apellidopaterno','apellidomaterno','tipousuario','correo','contraseña','confirmacioncontraseña',)
-    success_url = reverse_lazy('registrousuario_list')
-    template_name = 'contacts/registro_usuario_form.html'
-
-    def form_valid(self, form):
-        if form.cleaned_data['contraseña'] != form.cleaned_data['confirmacioncontraseña']:
-            form.add_error('confirmacioncontraseña', 'Las contraseñas no coinciden.')
-            return self.form_invalid(form)
-        return super().form_valid(form)
+#     def form_valid(self, form):
+#         if form.cleaned_data['contraseña'] != form.cleaned_data['confirmacioncontraseña']:
+#             form.add_error('confirmacioncontraseña', 'Las contraseñas no coinciden.')
+#             return self.form_invalid(form)
+#         return super().form_valid(form)
 
 
-class RegistroUsuarioDeleteView(generic.DeleteView):
-    model = RegistroUsuario
-    success_url = reverse_lazy('registrousuario_list')
-    template_name='contacts/registro_usuario_confirm_delete.html'
+# class RegistroUsuarioUpdateView(generic.UpdateView):
+#     model = RegistroUsuario
+#     fields = ('nombre','apellidopaterno','apellidomaterno','tipousuario','correo','contraseña','confirmacioncontraseña',)
+#     success_url = reverse_lazy('registrousuario_list')
+#     template_name = 'contacts/registro_usuario_form.html'
 
-from django.contrib.auth import authenticate, login
-from django.shortcuts import render, redirect
-from django.contrib.auth.views import LoginView
-from django.contrib import messages
+#     def form_valid(self, form):
+#         if form.cleaned_data['contraseña'] != form.cleaned_data['confirmacioncontraseña']:
+#             form.add_error('confirmacioncontraseña', 'Las contraseñas no coinciden.')
+#             return self.form_invalid(form)
+#         return super().form_valid(form)
 
-class CustomLoginView(LoginView):
-    template_name = "contacts/login.html"
 
-    def form_valid(self, form):
-        usuario = form.get_user()
+# class RegistroUsuarioDeleteView(generic.DeleteView):
+#     model = RegistroUsuario
+#     success_url = reverse_lazy('registrousuario_list')
+#     template_name='contacts/registro_usuario_confirm_delete.html'
 
-        if usuario.tipousuario == 'admin':
-            return redirect('MenuAdmin')  
-        elif usuario.tipousuario == 'ent':
-            return redirect('MenuEntrada') 
-        elif usuario.tipousuario == 'alm':
-            return redirect('MenuAlmacen')  
-        elif usuario.tipousuario == 'prod':
-            return redirect('MenuProduccion') 
-        elif usuario.tipousuario == 'cal':
-            return redirect('MenuCalidad') 
-        else:
-            return redirect('login') 
+# from django.contrib.auth import authenticate, login
+# from django.shortcuts import render, redirect
+# from django.contrib.auth.views import LoginView
+# from django.contrib import messages
 
-    def form_invalid(self, form):
-        messages.error(self.request, "Usuario o contraseña incorrectos")
-        return super().form_invalid(form)
+# class CustomLoginView(LoginView):
+#     template_name = "contacts/login.html"
+
+#     def form_valid(self, form):
+#         usuario = form.get_user()
+
+#         if usuario.tipousuario == 'admin':
+#             return redirect('MenuAdmin')  
+#         elif usuario.tipousuario == 'ent':
+#             return redirect('MenuEntrada') 
+#         elif usuario.tipousuario == 'alm':
+#             return redirect('MenuAlmacen')  
+#         elif usuario.tipousuario == 'prod':
+#             return redirect('MenuProduccion') 
+#         elif usuario.tipousuario == 'cal':
+#             return redirect('MenuCalidad') 
+#         else:
+#             return redirect('login') 
+
+#     def form_invalid(self, form):
+#         messages.error(self.request, "Usuario o contraseña incorrectos")
+#         return super().form_invalid(form)
 
 
 # CONTACTOS ---------------------------------------------
@@ -1008,7 +1156,7 @@ class OrdenProduccionCreateView(generic.CreateView):
 
         OrdenProduccion.objects.create(**data)
 
-        return redirect('orden_produccion_view')    
+        return redirect('ordenproduccion_view')    
     
 class OrdenProduccionListView(generic.ListView):
     model = DetalleOrden
@@ -1100,6 +1248,68 @@ class DetalleOrdenCreateListView(generic.CreateView):
 
 def orden_produccion_view(request):
     return render(request, 'orden_produccion.html')
+
+
+def OrdenProduccionList(request):
+    return render(request, 'orden_produccion_list.html')
+
+
+class OrdenProduccionList(View):
+    def get(self, request, *args, **kwargs):
+        return render(request, 'contacts/orden_produccion_list.html')
+    
+class OrdenProduccionListViewView(generic.ListView):
+    model = FormatoRecepcionMateriaPrima
+    paginate_by = 15
+    template_name = 'contacts/orden_produccion_list.html'
+
+    def get_queryset(self) -> QuerySet[Any]:
+        q = self.request.GET.get('q')
+
+        queryset = FormatoRecepcionMateriaPrima.objects.all()
+
+        if q:
+            queryset = queryset.filter(materiaprima__icontains=q)
+
+        queryset = queryset.prefetch_related('kardexrecepcionmateriaprimaalmacen_set')
+
+        return queryset
+    
+
+class KardexListViewView(generic.ListView):
+    model = FormatoRecepcionMateriaPrima
+    paginate_by = 15
+    template_name = 'contacts/kardex2.html'
+
+    def get_queryset(self) -> QuerySet[Any]:
+        q = self.request.GET.get('q')
+
+        queryset = FormatoRecepcionMateriaPrima.objects.all()
+
+        if q:
+            queryset = queryset.filter(materiaprima__icontains=q)
+
+        queryset = queryset.prefetch_related('kardexrecepcionmateriaprimaalmacen_set')
+
+        return queryset
+
+
+
+def buscar_kardex(request):
+    etiqueta = None
+    object_list = [] 
+
+    if 'q' in request.GET:
+        query = request.GET['q']
+        etiqueta = FormatoRecepcionMateriaPrima.objects.filter(materiaprima__icontains=query).first()
+
+        if etiqueta:
+            object_list = KardexRecepcionMateriaPrimaAlmacen.objects.filter(formato_recepcion=etiqueta)
+
+    return render(request, 'contacts/kardex.html', {
+        'etiqueta': etiqueta,
+        'object_list': object_list
+    })
 
 class ControlAseguramientoView(View):
     def get(self, request, *args, **kwargs):

@@ -23,3 +23,21 @@ class EtiquetaForm(forms.Form):
 
 # sjdbjhsbd
 # se agrego el dia viernes 06/09/2024
+
+from django import forms
+from django.contrib.auth.forms import UserCreationForm
+from .models import RegistroUsuario
+
+class RegistroUsuarioCreationForm(UserCreationForm):
+    email = forms.EmailField(required=True)
+    user_type = forms.ChoiceField(choices=RegistroUsuario.USER_TYPES, required=True, label="Tipo de Usuario")
+
+    class Meta:
+        model = RegistroUsuario
+        fields = ['username', 'first_name', 'last_name', 'email', 'user_type', 'password1', 'password2']
+
+    def clean_email(self):
+        email = self.cleaned_data['email']
+        if RegistroUsuario.objects.filter(email=email).exists():
+            raise forms.ValidationError('Este correo electrónico ya está registrado')
+        return email

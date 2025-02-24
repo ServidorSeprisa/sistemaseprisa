@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        @page {
+            size: A4 landscape; /* Configura la orientación horizontal */
+            margin: 10mm; /* Ajusta los márgenes según sea necesario */
+        }
+
+        body {
+            margin: 3;
+            padding: 0;
+            text-align: center; /* Centra el contenido de la página */
+        }
+
+        table {
+            width: 80%; /* Ajusta el ancho de la tabla */
+            margin: 20px auto; /* Centra la tabla y añade espacio arriba y abajo */
+            border-collapse: collapse; /* Asegura que los bordes de las celdas se colapsen */
+        }
+
+        th, td {
+            border: 1px solid black; /* Disminuye el grosor del borde para las celdas */
+            padding: 1.5px; /* Ajusta el relleno para mantener espacio alrededor del texto */
+            text-align: center;
+            vertical-align: middle; /* Centra verticalmente el contenido de la celda */
+        }
+
+        th img {
+            width: 100px; /* Ajusta el tamaño de la imagen */
+        }
+
+        .large-cell {
+            font-size: 1em; /* Tamaño de fuente ajustado */
+            text-align: center;
+            vertical-align: middle; /* Centra verticalmente el contenido de la celda */
+            padding: 1px; /* Ajusta el relleno para hacerlo más adecuado */
+        }
+
+        th.left, th.right {
+            width: 25%; /* Ajusta el ancho para las celdas de los extremos */
+            text-align: center;
+        }
+
+        th.right {
+            text-align: left; /* Alinea el texto a la izquierda en la celda derecha */
+        }
+
+        /* Estilo opcional para asegurar que la tabla tenga un borde visible */
+        table {
+            border: 1px solid black;
+        }
+
+        h2 {
+            text-align: left;
+        }
+    </style>
+</head>
+<body>
+    <table class="tabla">
+        <thead>
+            <tr>
+                <th class="left">
+                    <img src="C:/Users/AMD/Documents/Proyecto/logoSEPRISA4.png" alt="Logo">
+                </th>
+            
+                <th class="large-cell">
+                    SEPRISA, SERVICIOS Y PRODUCTOS INTEGRALES PARA LA SALUD S.A. <br>
+                    DE C.V.<br>
+                    FORMATO <br>
+                    RECEPCIÓN DE MATERIA PRIMA <br>
+                </th>
+            
+                <th class="right">
+                    CÓDIGO: <br>
+                    VERSIÓN: <br>
+                    FECHA DE REVISIÓN: <br>
+                    PÁGINAS: <br>
+                </th>
+            </tr>
+        </thead>
+    </table>
+
+    <table>
+        <thead>
+            <tr>
+                <th>F. de entrada</th>
+                <th>Materia prima</th>
+                <th>Lote SEPRISA</th>
+                <th>Peso Bruto</th>
+                <th>Peso Neto</th>
+                <th>No. Contenedores</th>
+                <th>Clave del proveedor</th>
+                <th>No. analisis</th>
+                <th>SKU</th>
+                <th>Lote proveedor</th>
+                <th>F. de caducidad</th>
+                <th>Recibe</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in FormatoRecepcionMateriaPrimax %}
+            <tr>
+                <td>{{ item.fechaentrada|date:'d/m/Y h:i A'}}</td>
+                <td>{{ item.materiaprima }}</td>
+                <td>{{ item.loteseprisa }}</td>
+                <td>{{ item.pesobruto }}</td>
+                <td>{{ item.pesoneto }}</td>
+                <td>{{ item.nocontenedores }}</td>
+                <td>{{ item.claveproveedor }}</td>
+                <td>{{ item.noanalisis }}</td>
+                <td>{{ item.sku }}</td>
+                <td>{{ item.noloteproveedor }}</td>
+                <td>{{ item.fechacaducidad }}</td>
+                <td>{{ item.recibe }}</td>
+            </tr>
+            {% endfor %}
+            {% comment %} <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+            <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+            <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+            <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+            <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+            <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+            <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+            <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+            <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+            <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+            <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+            <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+            <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+            <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+            <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr> {% endcomment %}
+
+        </tbody>
+    </table>
+
+    <h2>© Queda prohibida la reproducción total o parcial de este documento por cualquier medio, así como transportarlo fuera de las instalaciones SEPRISA S.A. DE C.V., sin autorización previa del Director General</h2>
+</body>
+</html>
+
+
+{% comment %} <!DOCTYPE html>
+<html>
+<head>
+    <style>
+        @page {
+            size: A4 landscape; /* Configura la orientación horizontal */
+            margin: 10mm; /* Ajusta los márgenes según sea necesario */
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            text-align: center; /* Centra el contenido de la página */
+        }
+
+        /* Estilo para la primera tabla */
+        .header-table {
+            width: 100%; /* Ajusta el ancho de la tabla al 100% */
+            border-collapse: collapse; /* Asegura que los bordes de las celdas se colapsen */
+            margin-bottom: 20px; /* Añade espacio debajo de la tabla */
+        }
+
+        .header-table th, .header-table td {
+            border: 2px solid black; /* Bordes negros para las celdas */
+            padding: 10px;
+            text-align: left;
+        }
+
+        .header-table th img {
+            width: 150px; /* Ajusta el tamaño de la imagen */
+        }
+
+        .large-cell {
+            font-size: 1.3em; /* Aumenta el tamaño de la fuente para la celda central */
+            text-align: center;
+            vertical-align: middle; /* Centra verticalmente el contenido de la celda */
+            padding: 20px; /* Ajusta el relleno para hacerlo más grande */
+        }
+
+        .header-table th.left, .header-table th.right {
+            width: 25%; /* Ajusta el ancho para las celdas de los extremos */
+            text-align: center;
+        }
+
+        .header-table th.right {
+            text-align: left; /* Alinea el texto a la izquierda en la celda derecha */
+        }
+
+        /* Estilo para la segunda tabla */
+        table.data-table {
+            width: 10%; /* Asegura que la tabla use el 100% del ancho disponible */
+            border-collapse: collapse; /* Asegura que los bordes de las celdas se colapsen */
+        }
+
+        table.data-table th, table.data-table td {
+            border: 2px solid black; /* Bordes negros para las celdas */
+            padding: 8px; /* Relleno reducido para ajustar mejor el contenido */
+            text-align: left;
+        }
+
+        /* Ajusta el tamaño de la fuente para las celdas de datos */
+        table.data-table th {
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <!-- Primera Tabla (Encabezado) -->
+    <table class="header-table">
+        <thead>
+            <tr>
+                <th class="left">
+                    <img src="C:/Users/AMD/Documents/Proyecto/logoSEPRISA4.png" alt="Logo">
+                </th>
+            
+                <th class="large-cell">
+                    SEPRISA, SERVICIOS Y PRODUCTOS INTEGRALES PARA LA SALUD S.A. <br>
+                    DE C.V.<br>
+                    FORMATO <br>
+                    RECEPCIÓN DE MATERIA PRIMA <br>
+                </th>
+            
+                <th class="right">
+                    CÓDIGO: <br>
+                    VERSIÓN: <br>
+                    FECHA DE REVISIÓN: <br>
+                    PÁGINAS: <br>
+                </th>
+            </tr>
+        </thead>
+    </table>
+
+    <!-- Segunda Tabla (Datos) -->
+    <table class="data-table">
+        <thead>
+            <tr>
+                <th>F. de entrada</th>
+                <th>Materia prima</th>
+                <th>Lote SEPRISA</th>
+                <th>Peso Bruto</th>
+                <th>Peso Neto</th>
+                <th>No. Contenedores</th>
+                <th>Clave del proveedor</th>
+                <th>No. analisis</th>
+                <th>SKU</th>
+                <th>Lote proveedor</th>
+                <th>F. de caducidad</th>
+                <th>Recibe</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in FormatoRecepcionMateriaPrimax %}
+            <tr>
+                <td>{{ item.fechaentrada|date:'d/m/Y h:i A'}}</td>
+                <td>{{ item.materiaprima }}</td>
+                <td>{{ item.loteseprisa }}</td>
+                <td>{{ item.pesobruto }}</td>
+                <td>{{ item.pesoneto }}</td>
+                <td>{{ item.nocontenedores }}</td>
+                <td>{{ item.claveproveedor }}</td>
+                <td>{{ item.noanalisis }}</td>
+                <td>{{ item.sku }}</td>
+                <td>{{ item.noloteproveedor }}</td>
+                <td>{{ item.fechacaducidad }}</td>
+                <td>{{ item.recibe }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <h2>© Queda prohibida la reproducción total o parcial de este documento por cualquier medio, así como transportarlo fuera de las instalaciones SEPRISA S.A. DE C.V., sin autorización previa del Director General</h2>
+</body>
+</html> {% endcomment %}

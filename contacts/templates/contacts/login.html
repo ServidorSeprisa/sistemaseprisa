@@ -1,128 +1,94 @@
+{% load crispy_forms_tags %}
 {% load static %}
 
 <!DOCTYPE html>
 <html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.min.css' %}">
     <style>
-        /* Fondo de la página */
         body {
-            background-color: #e0e0e0; /* Fondo general de la página (puede ser un color o una imagen de fondo) */
-            background-image: url('{% static "images/fondo1.jpg" %}'); /* Si prefieres una imagen de fondo */
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
-            margin: 0;
-            padding: 0;
+            background: linear-gradient(to right, #4b6cb7, #182848);
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
             font-family: 'Arial', sans-serif;
         }
 
-        /* Estilo del contenedor principal del login */
         .login-container {
-            {% comment %} background: #fff; /* Fondo blanco para el contenedor */ {% endcomment %}
-            background-color: rgba(255, 255, 255, 0.7); /* Fondo oscuro y translúcido para el contenedor */
-            padding: 20px;
-            border: 1px solid #ddd;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 30px;
             border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            width: 100%;
             max-width: 400px;
-            margin: 100px auto; /* Centrado en la página con margen superior */
             text-align: center;
         }
 
-        h1 {
-            font-family: "Bowlby One SC", sans-serif;
-            font-size: 2.5rem;
-            color: #0e1238;
+        .login-container h1 {
+            font-size: 2rem;
+            color: #182848;
             margin-bottom: 20px;
+            font-weight: bold;
         }
 
-        .form-title {
-            font-size: 1.5rem;
-            margin-bottom: 20px;
-        }
-
-        /* Estilo del botón */
-        .btn-login {
-            background: #0e1238;
-            color: #00FF00;
+        .input-group-text {
+            background: #4b6cb7;
+            color: #fff;
             border: none;
-            padding: 12px 20px;
+        }
+
+        .btn-login {
+            background: #182848;
+            color: #fff;
             font-size: 1.2rem;
-            cursor: pointer;
+            padding: 10px;
             border-radius: 5px;
             width: 100%;
+            transition: background 0.3s;
         }
 
         .btn-login:hover {
-            background: #32CD32;
-            color: #fff;
+            background: #4b6cb7;
         }
 
-        /* Estilo de los inputs */
-        .input-field {
-            margin-bottom: 20px;
-            padding: 12px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            width: 100%;
-            font-size: 1rem;
-            transition: border-color 0.3s ease, background-color 0.3s ease;
+        .card-link {
+            display: block;
+            margin-top: 10px;
+            color: #182848;
+            font-weight: bold;
+            transition: color 0.3s;
         }
 
-        /* Cambiar color de los inputs al pasar el mouse */
-        .input-field:hover {
-            border-color: #0e1238; /* Cambia el borde a color oscuro */
-            background-color: #f0f0f0; /* Cambia el fondo cuando el mouse está sobre el campo */
+        .card-link:hover {
+            color: #4b6cb7;
         }
-
-        /* Cambiar color del input cuando está enfocado (activo) */
-        .input-field:focus {
-            {% comment %} border-color: #e8984c; /* Borde dorado cuando el campo está en foco */
-            background-color: #fff; /* Fondo blanco cuando el campo está activo */ {% endcomment %}
-            border-color: #000000; /* Borde dorado cuando el campo está en foco */
-            background-color: #A9A9A9; /* Fondo blanco cuando el campo está activo */
-            outline: none; /* Eliminar el contorno predeterminado del navegador */
-        }
-
-        /* Logo o íconos (si los agregas) */
-        .logo {
-            width: 80px;
-            margin-bottom: 20px;
-        }
-
-        .container {
-            max-width: 100%;
-            margin: 0 auto;
-        }
-        
-    </style>    
-    <head>
-        <meta charset="UTF-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Login</title>
-
-        <link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.min.css' %}">
-    </head>
-    <body class="container py-5">
-        <div class="login-container">
-            <img src="{% static 'images/logoSEPRISA4.png' %}" alt="Logo" class="logo">
-            <h1 class="fw-bold text-primary">Iniciar Sesión</h1>
-            <h2 class="form-title">Accede a tu cuenta</h2>
-            
-            <form action="{% url 'login' %}" method="POST">
-                {% csrf_token %}
-                <input type="email" class="input-field" placeholder="Correo Electrónico" name="username" required><br>
-                <input type="password" class="input-field" placeholder="Contraseña" name="password" required><br>
-                <button type="submit" class="btn-login">Iniciar sesión</button>
-            </form>
-            
-            
-            {% comment %} <div class="mt-3">
-                <a href="{% url 'password_reset' %}" class="text-primary">¿Olvidaste tu contraseña?</a>
-            </div> {% endcomment %}
-        </div>
-        
-        <script src="{% static 'bootstrap/js/bootstrap.min.js' %}"></script>
-        <script src="{% static 'bootstrap/js/bootstrap.bundle.min.js' %}"></script>
-    </body>
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <img src="{% static 'images/logoSEPRISA4.png' %}" alt="Logo" class="img-fluid mb-3" width="80">
+        <h1>Iniciar Sesión</h1>
+        <form action="" method="post">
+            {% csrf_token %}
+            <div class="mb-3 input-group">
+                <label for="id_username">Correo:</label>
+                <span class="input-group-text"><i class="bi bi-person-fill"></i></span>
+                {{ form.username }}
+            </div>
+            <div class="mb-3 input-group">
+                <label for="id_password">Contraseña:</label>
+                <span class="input-group-text"><i class="bi bi-lock-fill"></i></span>
+                {{ form.password }}
+            </div>
+            <button class="btn btn-login" type="submit">Iniciar Sesión</button>
+        </form>
+        <a href="{% url 'menu_principal' %}" class="card-link">Inicio</a>
+        {% comment %} <a href="{% url 'register' %}" class="card-link">Registrarse</a> {% endcomment %}
+    </div>
+    <script src="{% static 'bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+</body>
 </html>

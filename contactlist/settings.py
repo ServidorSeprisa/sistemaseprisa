@@ -15,6 +15,10 @@ import os #agregado
 from pathlib import Path
 
 
+AUTH_USER_MODEL = 'contacts.RegistroUsuario'
+# LOGIN_REDIRECT_URL = 'home'
+LOGOUT_REDIRECT_URL = 'menu_principal'
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 

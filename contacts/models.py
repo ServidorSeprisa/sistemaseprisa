@@ -10,30 +10,60 @@ class Contact(models.Model):
     def __str__(self) -> str:
         return self.name
 
-class RegistroUsuario(models.Model):
-    TIPO_USUARIO_CHOICES = [
+from django.contrib.auth.models import AbstractUser
+from django.db import models
+
+class RegistroUsuario(AbstractUser):
+    USER_TYPES = [
         ('admin', 'Administrador'),
-        ('admin2', 'Administrador2'),
-        ('ent','Entrada'),
-        ('alm', 'Almacen'),
-        ('prod','Produccion'),
-        ('cal','calidad'),
+        ('alm', 'Almacenista'),
+        ('prod', 'Productor'),
+        ('cal', 'Calidad'),
+        ('entrada', 'Entrada')
     ]
 
-    nombre = models.CharField(max_length=100, verbose_name='Nombre')
-    apellidopaterno = models.CharField(max_length=100, verbose_name='Apellido Paterno')
-    apellidomaterno = models.CharField(max_length=100, verbose_name='Apellido Materno')
-    tipousuario = models.CharField(
-        max_length=100,
-        verbose_name='Tipo Usuario',
-        choices=TIPO_USUARIO_CHOICES,
-    )
-    correo = models.CharField(max_length=100, verbose_name='Correo',null=True,blank=True)
-    contraseña = models.CharField(max_length=100, verbose_name='Contraseña')
-    confirmacioncontraseña = models.CharField(max_length=100, verbose_name='Confirmacion Contraseña')
+    user_type = models.CharField(max_length=20, choices=USER_TYPES)
 
-    def __str__(self) -> str:
-        return self.nombre
+    # Especifica un related_name para evitar conflictos con el modelo User
+    groups = models.ManyToManyField(
+        'auth.Group',
+        related_name='customuser_set',  # Cambia el nombre de la relación inversa
+        blank=True
+    )
+    user_permissions = models.ManyToManyField(
+        'auth.Permission',
+        related_name='customuser_permissions',  # Cambia el nombre de la relación inversa
+        blank=True
+    )
+
+    def __str__(self):
+        # return self.username
+        return f"{self.username} ({self.get_user_type_display()})"
+
+# class RegistroUsuario(models.Model):
+#     TIPO_USUARIO_CHOICES = [
+#         ('admin', 'Administrador'),
+#         ('admin2', 'Administrador2'),
+#         ('ent','Entrada'),
+#         ('alm', 'Almacen'),
+#         ('prod','Produccion'),
+#         ('cal','calidad'),
+#     ]
+
+#     nombre = models.CharField(max_length=100, verbose_name='Nombre')
+#     apellidopaterno = models.CharField(max_length=100, verbose_name='Apellido Paterno')
+#     apellidomaterno = models.CharField(max_length=100, verbose_name='Apellido Materno')
+#     tipousuario = models.CharField(
+#         max_length=100,
+#         verbose_name='Tipo Usuario',
+#         choices=TIPO_USUARIO_CHOICES,
+#     )
+#     correo = models.CharField(max_length=100, verbose_name='Correo',null=True,blank=True)
+#     contraseña = models.CharField(max_length=100, verbose_name='Contraseña')
+#     confirmacioncontraseña = models.CharField(max_length=100, verbose_name='Confirmacion Contraseña')
+
+#     def __str__(self) -> str:
+#         return self.nombre
 
 class FormatoRecepcionMateriaAlergenos(models.Model):
 

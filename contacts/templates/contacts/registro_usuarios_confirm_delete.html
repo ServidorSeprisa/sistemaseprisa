@@ -1,0 +1,13 @@
+{% extends 'contacts/menu_base.html' %}  {# Extiende tu base si tienes una #}
+{% comment %} {% extends 'contacts/base.html' %} {% endcomment %}
+
+{% block content %}
+<div class="container mt-4 text-center">
+    <h2>¿Estás seguro de que deseas eliminar este usuario?</h2>
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-danger">Eliminar</button>
+        <a href="{% url 'user_list' %}" class="btn btn-secondary">Cancelar</a>
+    </form>
+</div>
+{% endblock %}

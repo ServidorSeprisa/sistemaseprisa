@@ -5,6 +5,15 @@ from contacts import views
 
 from .views import tu_vista_guardar, buscar_etiqueta_identificacion_materiales, buscar_orden_produccion, buscar_material,buscar_kardex, PruebaTablaListView,kardex_listlist
 # from .views import orden_produccion_view, menu_desplegable_view
+from django.urls import path
+# from .views import registro_usuario, login_usuario, menu_view, vista_protegida
+from .views import menu_principal,RegistroUsuario, menu_admin,menu_entrada,register,menu_almacen,menu_produccion,menu_calidad
+
+from django.contrib.auth.views import LogoutView
+# from .views import LoginView,RegistroUsuariosListView,RegistroUsuariosEditView,RegistroUsuariosDeleteView,
+from .views import LoginView,UserListView,UserEditView,UserDeleteView
+# from .views import orden_produccion_view, agregar_detalle
+
 
 
 urlpatterns = [
@@ -14,7 +23,28 @@ urlpatterns = [
     path('<int:pk>/edit/', views.ContactUpdateView.as_view(),name='contact_edit'),
     path('<int:pk>/delete/', views.ContactDeleteView.as_view(),name='contact_delete'),
 
-    path(" ", views.Menu.as_view(),name='Menu'),
+    # path('', home, name='home'),
+    path('', menu_principal, name='menu_principal'),
+    # path('products/', products, name='products'),
+    # path('registrousuarios/', RegistroUsuario, name='registro_usuarios'),
+    # path('usuarios/', RegistroUsuariosListView.as_view(), name='registro_usuarios_list'),
+    # path('usuarios/editar/<int:pk>/', RegistroUsuariosEditView.as_view(), name='registro_usuarios_edit'),
+    # path('usuarios/eliminar/<int:pk>/', RegistroUsuariosDeleteView.as_view(), name='registro_usuarios_delete'),
+    path('register/', register, name='register'),
+    path('usuarios/', UserListView.as_view(), name='user_list'),
+    path('usuarios/editar/<int:pk>/', UserEditView.as_view(), name='user_edit'),
+    path('usuarios/eliminar/<int:pk>/', UserDeleteView.as_view(), name='user_delete'),
+    path("Menu", views.Menu.as_view(),name='Menu'),
+
+    path('login/', LoginView.as_view(), name='login'),
+
+    path('menu_admin/', menu_admin, name='menu_admin'),
+    path('menu_entrada/', menu_entrada, name='menu_entrada'),
+    path('menu_almacen/', menu_almacen, name='menu_almacen'),
+    path('menu_produccion/', menu_produccion, name='menu_produccion'),
+    path('menu_calidad/', menu_calidad, name='menu_calidad'),    
+
+    # path(" ", views.Menu.as_view(),name='Menu'),
     path("menuadmin/", views.MenuAdmin.as_view(),name='MenuAdmin'),
     path("menuentrada/", views.MenuEntrada.as_view(),name='MenuEntrada'),
     path("menualmacen/", views.MenuAlmacen.as_view(),name='MenuAlmacen'),
@@ -50,18 +80,18 @@ urlpatterns = [
     path('formatorecepcionmaterialempaque/pdf/', views.export_formato_recepcion_material_empaque_pdf, name='export_formato_recepcion_material_empaque_pdf'),
     path('formatorecepcionmaterialempaqueview/',views.FormatoRecepcionMaterialEmpaqueListViewView.as_view(),name='formato_recepcion_material_empaque_view'),
 
-    path('registrousuarios/', views.RegistroUsuarioListView.as_view(), name='registrousuario_list'),
-    path('registrousuarios/new/', views.RegistroUsuarioCreateView.as_view(), name='registrousuario_new'),
-    path('registrousuarios/<int:pk>/edit/', views.RegistroUsuarioUpdateView.as_view(), name='registrousuario_edit'),
-    path('registrousuarios/<int:pk>/delete/', views.RegistroUsuarioDeleteView.as_view(), name='registrousuario_delete'),
+    # path('registrousuarios/', views.RegistroUsuarioListView.as_view(), name='registrousuario_list'),
+    # path('registrousuarios/new/', views.RegistroUsuarioCreateView.as_view(), name='registrousuario_new'),
+    # path('registrousuarios/<int:pk>/edit/', views.RegistroUsuarioUpdateView.as_view(), name='registrousuario_edit'),
+    # path('registrousuarios/<int:pk>/delete/', views.RegistroUsuarioDeleteView.as_view(), name='registrousuario_delete'),
 
     # # Vista Login
     # path("login/", views.LoginView.as_view(), name='login'),
     
-    path('login/', views.CustomLoginView.as_view(), name='login'),
+    # path('login/', views.CustomLoginView.as_view(), name='login'),
     # path('logout/', LogoutView.as_view(next_page='login'), name='logout'),
 
-    path('login/', views.LoginView.as_view(), name='login'),
+    # path('login/', views.LoginView.as_view(), name='login'),
 
     path('formatorecepcionmateriaprima/',views.FormatoRecepcionMateriaPrimaListView.as_view(),name='formato_recepcion_materia_prima'),
     path('formatorecepcionmateriaprima/new/', views.FormatoRecepcionMateriaPrimaCreateView.as_view(),name='formatorecepcionmateriaprima_new'),
@@ -128,6 +158,10 @@ urlpatterns = [
     path('buscar-orden/', buscar_orden_produccion, name='buscar_orden_produccion'),
     path('buscar-material/', buscar_material, name='buscar_material'),
     path('detalleorden/new/', views.DetalleOrdenCreateListView.as_view(),name='detalleorden_new'),
+    path('ordenproduccionlists',views.OrdenProduccionList.as_view(),name='ordenproduccionlist'),
+    path('ordenproduccionviewv/',views.OrdenProduccionListViewView.as_view(),name='ordenproduccion_view'),
+    # path("orden-produccion/", orden_produccion_view, name="orden_produccion"),
+    # path("agregar-detalle/", agregar_detalle, name="agregar_detalle"),
 
     # Vista Control de Aseguramiento
     path('controlaseguramientoview/', views.ControlAseguramientoView.as_view(), name='control_aseguramiento_view'),
@@ -145,5 +179,6 @@ urlpatterns = [
     path('bitacoraproductoterminado/new/', views.FormatoBitacoraProductoTerminadoCreateView.as_view(),name='formatobitacoraproductoterminado_new'),
     path('bitacoraproductoterminado/<int:pk>/edit/',views.FormatoBitacoraProductoTerminadoUpdateView.as_view(),name='formatobitacoraproductoterminado_edit'),
     path('bitacoraproductoterminado/<int:pk>/delete/',views.FormatoBitacoraProductoTerminadoDeleteView.as_view(),name='formatobitacoraproductoterminado_delete'),
+    path('bitacoraproductoterminadoviewview/', views.FormatoBitacoraProductoTerminadoListViewView.as_view(),name='formato_bitacora_producto_terminado_view')
 
 ]

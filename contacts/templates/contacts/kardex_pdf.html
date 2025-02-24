@@ -7,6 +7,7 @@
     <style>
         @page {
             size: A4 landscape; /* Configura la orientación horizontal */
+            {% comment %} margin: 25mm; /* Ajusta los márgenes según sea necesario */ {% endcomment %}
             margin-top: 15mm;
             margin-bottom: 15mm;
             margin-left: 25mm;
@@ -94,6 +95,9 @@
             
                 <th class="right">
                     CÓDIGO: 
+                    {% comment %} VERSIÓN: <br>
+                    FECHA DE REVISIÓN: <br>
+                    PÁGINAS: <br> {% endcomment %}
                 </th>
             </tr>
         </thead>
@@ -110,6 +114,14 @@
         </tbody>
     </table>
 
+    {% comment %} <h1>Kardex Report - SEPRISA</h1>
+    {% if etiqueta %}
+    <p><strong>Materia Prima:</strong> {{ etiqueta.materiaprima }}</p>
+    <p><strong>Fecha de Caducidad:</strong> {{ etiqueta.fechacaducidad }}</p>
+    <p><strong>SKU:</strong> {{ etiqueta.sku }}</p>
+    {% else %}
+    <p>No se encontró información.</p>
+    {% endif %} {% endcomment %}
     <h2 class="section-title">Entradas</h2>
     <table>
         <thead>
@@ -127,7 +139,7 @@
                 <th>Fecha de Entrada:</th>
                 <th>{{ etiqueta.fechaentrada }}</th>
                 <th>Cantidad Neto: </th>
-                <th>{{ etiqueta.pesoneto }}</th>
+                <th>{{ etiqueta.pesoneto }} kg</th>
             </tr>
             <tr>
                 <th>Código del Proveedor/Cliente:</th>

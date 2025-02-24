@@ -20,14 +20,17 @@ from django.urls import path, include
 # from django.conf.urls.static import static
 
 # from contactlist import 
-from contacts.views import Menu  # Asegúrate de importar tu vista correctamente
+# from contacts.views import Menu  # Asegúrate de importar tu vista correctamente
+from django.contrib.auth import views as auth_views
 
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('',include('contacts.urls')),
-    path('', Menu.as_view(), name='Menu'), #vista principal
+    # path('', Menu.as_view(), name='Menu'), #vista principal
     # path('',include('formatorecepcionmateriaalergenos.urls')), para la app de formatorecepcionmateriaalergenos
+    path('accounts/', include('django.contrib.auth.urls')),
+    path('login/', auth_views.LoginView.as_view(template_name='contacts/login.html'), name='login'),
 ]
 
 # if settings.DEBUG:

@@ -1,5 +1,5 @@
     <!-- kardex.html -->
-    {% extends 'contacts/menuprueba3.html' %}
+    {% extends 'contacts/menu_base.html' %} 
     {% load static %}
 
     {% block content %}
@@ -201,13 +201,4 @@
         
     </div>
     {% endblock %}
-
-
-    {% comment %} en esta vista se realiza la salida de producto 
-    para esto se busca el material de entrada que tiene la cantidad neto que es la cantidad inicial
-    para la primera saklida de producto de esa cantidad se le resta a la cantidad neto y lo que quede se guarda en cantidad queda y que esta cantidad queda se muestre cuando se busque el material 
-    para la siguiente salida la cantidad sale le resta a la cantidad queda y lo que queda se actualiza en cantidad queda 
-    y si quiere volver a dar salida a producto la cantidad sale le resta a cantidad queda y esta cantidad se va mostrando cada que se busca por materia {% endcomment %}
-
-
 

@@ -1,0 +1,14 @@
+{% extends 'contacts/menu_base.html' %}  {# Extiende tu base si tienes una #}
+{% comment %} {% extends 'contacts/base.html' %} {% endcomment %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2 class="text-center">Editar Usuario</h2>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-success">Guardar Cambios</button>
+        <a href="{% url 'user_list' %}" class="btn btn-secondary">Cancelar</a>
+    </form>
+</div>
+{% endblock %}

@@ -1,0 +1,521 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <title>Menu</title>
+         
+  <link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.min.css' %}">
+  <style>
+      /* Aquí van tus estilos personalizados */
+      {% comment %} body, html {
+        margin: 0;
+        padding: 0;
+        height: 100%;
+      } {% endcomment %}
+      
+      .hero_area {/*fondo de la pagina*/
+        {% comment %} background-image: url("{% static 'images/fondo2.jpg' %}"); {% endcomment %}
+        background-color: #0f94d1;
+        background-size: cover; 
+        background-attachment: fixed; 
+        min-height: 100vh; /* Asegúrate de que ocupe toda la página */
+      }
+      
+      .custom_nav-container .dropdown-menu { /*color de fondo del menu desplegable*/
+        background-color: rgba(219, 112, 147, 0.8); /* Color azul transparente */
+      }
+      
+      .custom_nav-container .dropdown-item {
+        color: #fff; /* Color del texto del menú */
+      }
+      
+      .custom_nav-container .dropdown-item:hover {
+        background-color: rgba(135, 206, 250, 0.6); /* Color al pasar el mouse */
+        color: #fff; /* Asegúrate de que el texto siga siendo blanco */
+      }
+      
+      
+      .custom_nav-container {
+        z-index: 99999;
+        padding: 15px 0;
+      }
+    @font-face {
+      font-family: "Ethnocentric";
+      src: url("../fonts/ethnocentric/ethnocentric rg.ttf") format("ttf");
+      font-weight: 400;
+    }
+        
+    @font-face {
+      font-family: "Ethnocentric";
+      src: url("../fonts/ethnocentric/ethnocentric rg it.ttf") format("ttf");
+      font-weight: 400;
+    }
+        
+    @font-face {
+      font-family: "poppins";
+      src: url("../fonts/ethnocentric/Poppins-Regular.ttf") format("ttf");
+      font-weight: 400;
+    }
+        
+    @font-face {
+      font-family: "poppins";
+      src: url("../fonts/ethnocentric/Poppins-Bold.ttf") format("ttf");
+      font-weight: bold;
+    }
+        
+    h1,
+    h2,
+    h3 {
+      font-family: "Ethnocentric";
+    }
+        
+    body {
+          font-family: "poppins", sans-serif;
+          color: #101010;
+          background-color: #ffffff;
+        }
+        
+        .layout_padding {
+          padding: 75px 0;
+        }
+        
+        .layout_padding2 {
+          padding: 45px 0;
+        }
+        
+        .layout_padding2-top {
+          padding-top: 45px;
+        }
+        
+        .layout_padding2-bottom {
+          padding-bottom: 45px;
+        }
+        
+        .layout_padding-top {
+          padding-top: 75px;
+        }
+        
+        .layout_padding-bottom {
+          padding-bottom: 75px;
+        }
+        
+        .custom_heading {
+          position: relative;
+        }
+        
+        .custom_heading::before {
+          position: absolute;
+          content: "";
+          left: -45px;
+          width: 37px;
+          height: 32px;
+          background-image: url(../images/herbal.png);
+          background-size: cover;
+        }
+        .custom-nav {
+          background-image: url("{% static 'images/fondo2.jpg' %}"); /* Cambia la ruta a tu imagen */
+          background-size: cover; /* Ajusta el tamaño de la imagen */
+          background-position: center; /* Centra la imagen */
+      }
+      
+      {% comment %} .hero_area {
+          background-image: url("{% static 'images/fondo2.jpg' %}"); /* Cambia la ruta a tu imagen de fondo principal */
+          background-size: cover; /* Ajusta el tamaño de la imagen */
+          background-attachment: fixed; /* Hace que la imagen de fondo se mantenga fija al desplazarse */
+          height: 98vh; /* Ajusta la altura según sea necesario */
+      } {% endcomment %}
+
+        {% comment %} /*header section*/
+        /* .hero_area {
+          height: 98vh;
+          background-image: url(../images/fondo2.jpg);
+          background-size: cover;
+          background-attachment: fixed;
+        } */ {% endcomment %}
+        
+        .sub_page .hero_area {
+          height: auto;
+        }
+        
+        .hero_area.sub_pages {
+          height: auto;
+        }
+        
+        .header_section .container-fluid {
+          padding-right: 25px;
+          padding-left: 25px;
+        }
+        
+        .header_section .nav_container {
+          margin: 0 auto;
+        }
+        
+        .custom_nav-container.navbar-expand-lg .navbar-nav .nav-link {
+          padding: 10px 30px;
+          color: #ffffff;
+          text-align: center;
+          text-transform: uppercase;
+        }
+        
+        a,
+        a:hover,
+        a:focus {
+          text-decoration: none;
+        }
+        
+        a:hover,
+        a:focus {
+          color: initial;
+        }
+        
+        .btn,
+        .btn:focus {
+          outline: none !important;
+          -webkit-box-shadow: none;
+                  box-shadow: none;
+        }
+        
+        .navbar-brand,
+        .navbar-brand:hover {
+          text-transform: uppercase;
+          font-weight: bold;
+          font-size: 24px;
+          color: #fafcfd;
+        }
+        
+        .custom_nav-container .nav_search-btn {
+          background-image: url(../images/search-icon.png);
+          background-size: 22px;
+          background-repeat: no-repeat;
+          background-position-y: 7px; 
+          width: 35px;
+          height: 35px;
+          padding: 0;
+          border: none;
+        }
+        
+        .navbar-brand {
+          display: -webkit-box;
+          display: -ms-flexbox;
+          display: flex;
+          -webkit-box-align: center;
+              -ms-flex-align: center;
+                  align-items: center;
+          -webkit-box-orient: vertical;
+          -webkit-box-direction: normal;
+              -ms-flex-direction: column;
+                  flex-direction: column;
+          align-items: center;
+          margin-right: 0;
+        }
+        
+        .navbar-brand img {
+          width: 45px;
+        }
+        
+        .navbar-brand span {
+          font-size: 24px;
+          font-weight: 700;
+          color: #ffffff;
+          font-family: "Ethnocentric";
+        }
+        
+        .custom_nav-container {
+          z-index: 99999;
+          padding: 15px 0;
+          -webkit-box-orient: vertical;
+          -webkit-box-direction: normal;
+              -ms-flex-direction: column;
+                  flex-direction: column;
+          -webkit-box-align: center;
+              -ms-flex-align: center;
+                  align-items: center;
+        }
+        
+        .custom_nav-container .navbar-toggler {
+          outline: none;
+        }
+        
+        .custom_nav-container .navbar-toggler .navbar-toggler-icon {
+          background-image: url(../images/menu.png);
+          background-size: 35px;
+        }
+        
+        /*end header section*/
+        .hero_section {
+          text-align: center;
+          color: #ffffff;
+          display: -webkit-box;
+          display: -ms-flexbox;
+          display: flex;
+          -webkit-box-orient: vertical;
+          -webkit-box-direction: normal;
+              -ms-flex-direction: column;
+                  flex-direction: column;
+          -webkit-box-pack: center;
+              -ms-flex-pack: center;
+                  justify-content: center;
+          height: 75%;
+        }
+        
+        .hero_section h1 {
+          font-size: 85px;
+          display: -webkit-box;
+          display: -ms-flexbox;
+          display: flex;
+          -webkit-box-pack: justify;
+              -ms-flex-pack: justify;
+                  justify-content: space-between;
+          width: 85%;
+          margin: 0 auto;
+        }
+        
+        .hero_section .hero_btn-box a {
+          display: inline-block;
+          padding: 12px 55px;
+          background-color: transparent;
+          border: 1.5px solid #ffffff;
+          color: #ffffff;
+          margin-top: 55px;
+          text-transform: uppercase;
+        }
+        
+        .hero_section .hero_btn-box a:hover {
+          background-color: #ffffff;
+          color: #00ff00;
+        }
+        
+        .sub_page .about_section .about_container {
+          margin-top: 0;
+        }
+        .logo2 {
+          width: 150px; /* Cambia el valor según el tamaño deseado */
+          height: auto; /* Mantiene la proporción del logo */
+        }
+
+    </style>
+</head>
+
+{% comment %} {% if request.user.is_authenticated %}
+    <hr>
+    <h4>
+        {{ user.username | upper }}, bienvenido
+    </h4>
+{% endif %} {% endcomment %}
+
+<body >
+  <div class="sub_page">
+    <div class="hero_area">
+      <header class="header_section">
+        <div class="container-fluid">
+          <nav class="navbar navbar-expand-lg custom_nav-container">
+            <a class="navbar-brand" href="https://seprisalab.com/">
+              <img src="{% static 'images/logoSEPRISAsf.png' %}" alt="" />
+              <span>SEPRISA</span>
+            </a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+              <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+              
+              {% comment %} <a class="navbar-brand" href="index.html">
+                <img src="{% static 'images/logoSEPRISAsf.png' %}" alt="" />
+                <span>SEPRISA</span>
+              </a> {% endcomment %}
+              <ul class="navbar-nav ml-auto">
+                {% if request.user.is_authenticated %}
+                    <hr>
+                    <h4>
+                        {{ user.username | upper }}, bienvenido
+                    </h4>
+                {% endif %}
+                <li class="nav-item active">
+                  <a class="nav-link" href="{% url 'menu_almacen' %}">Inicio <span class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item dropdown">
+                  <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Entrada
+                  </a>
+                  <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    {% comment %} <a class="dropdown-item" href="{% url 'formato_recepcion_materia' %}">Entrada 1</a>
+                    <a class="dropdown-item" href="entrada2.html">Entrada 2</a> {% endcomment %}
+                    <a class="dropdown-item" href="{% url 'formato_recepcion_materia_alergenos_view' %}">Registrar recepción de materias primas consideradas alérgenos</a>
+                    <a class="dropdown-item" href="{% url 'formato_recepcion_material_empaque_view' %}">Registrar recepción de material de empaque</a>
+                    <a class="dropdown-item" href="{% url 'formato_recepcion_materia_prima_view' %}">Registrar recepción de materia prima</a>
+                    {% comment %} <a class="dropdown-item" href="{% url 'formato_solicitud_analisis' %}">Solicitud de análisis</a> {% endcomment %}
+                    {% comment %} <a class="dropdown-item" href="{% url 'kardex' %}">KARDEX</a> {% endcomment %}
+                  </div>
+                </li>
+                <li class="nav-item dropdown">
+                  <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Almacen
+                  </a>
+                  <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <a class="dropdown-item" href="{% url 'kardex' %}">KARDEX</a>
+                    <a class="dropdown-item" href="{% url 'formato_bitacora_producto_terminado_view' %}">Bitacora De Producto Terminado</a>
+                  </div>
+                </li>
+                <li class="nav-item dropdown">
+                  <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Produccion
+                  </a>
+                  <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <a class="dropdown-item" href="{% url 'menu_almacen' %}">Orden de Produccion</a>
+                    {% comment %} <a class="dropdown-item" href="{% url 'control_aseguramiento_view' %}">Control de Aseguramiento</a> {% endcomment %}
+
+                  </div>
+                </li>
+                <li class="nav-item dropdown">
+                  <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                      Calidad
+                  </a>
+                  <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                      {% comment %} <a class="dropdown-item" href="{% url 'orden_produccion_view' %}">Orden de Produccion</a> {% endcomment %}
+                      <a class="dropdown-item" href="{% url 'menu_almacen' %}">Control de Aseguramiento</a>
+
+                  </div>
+                </li>
+                {% comment %} <li class="nav-item">
+                  <a class="nav-link" href="product.html">Almacen</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="client.html">Produccion</a>
+                </li> {% endcomment %}
+                <li class="nav-item">
+                  <a class="nav-link" href="{% url 'login' %}">Login</a>
+                </li>
+                {% comment %} <li class="nav-item">
+                  <a class="nav-link" href="{% url 'register' %}">Registro Usuarios</a>
+                </li> {% endcomment %}
+                <form method="post" action="{% url 'logout' %}">
+                  {% csrf_token %}
+                  <button type="submit" class="btn btn-danger">Salir</button>
+                </form>
+
+              </ul>
+            </div>
+          </nav>
+        </div>
+      </header>
+      <!-- hero section -->
+      <section class="hero_section">
+        <div class="hero_detail">
+          {% comment %} <img src="{% static 'images/logoSEPRISAsf.png' %}" alt="" /> {% endcomment %}
+          <img class="logo2" src="{% static 'images/caps2SF.gif' %}" alt="" />
+          <h1>
+            <span>
+              S
+            </span>
+            <span>
+              E
+            </span>
+            <span>
+              P
+            </span>
+            <span>
+              R
+            </span>
+            <span>
+              I
+            </span>
+            <span>
+              S
+            </span>
+            <span>
+              A
+            </span>
+          </h1>
+          <h3>
+            Servicios Y Productos Integrales Para La Salud S.A. de C.V.
+          </h2>
+        </div>
+        {% comment %} <div class="hero_btn-box">
+          <a href="">
+            Contact Us
+          </a>
+        </div> {% endcomment %}
+      </section>
+    </div>
+    <!-- end hero section -->
+  </div>
+
+  <!-- end hero area -->
+
+
+  <!-- end about section -->
+
+  <!-- product section -->
+  
+
+
+  <!-- end product section -->
+
+  <!-- why section -->
+
+  
+
+  <!-- end why section -->
+
+
+
+  <!-- contact section -->
+  {% comment %} <section>
+  </section> {% endcomment %}
+
+  {% comment %} <section class="contact_section layout_padding">
+    <div class="container">
+      <div class="col-md-6">
+        <div class="d-flex mb-4 ml-4 ml-md-0">
+          <h2 class="custom_heading text-center">
+            CONTACT US
+          </h2>
+        </div>
+        <form action="">
+          <div>
+            <input type="text" placeholder="Name" />
+          </div>
+          <div>
+            <input type="email" placeholder="Email" />
+          </div>
+          <div>
+            <input type="text" placeholder="Pone Number" />
+          </div>
+          <div>
+            <input type="text" class="message-box" placeholder="Message" />
+          </div>
+          <div class="d-flex justify-content-center mt-4 ">
+            <button>
+              SEND
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </section> {% endcomment %}
+
+  <!-- end contact section -->
+
+  <!-- client section -->
+
+  <!-- end info_section -->
+
+  <!-- footer section -->
+  
+  <!-- footer section -->
+
+  {% comment %} <script type="text/javascript" src="js/jquery-3.4.1.min.js"></script>
+  <script type="text/javascript" src="js/bootstrap.js"></script> {% endcomment %}
+  {% comment %} <script type="text/javascript" src="{% static 'js/jquery-3.4.1.min.js' %}"></script> {% endcomment %}
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  
+  <script type="text/javascript" src="{% static 'js/bootstrap.js' %}"></script>
+  {% comment %} <script src="{%static 'bootstrap/js/bootstrap.min.js'%}"></script> {% endcomment %}
+  
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
