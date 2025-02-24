@@ -1293,6 +1293,23 @@ class KardexListViewView(generic.ListView):
 
         return queryset
 
+class KardexListVView(generic.ListView):
+    model = FormatoRecepcionMateriaPrima
+    paginate_by = 15
+    template_name = 'contacts/kardex2_list.html'
+
+    def get_queryset(self) -> QuerySet[Any]:
+        q = self.request.GET.get('q')
+
+        queryset = FormatoRecepcionMateriaPrima.objects.all()
+
+        if q:
+            queryset = queryset.filter(materiaprima__icontains=q)
+
+        # Usar prefetch_related para obtener la relación 'kardexrecepcionmateriaprimaalmacen_set'
+        queryset = queryset.prefetch_related('kardexrecepcionmateriaprimaalmacen_set')
+
+        return queryset
 
 
 def buscar_kardex(request):

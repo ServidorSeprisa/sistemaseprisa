@@ -148,7 +148,7 @@
                     <th>Clave del proveedor</th>
                     <th>SKU</th>
                     <th>Cantidad queda</th>
-                    <th>Acciones</th>
+                    {% comment %} <th>Acciones</th> {% endcomment %}
                     <th></th>
                 </tr>
             </thead>
@@ -181,12 +181,12 @@
                         </div>
                     </td> {% endcomment %}
 
-                    <td>
+                    {% comment %} <td>
                         <div class="btn-group btn-group-sm">
                             <!-- Se pasa el id del objeto a la página de kardex -->
                             <a href="{% url 'kardex_listlist' %}?id={{ FormatoRecepcionMateriaPrima.id }}" class="btn btn-primary">Salida</a>
                         </div>
-                    </td>
+                    </td> {% endcomment %}
                     
                     
                 </tr>
