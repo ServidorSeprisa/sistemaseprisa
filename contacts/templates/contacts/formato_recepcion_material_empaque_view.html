@@ -152,7 +152,7 @@
                     <th>SKU</th>
                     <th>Lote proveedor</th>
                     <th>Recibe</th>
-                    <th>Acciones</th>
+                    {% comment %} <th>Acciones</th> {% endcomment %}
                     <th></th>
                 </tr>
             </thead>
@@ -176,12 +176,12 @@
                     <td>{{ FormatoRecepcionMaterialEmpaque.noloteproveedor|default:'-' }}</td>
                     <td>{{ FormatoRecepcionMaterialEmpaque.recibe|default:'-' }}</td>
 
-                    <td>
+                    {% comment %} <td>
                         <div class="btn-group btn-group-sm">
                             <a href="{% url 'formatorecepcionmaterialempaque_edit' FormatoRecepcionMaterialEmpaque.pk %}" class ="btn btn-primary">Editar</a>
                             <a href="{% url 'formatorecepcionmaterialempaque_delete' FormatoRecepcionMaterialEmpaque.pk %}" class ="btn btn-danger">Eliminar</a>
                         </div>
-                    </td>
+                    </td> {% endcomment %}
                 </tr>
                 {% endfor %}
             </tbody>

@@ -153,7 +153,7 @@
                     <th>Fecha Caducidad</th>
                     <th>Recibe</th>
                     <th>Observaciones</th>
-                    <th>Acciones</th>
+                    {% comment %} <th>Acciones</th> {% endcomment %}
                     <th></th>
                 </tr>
             </thead>
@@ -175,12 +175,12 @@
                     <td>{{ FormatoBitacoraProductoTerminado.recibe|default:'-' }}</td>
                     <td>{{ FormatoBitacoraProductoTerminado.observaciones|default:'-' }}</td>
 
-                    <td>
+                    {% comment %} <td>
                         <div class="btn-group btn-group-sm">
                             <a href="{% url 'formatobitacoraproductoterminado_edit' FormatoBitacoraProductoTerminado.pk %}" class ="btn btn-primary">Editar</a>
                             <a href="{% url 'formatobitacoraproductoterminado_delete' FormatoBitacoraProductoTerminado.pk %}" class ="btn btn-danger">Eliminar</a>
                         </div>
-                    </td>
+                    </td> {% endcomment %}
                 </tr>
                 <div></div>
                 {% endfor %}

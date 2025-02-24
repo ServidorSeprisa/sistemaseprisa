@@ -178,11 +178,11 @@
                     <td>{{ FormatoRecepcionMateriaAlergenos.fechacaducidad|date:'d/m/Y h:i A' }}</td>
                     <td>{{ FormatoRecepcionMateriaAlergenos.recibe|default:'-' }}</td>
 
-                    <td>
+                    {% comment %} <td>
                         <div class="btn-group btn-group-sm">
                             <a href="{% url 'formatorecepcionmateriaalergenos_edit' FormatoRecepcionMateriaAlergenos.pk %}" class ="btn btn-primary">Editar</a>
                             <a href="{% url 'formatorecepcionmateriaalergenos_delete' FormatoRecepcionMateriaAlergenos.pk %}" class ="btn btn-danger">Eliminar</a>
-                        </div>
+                        </div> {% endcomment %}
                     </td>
                 </tr>
                 <div></div>
