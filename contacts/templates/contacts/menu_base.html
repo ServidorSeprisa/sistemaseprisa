@@ -511,9 +511,9 @@
                               <li class="nav-item">
                                 <a class="nav-link" href="{% url 'login' %}">Login</a>
                               </li>
-                              <li class="nav-item">
+                              {% comment %} <li class="nav-item">
                                 <a class="nav-link" href="{% url 'register' %}">Registro Usuarios</a>
-                              </li>
+                              </li> {% endcomment %}
                               {% comment %} <form method="post" action="{% url 'logout' %}">
                                 {% csrf_token %}
                                 <button type="submit" class="btn btn-danger">Salir</button>
@@ -596,9 +596,9 @@
                               <li class="nav-item">
                                 <a class="nav-link" href="{% url 'login' %}">Login</a>
                               </li>
-                              <li class="nav-item">
+                              {% comment %} <li class="nav-item">
                                 <a class="nav-link" href="{% url 'register' %}">Registro Usuarios</a>
-                              </li>
+                              </li> {% endcomment %}
                               {% comment %} <form method="post" action="{% url 'logout' %}">
                                 {% csrf_token %}
                                 <button type="submit" class="btn btn-danger">Salir</button>
@@ -670,9 +670,9 @@
                               <li class="nav-item">
                                 <a class="nav-link" href="{% url 'login' %}">Login</a>
                               </li>
-                              <li class="nav-item">
+                              {% comment %} <li class="nav-item">
                                 <a class="nav-link" href="{% url 'register' %}">Registro Usuarios</a>
-                              </li>
+                              </li> {% endcomment %}
                               {% comment %} <form method="post" action="{% url 'logout' %}">
                                 {% csrf_token %}
                                 <button type="submit" class="btn btn-danger">Salir</button>
