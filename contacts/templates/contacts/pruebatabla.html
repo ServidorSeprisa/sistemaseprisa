@@ -184,6 +184,7 @@
                         <div class="btn-group btn-group-sm">
                             <a href="{% url 'formatorecepcionmateriaprima_edit' FormatoRecepcionMateriaPrima.pk %}" class ="btn btn-primary">Editar</a>
                             <a href="{% url 'formatorecepcionmateriaprima_delete' FormatoRecepcionMateriaPrima.pk %}" class ="btn btn-danger">Eliminar</a>
+                            <a href="{% url 'formatorecepcionmateriaprima_new' %}?materiaprima={{ FormatoRecepcionMateriaPrima.materiaprima }}&loteseprisa={{ FormatoRecepcionMateriaPrima.loteseprisa }}&pesobruto={{ FormatoRecepcionMateriaPrima.pesobruto }}&pesoneto={{ FormatoRecepcionMateriaPrima.pesoneto }}&nocontenedores={{ FormatoRecepcionMateriaPrima.nocontenedores }}&claveproveedor={{ FormatoRecepcionMateriaPrima.claveproveedor }}&noanalisis={{ FormatoRecepcionMateriaPrima.noanalisis }}&sku={{ FormatoRecepcionMateriaPrima.sku }}&noloteproveedor={{ FormatoRecepcionMateriaPrima.noloteproveedor }}&fechacaducidad={{ FormatoRecepcionMateriaPrima.fechacaducidad }}&recibe={{ FormatoRecepcionMateriaPrima.recibe }}" class="btn btn-success">Duplicar</a>
                         </div>
                     </td>
                 </tr>

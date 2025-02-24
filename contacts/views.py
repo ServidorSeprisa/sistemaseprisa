@@ -564,12 +564,31 @@ def formato_recepcion_list(request):
         "has_previous": page > 1
     })
 
-class FormatoRecepcionMateriaPrimaCreateView(generic.CreateView):
-    model = FormatoRecepcionMateriaPrima 
-    fields = ('materiaprima','loteseprisa','pesobruto','pesoneto','nocontenedores','claveproveedor','noanalisis','sku','noloteproveedor','fechacaducidad','recibe',)
+# class FormatoRecepcionMateriaPrimaCreateView(generic.CreateView):
+#     model = FormatoRecepcionMateriaPrima 
+#     fields = ('materiaprima','loteseprisa','pesobruto','pesoneto','nocontenedores','claveproveedor','noanalisis','sku','noloteproveedor','fechacaducidad','recibe',)
 
-    success_url = reverse_lazy('formato_recepcion_materia_prima')
-    template_name='contacts/formato_recepcion_materia_prima_form.html'
+#     success_url = reverse_lazy('formato_recepcion_materia_prima')
+#     template_name='contacts/formato_recepcion_materia_prima_form.html'
+
+class FormatoRecepcionMateriaPrimaCreateView(generic.CreateView):
+    model = FormatoRecepcionMateriaPrima
+    fields = ('materiaprima', 'loteseprisa', 'pesobruto', 'pesoneto', 'nocontenedores', 'claveproveedor', 'noanalisis', 'sku', 'noloteproveedor', 'fechacaducidad', 'recibe')
+    success_url = reverse_lazy('formato_recepcion_list')
+    template_name = 'contacts/formato_recepcion_materia_prima_form.html'
+
+    def get_initial(self):
+        # Obtener los parámetros de la URL y pre-llenar los datos del modelo
+        initial_data = super().get_initial()
+        for field in self.fields:
+            value = self.request.GET.get(field)
+            if value:
+                initial_data[field] = value
+        return initial_data
+
+    def form_valid(self, form):
+        # Guardar el nuevo registro con los datos duplicados
+        return super().form_valid(form)
 
 class FormatoRecepcionMateriaPrimaUpdateView(generic.UpdateView):
     model = FormatoRecepcionMateriaPrima
