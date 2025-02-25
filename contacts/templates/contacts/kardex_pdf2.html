@@ -61,7 +61,7 @@
         <thead>
             <tr>
                 <th class="left">
-                    <img src="C:\Users\ceci2\OneDrive\Documentos\LABORATORIO SEPRISA\sistemaseprisa\static\images\logoSEPRISA4.png" alt="Logo">
+                    <img src="C:/Users/AMD/Documents/Proyecto/logoSEPRISA4.png" alt="Logo">
                 </th>
             
                 <th class="large-cell">
@@ -84,53 +84,38 @@
     <table>
         <thead>
             <tr>
-                <th>F. de entrada</th>
-                <th>Materia prima</th>
+                <th>Materia Prima</th>
+                <th>F. de Caducidad</th>
                 <th>Lote SEPRISA</th>
-                <th>Peso Bruto</th>
+                <th>F. de Entrada</th>
                 <th>Peso Neto</th>
-                <th>No. Contenedores</th>
-                <th>Clave del proveedor</th>
-                <th>No. analisis</th>
+                <th>Clave del Proveedor</th>
                 <th>SKU</th>
-                <th>Lote proveedor</th>
-                <th>F. de caducidad</th>
-                <th>Recibe</th>
+                <th>Cantidad Queda</th>
             </tr>
         </thead>
         <tbody>
             {% for item in FormatoRecepcionMateriaPrimax %}
             <tr>
-                <td>{{ item.fechaentrada|date:'d/m/Y h:i A'}}</td>
                 <td>{{ item.materiaprima }}</td>
+                <td>{{ item.fechacaducidad|date:'d/m/Y' }}</td>
                 <td>{{ item.loteseprisa }}</td>
-                <td>{{ item.pesobruto }}</td>
+                <td>{{ item.fechaentrada|date:'d/m/Y' }}</td>
                 <td>{{ item.pesoneto }}</td>
-                <td>{{ item.nocontenedores }}</td>
                 <td>{{ item.claveproveedor }}</td>
-                <td>{{ item.noanalisis }}</td>
                 <td>{{ item.sku }}</td>
-                <td>{{ item.noloteproveedor }}</td>
-                <td>{{ item.fechacaducidad }}</td>
-                <td>{{ item.recibe }}</td>
+                <td>
+                    {% if item.kardexrecepcionmateriaprimaalmacen_set.all %}
+                        {% for kardex in item.kardexrecepcionmateriaprimaalmacen_set.all %}
+                            {{ kardex.cantidadqueda|default:"-" }}
+                        {% endfor %}
+                    {% else %}
+                        -
+                    {% endif %}
+                </td>
+                
             </tr>
             {% endfor %}
-            {% comment %} <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
-            <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
-            <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
-            <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
-            <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
-            <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
-            <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
-            <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
-            <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
-            <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
-            <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
-            <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
-            <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
-            <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
-            <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr> {% endcomment %}
-
         </tbody>
     </table>
 
