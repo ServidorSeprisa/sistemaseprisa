@@ -58,7 +58,7 @@
         <thead>
             <tr>
                 <th class="left">
-                    <img src="C:/Users/AMD/Documents/Proyecto/logoSEPRISA4.png" alt="Logo">
+                    <img src="C:\Users\ceci2\OneDrive\Documentos\LABORATORIO SEPRISA\sistemaseprisa\static\images\logoSEPRISA4.png" alt="Logo">
                 </th>
             
                 <th class="large-cell">
@@ -109,7 +109,7 @@
                 <td>{{ item.noanalisis }}</td>
                 <td>{{ item.sku }}</td>
                 <td>{{ item.noloteproveedor }}</td>
-                <td>{{ item.fechacaducidad }}</td>
+                <td>{{ item.fechacaducidad|date:'d/m/Y }}</td>
                 <td>{{ item.recibe }}</td>
             </tr>
             {% endfor %}
