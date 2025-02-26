@@ -1534,8 +1534,8 @@ def formato_bitacora_producto_terminado_list(request):
     end = start + items_per_page
 
     queryset = FormatoBitacoraProductoTerminado.objects.filter(
-        Q(materiaprima__icontains=query) |
-        Q(claveproveedor__icontains=query)
+        Q(producto__icontains=query) |
+        Q(cliente__icontains=query)
     )[start:end]
     
     table_html = render_to_string("partials/formato_recepcion_table_body.html", {"object_list": queryset})
