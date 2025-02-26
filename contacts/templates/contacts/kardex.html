@@ -105,7 +105,7 @@
                     </div> {% endcomment %}
                     <div class="col-md-6">
                         <label for="cantidad_queda" class="form-label">Cantidad Queda</label>
-                        <input type="text" id="cantidad_queda" name="cantidad_queda" class="form-control" value="{{ etiqueta.cantidadqueda }}" readonly>
+                        <input type="text" id="cantidad_queda" name="cantidad_queda" class="form-control" value="{% if salidas %}{{ salidas.last.cantidadqueda }}{% else %}{{ etiqueta.pesoneto }}{% endif %}" readonly>
                     </div>
                     <div class="col-md-6">
                         <label for="realizo" class="form-label">Realizó</label>
@@ -166,7 +166,7 @@
         </div>
         
 
-        <script src="{% static 'bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+        {% comment %} <script src="{% static 'bootstrap/js/bootstrap.bundle.min.js' %}"></script>
         <script>
             // Esta función se ejecuta cada vez que el usuario ingresa un valor en el campo de 'Cantidad Sale'.
             function updateCantidadQueda() {
@@ -196,9 +196,38 @@
                 // Escucha cambios en el campo 'Cantidad Sale' y actualiza 'Cantidad Queda'
                 document.getElementById('cantidad_sale').addEventListener('input', updateCantidadQueda);
             }
+        </script> {% endcomment %}
+        <script src="{% static 'bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                let cantidadSaleInput = document.getElementById('cantidad_sale');
+                let cantidadQuedaInput = document.getElementById('cantidad_queda');
+        
+                function updateCantidadQueda() {
+                    let cantidadNetoOriginal = parseFloat(cantidadQuedaInput.dataset.original) || 0; // Guardar cantidad inicial
+                    let cantidadSale = parseFloat(cantidadSaleInput.value) || 0;
+        
+                    let nuevaCantidadQueda = cantidadNetoOriginal - cantidadSale;
+        
+                    if (nuevaCantidadQueda < 0) {
+                        alert('No puedes sacar más de la cantidad disponible.');
+                        cantidadSaleInput.value = cantidadNetoOriginal;  // Restablece al valor máximo permitido
+                        nuevaCantidadQueda = 0;
+                    }
+        
+                    cantidadQuedaInput.value = nuevaCantidadQueda.toFixed(2); // Mantiene el formato decimal
+                }
+        
+                // Guardamos el valor original en un atributo personalizado
+                cantidadQuedaInput.setAttribute("data-original", cantidadQuedaInput.value);
+        
+                // Evento para actualizar en tiempo real
+                cantidadSaleInput.addEventListener("input", updateCantidadQueda);
+            });
         </script>
         
         
     </div>
-    {% endblock %}
+{% endblock %}
+
 

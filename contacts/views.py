@@ -1351,24 +1351,54 @@ class ControlAseguramientoView(View):
     def get(self, request, *args, **kwargs):
         return render(request, 'contacts/control_aseguramiento_calidad.html')
     
-def export_control_aseguramiento_pdf(request):
-    FormatoRecepcionMateriaPrimax = FormatoRecepcionMateriaPrima.objects.all()[:15]
+# def export_control_aseguramiento_pdf(request):
+#     FormatoRecepcionMateriaPrimax = FormatoRecepcionMateriaPrima.objects.all()[:15]
     
-    template_path = 'contacts/control_aseguramiento_calidad_pdf.html'
-    context = {'FormatoRecepcionMateriaPrimax': FormatoRecepcionMateriaPrimax}
+#     template_path = 'contacts/control_aseguramiento_calidad_pdf.html'
+#     context = {'FormatoRecepcionMateriaPrimax': FormatoRecepcionMateriaPrimax}
 
+#     template = get_template(template_path)
+#     html = template.render(context)
+
+#     response = HttpResponse(content_type='application/pdf')
+#     response['Content-Disposition'] = 'attachment; filename="ControlAseguramiento.pdf"'
+
+#     result = BytesIO()
+#     pdf = pisa.CreatePDF(BytesIO(html.encode("UTF-8")), dest=result)
+
+#     if pdf.err:
+#         return HttpResponse('Error generando el PDF', status=500)
+
+#     response.write(result.getvalue())
+#     return response
+from django.http import HttpResponse
+from io import BytesIO
+from django.template.loader import get_template
+from xhtml2pdf import pisa
+def export_control_aseguramiento_pdf(request):
+    # Pasa cualquier dato adicional si es necesario (en este caso no se necesitan)
+    context = {}
+
+    # Carga la plantilla donde tienes la tabla estática
+    template_path = 'contacts/control_aseguramiento_calidad_pdf.html'
     template = get_template(template_path)
+
+    # Renderiza el HTML con el contexto
     html = template.render(context)
 
+    # Configura la respuesta HTTP para la descarga del archivo PDF
     response = HttpResponse(content_type='application/pdf')
     response['Content-Disposition'] = 'attachment; filename="ControlAseguramiento.pdf"'
 
+    # Crea el PDF a partir del HTML renderizado
     result = BytesIO()
     pdf = pisa.CreatePDF(BytesIO(html.encode("UTF-8")), dest=result)
 
+    # Si ocurre un error al generar el PDF, muestra un mensaje
     if pdf.err:
         return HttpResponse('Error generando el PDF', status=500)
 
+    # Escribe el resultado en la respuesta HTTP
     response.write(result.getvalue())
     return response
 
@@ -1405,31 +1435,67 @@ class FormatoBitacoraProductoTerminadoView(View):
     def get(self, request, *args, **kwargs):
         return render(request, 'contacts/formato_bitacora_producto_terminado.html')
     
+# def export_bitacora_producto_terminado_pdf(request):
+#     FormatoBitacoraProductoTerminadox = FormatoBitacoraProductoTerminado.objects.all()[:15]
+    
+#     template_path = 'contacts/formato_bitacora_producto_terminado_pdf.html'
+#     context = {'FormatoBitacoraProductoTerminadox': FormatoBitacoraProductoTerminadox}
+
+#     template = get_template(template_path)
+#     html = template.render(context)
+
+#     response = HttpResponse(content_type='application/pdf')
+#     response['Content-Disposition'] = 'attachment; filename="BitacoraProductoTerminado.pdf"'
+
+#     result = BytesIO()
+#     pdf = pisa.CreatePDF(BytesIO(html.encode("UTF-8")), dest=result)
+
+#     if pdf.err:
+#         return HttpResponse('Error generando el PDF', status=500)
+
+#     response.write(result.getvalue())
+#     return response
+
+# class kardex(View):
+#     def get(self, request, *args, **kwargs):
+#         return render(request, 'contacts/kardex.html')
+
 def export_bitacora_producto_terminado_pdf(request):
-    FormatoBitacoraProductoTerminadox = FormatoBitacoraProductoTerminado.objects.all()[:15]
-    
-    template_path = 'contacts/formato_bitacora_producto_terminado_pdf.html'
-    context = {'FormatoBitacoraProductoTerminadox': FormatoBitacoraProductoTerminadox}
+    if request.method == 'POST':
+        data = json.loads(request.body)
+        selected_ids = data.get('ids', [])
 
-    template = get_template(template_path)
-    html = template.render(context)
+        if not selected_ids:
+            return JsonResponse({"error": "No IDs provided"}, status=400)
 
-    response = HttpResponse(content_type='application/pdf')
-    response['Content-Disposition'] = 'attachment; filename="BitacoraProductoTerminado.pdf"'
+        objects = FormatoBitacoraProductoTerminado.objects.filter(pk__in=selected_ids)
 
-    result = BytesIO()
-    pdf = pisa.CreatePDF(BytesIO(html.encode("UTF-8")), dest=result)
+        template_path = 'contacts/formato_bitacora_producto_terminado_pdf.html'
+        context = {'FormatoBitacoraProductoTerminadox': objects}
 
-    if pdf.err:
-        return HttpResponse('Error generando el PDF', status=500)
+        template = get_template(template_path)
+        html = template.render(context)
 
-    response.write(result.getvalue())
-    return response
+        response = HttpResponse(content_type='application/pdf')
+        response['Content-Disposition'] = 'attachment; filename="FormatoBitacoraProductoTerminado.pdf"'
 
-class kardex(View):
-    def get(self, request, *args, **kwargs):
-        return render(request, 'contacts/kardex.html')
-    
+        result = BytesIO()
+        pisa_status = pisa.CreatePDF(
+            BytesIO(html.encode("UTF-8")),
+            dest=result,
+            encoding='UTF-8'
+        )
+
+        if pisa_status.err:
+            return HttpResponse('Error generando el PDF', status=500)
+
+        response.write(result.getvalue())
+        return response
+
+    return JsonResponse({"error": "Invalid request"}, status=400)
+
+
+
 
 
 class FormatoBitacoraProductoTerminadoView(View):
@@ -1515,43 +1581,108 @@ from django.shortcuts import render
 from .models import KardexRecepcionMateriaPrimaAlmacen
 
 
+# class GuardarKardexView(View):
+#     def post(self, request, *args, **kwargs):
+#         formato_id = request.POST.get('id')
+        
+#         if not formato_id:
+#             return render(request, 'kardex.html', {'error': 'ID de formato no encontrado.'})
+
+#         formato_recepcion = get_object_or_404(FormatoRecepcionMateriaPrima, id=formato_id)
+
+#         fechasalida = request.POST.get('fecha_salida', None)
+#         if not fechasalida:
+#             return render(request, 'contacts/kardex.html', {'error': 'La fecha de salida es obligatoria.'})
+        
+#         try:
+#             kardex = KardexRecepcionMateriaPrimaAlmacen(
+#                 materiaprima=formato_recepcion.materiaprima,  
+#                 fechacaducidad=formato_recepcion.fechacaducidad,
+#                 noloteseprisa=formato_recepcion.loteseprisa,
+#                 fechaentrada=formato_recepcion.fechaentrada,
+#                 cantidadneto=formato_recepcion.pesoneto,
+#                 codigoproveedorcliente=formato_recepcion.claveproveedor,
+#                 sku=formato_recepcion.sku,
+
+#                 fechasalida=fechasalida,  
+#                 clienteusointerno=request.POST.get('cliente_usointerno', ''),
+#                 noloteproveedor=request.POST.get('lote_proveedor', ''),
+#                 cantidadsale=request.POST.get('cantidad_sale', 0),  
+#                 cantidadqueda=request.POST.get('cantidad_queda', 0),
+#                 realizo=request.POST.get('realizo', ''),
+#                 observaciones=request.POST.get('observaciones', ''), 
+
+#                 formato_recepcion=formato_recepcion
+#             )
+#             kardex.save()
+#             return redirect('kardex_list') 
+#         except Exception as e:
+#             return render(request, 'contacts/kardex.html', {'error': f'No se pudo guardar el kardex: {e}'})
+
+from decimal import Decimal
+from django.shortcuts import get_object_or_404, redirect, render
+from django.views import View
+from .models import FormatoRecepcionMateriaPrima, KardexRecepcionMateriaPrimaAlmacen
+
 class GuardarKardexView(View):
     def post(self, request, *args, **kwargs):
         formato_id = request.POST.get('id')
         
         if not formato_id:
-            return render(request, 'kardex.html', {'error': 'ID de formato no encontrado.'})
+            return render(request, 'contacts/kardex.html', {'error': 'ID de formato no encontrado.'})
 
         formato_recepcion = get_object_or_404(FormatoRecepcionMateriaPrima, id=formato_id)
 
-        fechasalida = request.POST.get('fecha_salida', None)
+        fechasalida = request.POST.get('fecha_salida')
         if not fechasalida:
             return render(request, 'contacts/kardex.html', {'error': 'La fecha de salida es obligatoria.'})
-        
+
+        try:
+            cantidad_sale = Decimal(request.POST.get('cantidad_sale', "0"))
+        except:
+            return render(request, 'contacts/kardex.html', {'error': 'Cantidad de salida no válida.'})
+
+        # Obtener la última salida para determinar la cantidad disponible
+        ultima_salida = KardexRecepcionMateriaPrimaAlmacen.objects.filter(
+            formato_recepcion=formato_recepcion
+        ).order_by('-id').first()
+
+        cantidad_queda_anterior = (
+            ultima_salida.cantidadqueda if ultima_salida else formato_recepcion.pesoneto
+        )
+
+        # Verificar que cantidad_queda_anterior sea un Decimal
+        cantidad_queda_anterior = Decimal(str(cantidad_queda_anterior)) if cantidad_queda_anterior is not None else Decimal("0")
+
+        # Calcular la cantidad que queda después de la salida
+        cantidad_queda_actual = cantidad_queda_anterior - cantidad_sale
+
+        if cantidad_queda_actual < 0:
+            return render(request, 'contacts/kardex.html', {'error': 'No puedes sacar más de lo que hay disponible.'})
+
         try:
             kardex = KardexRecepcionMateriaPrimaAlmacen(
-                materiaprima=formato_recepcion.materiaprima,  
+                materiaprima=formato_recepcion.materiaprima,
                 fechacaducidad=formato_recepcion.fechacaducidad,
                 noloteseprisa=formato_recepcion.loteseprisa,
                 fechaentrada=formato_recepcion.fechaentrada,
                 cantidadneto=formato_recepcion.pesoneto,
                 codigoproveedorcliente=formato_recepcion.claveproveedor,
                 sku=formato_recepcion.sku,
-
-                fechasalida=fechasalida,  
+                fechasalida=fechasalida,
                 clienteusointerno=request.POST.get('cliente_usointerno', ''),
                 noloteproveedor=request.POST.get('lote_proveedor', ''),
-                cantidadsale=request.POST.get('cantidad_sale', 0),  
-                cantidadqueda=request.POST.get('cantidad_queda', 0),
+                cantidadsale=cantidad_sale,
+                cantidadqueda=cantidad_queda_actual,  # Guardar la cantidad restante
                 realizo=request.POST.get('realizo', ''),
-                observaciones=request.POST.get('observaciones', ''), 
-
+                observaciones=request.POST.get('observaciones', ''),
                 formato_recepcion=formato_recepcion
             )
             kardex.save()
-            return redirect('kardex_list') 
+            return redirect('kardex_list')
         except Exception as e:
             return render(request, 'contacts/kardex.html', {'error': f'No se pudo guardar el kardex: {e}'})
+
 
 class KardexView(View):
     def get(self, request, *args, **kwargs):

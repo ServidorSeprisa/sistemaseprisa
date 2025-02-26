@@ -120,7 +120,7 @@ urlpatterns = [
     path('etiquetacuarentena', views.Etiqueta_cuarentena.as_view(), name='etiqueta_cuarentena'),
 
     # Vista Kardex
-    path('kardex/', views.kardex.as_view(), name='kardex'),
+    # path('kardex/', views.kardex.as_view(), name='kardex'),
     path('kardex/pdf/', views.export_kardex_pdf, name='export_kardex_pdf'),
     path('kardex/list/',views.KardexListView.as_view(),name='kardex_list'),
     path('kardex/new/', views.KardexCreateView.as_view(),name='kardex_new'),
@@ -132,8 +132,6 @@ urlpatterns = [
     path('kardexview/',views.KardexListViewView.as_view(),name='kardex_view'),
     path('exportkardex/pdf/', views.export_formato_kardex_pdf2, name='export_formato_kardex_pdf2'),
     path('kardexlist/', kardex_listlist, name='kardex_listlist'),
-    path('kardexvview/',views.KardexListVView.as_view(),name='kardex_vview'),
-
 
     # path('download-pdf/', views.generate_pdf.as_view(), name='download_pdf'),
 
