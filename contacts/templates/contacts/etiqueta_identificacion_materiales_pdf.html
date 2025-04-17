@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        @page {
+            size: A4 landscape; /* Configura la orientación horizontal */
+            margin: 0; /* Sin márgenes */
+        }
+        
+        body {
+            margin: 0; /* Sin márgenes */
+            padding: 0; /* Sin relleno */
+            font-size: 25px; /* Tamaño de fuente reducido */
+        }
+        
+        table {
+            width: 100%; /* Asegura que la tabla ocupe todo el ancho */
+            border-collapse: collapse; /* Colapsa bordes */
+        }
+        th{
+            padding: 15px; /* Ajusta el espaciado si es necesario */
+        }
+        
+        td {
+            border: 1px solid black; /* Bordes para las celdas */
+            height: auto;
+            padding: 5px; /* Ajusta el espaciado si es necesario */
+            text-align: left; /* Alineación del texto */
+        }
+
+        .cabeza {
+            background: #267dc3;
+            text-align: center;
+            font-size: 30px; /* Tamaño de fuente reducido para el encabezado */
+        }
+        .img-container {
+            text-align: left;
+            margin: 0; /* Sin márgenes */
+            padding: 0px; /* Ajusta el espaciado si es necesario */
+
+        }
+        
+        .img-small {
+            width: 200px; /* Tamaño reducido de la imagen */
+            height: auto; /* Mantiene la proporción original */
+            float: left;
+        }
+        
+        .subrayado {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    {% for etiqueta in etiquetas %}
+    <table>
+        <thead>
+            <tr>
+                <th colspan="8" class="cabeza">
+                    <u>SEPRISA, SERVICIOS Y PRODUCTOS INTEGRALES PARA LA SALUD <br>
+                        S.A. DE C.V.<br></u>
+                    <div class="img-container">
+                        <img src="static/images/logoSEPRISA4.png" alt="Logo" class="img-small">
+                    </div>
+                    
+                    <span>ETIQUETA DE IDENTIFICACIÓN DE MATERIALES</span><br>
+                </th>
+            </tr>
+        </thead>
+        
+        <tbody>
+            <tr>
+                <td>Material</td>
+                <td colspan="4">{{ etiqueta.material|default:'-'}}</td>
+                <td>No. Análisis</td>
+                <td colspan="2">{{ etiqueta.no_analisis|default:'-'}}</td>
+            </tr>
+            <tr>
+                <td>Proveedor o cliente SKU:</td>
+                <td colspan="3">{{ etiqueta.proveedor|default:'-'}}</td>
+                <td>No. Lote de Proveedor</td>
+                <td colspan="3">{{ etiqueta.lote_proveedor|default:'-'}}</td>
+            </tr>
+            <tr>
+                <td>No. Lote Interno</td>
+                <td colspan="3">{{ etiqueta.lote_interno|default:'-'}}</td>
+                <td>P. Bruto {{ etiqueta.peso_bruto|default:'-'}}</td>
+                <td>P. Tara {{ etiqueta.peso_bruto|default:'-'}}</td>
+                <td>P. Neto {{ etiqueta.peso_bruto|default:'-'}}</td>
+                <td>Contenedor {{ etiqueta.contenedor|default:'-'}} de {{ etiqueta.de|default:'-'}}</td>
+
+            </tr>
+            <tr>
+                <td>SKU</td>
+                <td colspan="3">{{ etiqueta.sku|default:'-'}}</td>
+                <td>Fecha de caducidad</td>
+                <td colspan="3">{{ etiqueta.fechacaducidad|default:'-'}}</td>
+            </tr>
+            <tr>
+                <td>Realizó</td>
+                <td colspan="3">{{ etiqueta.realizo|default:' '}}</td>
+                <td>Verificó</td>
+                <td colspan="3">{{ etiqueta.verifico|default:' '}}</td>
+            </tr>
+        </tbody>
+    </table>
+    {% endfor %}
+</body>
+</html>
