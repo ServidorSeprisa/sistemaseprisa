@@ -1,6 +1,5 @@
 {% extends 'contacts/menu_base.html' %} 
-{% comment %} {% extends 'contacts/menuprueba3.html' %}   {% endcomment %}
-
+}
 {% load static %}
 
 {% block content %}
@@ -42,6 +41,8 @@
             <a href="{% url 'export_orden_produccion_pdf' %}" class="btn btn-outline-primary">Descargar Orden de Producción</a>
         </div>
     </div>
+
+    
 
     <form method="post" action="{% url 'ordenproduccion_new' %}">
         {% csrf_token %}

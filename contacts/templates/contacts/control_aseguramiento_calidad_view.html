@@ -1,0 +1,457 @@
+{% extends 'contacts/menu_base.html' %} 
+
+{% load static %}
+
+{% block content %}
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+    html, body {
+        height: 100%;
+        margin: 0;
+        background-image: url("{% static 'images/fondo1.jpg' %}"); /* Cambia la ruta a tu imagen */
+
+    }
+    
+    .container {
+        background-color: rgb(0, 255, 255,0.8); /* Esto se puede dejar o eliminar */
+        padding: 20px; /* Ajusta el padding según sea necesario */
+        border-radius: 5px; /* Opcional, para un aspecto más estilizado */
+    }
+    .table {
+        background-color:rgb(135, 206, 250,0.8)        ;
+    }
+    
+    
+    
+</style>
+
+<div class="d-flex justify-content-between mb-3">
+    
+    <div>
+        <a href="{% url 'orden_produccion2' %}" class="btn btn-outline-primary">Siguiente</a>
+        <a href="{% url 'export_control_aseguramiento_pdf' %}" class="btn btn-outline-primary">Descargar Control de Aseguramiento</a>
+        <a href="{% url 'export_control_aseguramiento_pdf2' %}" class="btn btn-outline-primary">Descargar Grafica</a>
+
+    </div>
+</div>
+
+
+<form method="get" action="{% url 'ordenproduccion_searchv' %}">
+
+    <div class="row mb-3">
+        <div class="col-md-8">
+            <input type="text" id="search_noorden" name="search_noorden" class="form-control" placeholder="Buscar por No. Orden de Producción">
+        </div>
+        <div class="col-md-4">
+            <button type="submit" class="btn btn-primary">Buscar</button>
+        </div>
+    </div>
+
+    {% csrf_token %}
+
+    <input type="hidden" name="id" value="{% if OrdenProduccion %}{{ OrdenProduccion.noordenproduccion }}{% endif %}">
+
+
+    <div class="card mb-4">
+        <div class="card-header">
+            <h5 class="mb-0">Información de la Orden de Producción</h5>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label for="producto" class="form-label">Producto:</label>
+                    <input type="text" id="producto" name="producto" class="form-control" value="{% if OrdenProduccion %}{{ OrdenProduccion.producto }}{% endif %}" disabled>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label for="clavesku_maquila" class="form-label">CLAVE/SKU Maquila:</label>
+                    <input type="text" id="clavesku_maquila" name="clavesku_maquila" class="form-control" value="{% if OrdenProduccion %}{{ OrdenProduccion.claveskumaquila }}{% endif %}" disabled>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label for="presentacion" class="form-label">Presentación:</label>
+                    <input type="text" id="presentacion" name="presentacion" class="form-control" value="{% if OrdenProduccion %}{{ OrdenProduccion.presentacion }}{% endif %}" disabled>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label for="noorden_produccion" class="form-label">No. Orden de Producción:</label>
+                    <input type="text" id="noorden_produccion" name="noorden_produccion" class="form-control" value="{% if OrdenProduccion %}{{ OrdenProduccion.noordenproduccion }}{% endif %}" disabled>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label for="numero_lote" class="form-label">Número de lote:</label>
+                    <input type="text" id="numero_lote" name="numero_lote" class="form-control" value="{% if OrdenProduccion %}{{ OrdenProduccion.numerolote }}{% endif %}" placeholder="Número de Lote" disabled>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label for="fecha_caducidad" class="form-label">Fecha de caducidad:</label>
+                    <input type="date" id="fecha_caducidad" name="fecha_caducidad" class="form-control" value="{% if OrdenProduccion %}{{ OrdenProduccion.fechacaducidad }}{% endif %}" disabled>
+                </div>
+            </div>
+            
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label for="fechainicio_proceso" class="form-label">Fecha inicio proceso:</label>
+                    <input type="date" id="fechainicio_proceso" name="fechainicio_proceso" class="form-control" value="{% if OrdenProduccion %}{{ OrdenProduccion.fechainicioproceso }}{% endif %}" disabled>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label for="fechatermino_proceso" class="form-label">Fecha termino de proceso:</label>
+                    <input type="date" id="fechatermino_proceso" name="fechatermino_proceso" class="form-control" value="{% if OrdenProduccion %}{{ OrdenProduccion.fechaterminoproceso }}{% endif %}" disabled>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label for="rendimiento_teorico" class="form-label">Rendimiento teorico:</label>
+                    <input type="number" id="rendimiento_teorico" name="rendimiento_teorico" class="form-control" value="{% if etiqueta %}{{ OrdenProduccion.rendimientoteorico }}{% endif %}" placeholder="Rendimiento teorico" disabled>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label for="rendimiento_real" class="form-label">Rendimiento real:</label>
+                    <input type="number" id="rendimiento_real" name="rendimiento_real" class="form-control" value="{% if OrdenProduccion %}{{ OrdenProduccion.rendimientoreal }}{% endif %}" placeholder="Rendimiento real" disabled>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</form>
+
+    <div class="container mt-5">
+        <h2>Tabla de Muestras y Pesos</h2>
+        {% if OrdenProduccion %}
+        <h3>Orden de Producción: {{ OrdenProduccion.noordenproduccion }}</h3>
+    
+        <!-- Primera Tabla de Muestras -->
+        <table id="tablaMuestras1" class="table">
+            <thead>
+                <tr>
+                    <th>Muestra</th>
+                    <th>Muestra 1</th>
+                    <th>Muestra 2</th>
+                    <th>Muestra 3</th>
+                    <th>Muestra 4</th>
+                    <th>Muestra 5</th>
+                    <th>Muestra 6</th>
+                    <th>Muestra 7</th>
+                    <th>Muestra 8</th>
+                    <th>Muestra 9</th>
+                    <th>Muestra 10</th>
+                    <th>Muestra 11</th>
+                    <th>Muestra 12</th>
+                    <th>Muestra 13</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for muestra in tabla1_muestras %}
+                    <tr>
+                        <td>{{ muestra.fila }}</td> 
+                        {% for valor in muestra.valores %}
+                            <td>
+                                <input type="number" class="form-control" value="{{ valor }}" />
+                            </td>
+                        {% endfor %}
+                    </tr>
+                {% empty %}
+                    <tr>
+                        <td colspan="14">No se encontraron muestras.</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    
+        <table id="tablaMuestras2" class="table">
+            <thead>
+                <tr>
+                    <th>Muestra</th>
+                    <th>Muestra 1</th>
+                    <th>Muestra 2</th>
+                    <th>Muestra 3</th>
+                    <th>Muestra 4</th>
+                    <th>Muestra 5</th>
+                    <th>Muestra 6</th>
+                    <th>Muestra 7</th>
+                    <th>Muestra 8</th>
+                    <th>Muestra 9</th>
+                    <th>Muestra 10</th>
+                    <th>Muestra 11</th>
+                    <th>Muestra 12</th>
+                    <th>Muestra 13</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for muestra in tabla2_muestras %}
+                    <tr>
+                        <td>{{ muestra.fila }}</td> <!-- Muestra la fila -->
+                        {% for valor in muestra.valores %}
+                            <td>
+                                <input type="number" class="form-control" value="{{ valor }}" />
+                            </td>
+                        {% endfor %}
+                    </tr>
+                {% empty %}
+                    <tr>
+                        <td colspan="14">No se encontraron muestras.</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    
+    {% else %}
+        <p>No se encontró ninguna orden de producción con ese número.</p>
+    {% endif %}
+        
+        <button class="btn btn-primary" onclick="calcularPromedios()">Calcular Promedios</button>
+        
+        <h3 class="mt-4">Gráfica de Promedios</h3>
+        <canvas id="graficaPromedios" width="400" height="200"></canvas>
+        
+        <script>
+            let grafica;
+        
+            function calcularPromedios() {
+                const filasTabla1 = document.querySelectorAll('#tablaMuestras1 tbody tr');
+                const filasTabla2 = document.querySelectorAll('#tablaMuestras2 tbody tr');
+                
+                const numMuestras = 26; 
+        
+                const sumas = new Array(numMuestras).fill(0);
+                const counts = new Array(numMuestras).fill(0);
+        
+                filasTabla1.forEach(fila => {
+                    for (let i = 1; i <= 13; i++) {
+                        const input = fila.children[i].querySelector('input');
+                        if (input) {
+                            const valor = parseFloat(input.value) || 0;
+                            sumas[i - 1] += valor;
+                            if (valor !== 0) counts[i - 1]++;
+                        }
+                    }
+                });
+        
+                filasTabla2.forEach(fila => {
+                    for (let i = 0; i < 13; i++) {
+                        const input = fila.children[i + 1].querySelector('input');
+                        if (input) {
+                            const valor = parseFloat(input.value) || 0;
+                            sumas[i + 13] += valor;
+                            if (valor !== 0) counts[i + 13]++;
+                        }
+                    }
+                });
+        
+                const promedios = sumas.map((suma, i) => (counts[i] > 0 ? (suma / counts[i]).toFixed(2) : 0));
+        
+                if (grafica) {
+                    grafica.destroy();
+                }
+        
+                const ctx = document.getElementById('graficaPromedios').getContext('2d');
+                grafica = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: Array.from({ length: numMuestras }, (_, i) => `Muestra ${i + 1}`),
+                        datasets: [{
+                            label: 'Promedios',
+                            data: promedios,
+                            borderColor: 'rgba(75, 192, 192, 1)',
+                            backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                            borderWidth: 1,
+                            fill: true
+                        }]
+                    },
+                    options: {
+                        scales: {
+                            y: {
+                                beginAtZero: true
+                            }
+                        }
+                    }
+                });
+        
+                console.log(promedios);
+        
+                const tabla1 = document.querySelector('#tablaMuestras1 tbody');
+                const tabla2 = document.querySelector('#tablaMuestras2 tbody');
+                const filaPromediosExistente1 = tabla1.querySelector('.fila-promedio');
+                const filaPromediosExistente2 = tabla2.querySelector('.fila-promedio');
+        
+                if (filaPromediosExistente1) filaPromediosExistente1.remove();
+                if (filaPromediosExistente2) filaPromediosExistente2.remove();
+        
+                const filaPromedios1 = document.createElement('tr');
+                filaPromedios1.classList.add('fila-promedio');
+                filaPromedios1.innerHTML = `<td>Promedio</td>` + promedios.slice(0, 13).map(promedio => `<td>${promedio}</td>`).join('');
+                tabla1.appendChild(filaPromedios1);
+        
+                const filaPromedios2 = document.createElement('tr');
+                filaPromedios2.classList.add('fila-promedio');
+                filaPromedios2.innerHTML = `<td>Promedio</td>` + promedios.slice(13, 26).map(promedio => `<td>${promedio}</td>`).join('');
+                tabla2.appendChild(filaPromedios2);
+            }
+        </script>
+
+        
+        
+        
+<a href="#" id="descargarGrafica" class="btn btn-outline-primary">Descargar Gráfica</a>
+
+<a href="#" id="descargarTabla" class="btn btn-outline-primary">Descargar Tabla</a>
+
+<script>
+    document.getElementById('descargarGrafica').addEventListener('click', function() {
+        const canvas = document.getElementById('graficaPromedios');
+        const url = canvas.toDataURL('image/png');
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'grafica_promedios.png';
+        a.click();
+    });
+
+    document.getElementById('descargarTabla').addEventListener('click', function() {
+        const encabezadoTabla1 = Array.from(document.querySelectorAll('#tablaMuestras1 thead th'))
+            .slice(1) 
+            .map(th => th.textContent.trim()).join(',');
+        
+        const encabezadoTabla2 = Array.from(document.querySelectorAll('#tablaMuestras2 thead th'))
+            .slice(1)
+            .map(th => th.textContent.trim()).join(',');
+
+        let csvContent = 'Muestra,' + encabezadoTabla1 + '\n';
+        
+        const filasTabla1 = document.querySelectorAll('#tablaMuestras1 tbody tr');
+        const filasTabla2 = document.querySelectorAll('#tablaMuestras2 tbody tr');
+        
+        const procesarFilas = (filas, tabla) => {
+            filas.forEach(fila => {
+                const celdas = Array.from(fila.children).slice(0, -1); 
+                const valores = celdas.map(celda => celda.querySelector('input')?.value || '');
+                if (tabla === 1) {
+                    csvContent += valores.join(',') + '\n';
+                } else {
+                    csvContent += ',' + valores.join(',') + '\n';
+                }
+            });
+        };
+
+        procesarFilas(filasTabla1, 1);
+        
+        csvContent += '\n';
+
+        csvContent += 'Muestra,' + encabezadoTabla2 + '\n';
+        procesarFilas(filasTabla2, 2);
+        
+        const blob = new Blob([csvContent], { type: 'text/csv' });
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = 'tabla_muestras_completa.csv';
+        a.click();
+    });
+</script>
+
+<script>
+    function guardarDatos() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const numeroOrden = urlParams.get('id');  
+
+        if (!numeroOrden) {
+            alert('Número de orden no disponible');
+            return;  
+        }
+
+        const filasTabla1 = document.querySelectorAll('#tablaMuestras1 tbody tr');
+        const filasTabla2 = document.querySelectorAll('#tablaMuestras2 tbody tr');
+        
+        let datosTabla1 = [];
+        let datosTabla2 = [];
+
+        filasTabla1.forEach((fila, indexFila) => {
+            let celdas = fila.querySelectorAll('input');
+            celdas.forEach((celda, indexColumna) => {
+                let valor = parseFloat(celda.value) || 0;
+                datosTabla1.push({
+                    fila: indexFila + 1,  
+                    columna: indexColumna + 1,  
+                    valor: valor
+                });
+            });
+        });
+
+        filasTabla2.forEach((fila, indexFila) => {
+            let celdas = fila.querySelectorAll('input');
+            celdas.forEach((celda, indexColumna) => {
+                let valor = parseFloat(celda.value) || 0;
+                datosTabla2.push({
+                    fila: indexFila + 1,  
+                    columna: indexColumna + 14,  
+                    valor: valor
+                });
+            });
+        });
+
+        fetch('/guardar_muestras/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': getCookie('csrftoken')  
+            },
+            body: JSON.stringify({ 
+                numero_orden: numeroOrden,  
+                tabla1: datosTabla1, 
+                tabla2: datosTabla2 
+            })
+        })
+        .then(response => response.json())
+        .then(data => alert(data.mensaje || data.error))
+        .catch(error => console.error('Error:', error));
+    }
+
+    // Función para obtener el token CSRF
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            let cookies = document.cookie.split(';');
+            cookies.forEach(cookie => {
+                cookie = cookie.trim();
+                if (cookie.startsWith(name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                }
+            });
+        }
+        return cookieValue;
+    }
+</script>
+
+
+
+<script>
+    function buscarOrden() {
+        let numeroOrden = document.getElementById('numeroOrden').value;
+    
+        fetch(`/obtener_muestras/${numeroOrden}/`)
+        .then(response => response.json())
+        .then(data => {
+            if (data.error) {
+                alert(data.error);
+                return;
+            }
+    
+            document.querySelectorAll('#tablaMuestras1 tbody tr input').forEach(input => input.value = '');
+            document.querySelectorAll('#tablaMuestras2 tbody tr input').forEach(input => input.value = '');
+    
+            data.tabla1.forEach(muestra => {
+                let input = document.querySelector(`#tablaMuestras1 tbody tr:nth-child(${muestra.fila}) td:nth-child(${muestra.columna + 1}) input`);
+                if (input) input.value = muestra.valor;
+            });
+    
+            data.tabla2.forEach(muestra => {
+                let input = document.querySelector(`#tablaMuestras2 tbody tr:nth-child(${muestra.fila}) td:nth-child(${muestra.columna + 1}) input`);
+                if (input) input.value = muestra.valor;
+            });
+        })
+        .catch(error => console.error('Error:', error));
+    }
+    
+</script>
+
+{% endblock content %}
+

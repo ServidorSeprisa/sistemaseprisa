@@ -1,50 +1,5 @@
 {% extends 'contacts/formato_recepcion_materia_prima_base.html' %}  
 
-{% comment %} {% extends 'contacts/basemenudesplegable.html' %}   {% endcomment %}
-
-{% comment %} 
-{% load static crispy_forms_tags %}
-
-{% block content %}
-
-    <div class = "mt-5">
-        <h3> 
-            {% if FormatoRecepcionMateriaPrima %}
-            Editar
-            {% else %}
-            Nuevo
-            {% endif %}
-            Contacto 
-        </h3>
-    </div> 
-     {% endcomment %}
-
-    {% comment %} #################### <form action="" method="post" class="mt-5 mx-auto" style="max-width: 320px;" novalidate> {% endcomment %}
-    {% comment %} <form action="" method="post" class="mt-5 mx-auto" style="max-width: 420px;" enctype="multipart/form-date" novalidate>
-
-    {% csrf_token %}
-         {% endcomment %}
-        {% comment %} ############################ {{form.as_p}}  {% endcomment %}
-        {% comment %} {{ form| crispy }}
-
-        <div class="text-end mt-3">
-            <a href="{% url 'formato_recepcion_materia_prima' %}" class="btn btn-light me-1">
-                Cancelar
-            </a>
-            <button class="btn btn-primary">
-                {% if For %}
-                Actualizar
-                {% else %}
-                Crear
-                {% endif %}
-                contacto
-            </button>
-        </div>
-    </form> 
-
-{% endblock content %} {% endcomment %}
-
-
 {% load static crispy_forms_tags %}
 
 {% block content %}

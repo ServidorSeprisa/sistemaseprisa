@@ -10,15 +10,7 @@
          
   <link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.min.css' %}">
   <style>
-      /* Aquí van tus estilos personalizados */
-      {% comment %} body, html {
-        margin: 0;
-        padding: 0;
-        height: 100%;
-      } {% endcomment %}
-      
       .hero_area {/*fondo de la pagina*/
-        {% comment %} background-image: url("{% static 'images/fondo2.jpg' %}"); {% endcomment %}
         background-color: #0f94d1;
         background-size: cover; 
         background-attachment: fixed; 
@@ -121,22 +113,6 @@
           background-size: cover; /* Ajusta el tamaño de la imagen */
           background-position: center; /* Centra la imagen */
       }
-      
-      {% comment %} .hero_area {
-          background-image: url("{% static 'images/fondo2.jpg' %}"); /* Cambia la ruta a tu imagen de fondo principal */
-          background-size: cover; /* Ajusta el tamaño de la imagen */
-          background-attachment: fixed; /* Hace que la imagen de fondo se mantenga fija al desplazarse */
-          height: 98vh; /* Ajusta la altura según sea necesario */
-      } {% endcomment %}
-
-        {% comment %} /*header section*/
-        /* .hero_area {
-          height: 98vh;
-          background-image: url(../images/fondo2.jpg);
-          background-size: cover;
-          background-attachment: fixed;
-        } */ {% endcomment %}
-        
         .sub_page .hero_area {
           height: auto;
         }
@@ -300,13 +276,6 @@
     </style>
 </head>
 
-{% comment %} {% if request.user.is_authenticated %}
-    <hr>
-    <h4>
-        {{ user.username | upper }}, bienvenido
-    </h4>
-{% endif %} {% endcomment %}
-
 <body >
   <div class="sub_page">
     <div class="hero_area">
@@ -322,10 +291,6 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
               
-              {% comment %} <a class="navbar-brand" href="index.html">
-                <img src="{% static 'images/logoSEPRISAsf.png' %}" alt="" />
-                <span>SEPRISA</span>
-              </a> {% endcomment %}
               <ul class="navbar-nav ml-auto">
                 {% if request.user.is_authenticated %}
                     <hr>
@@ -341,13 +306,9 @@
                     Entrada
                   </a>
                   <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                    {% comment %} <a class="dropdown-item" href="{% url 'formato_recepcion_materia' %}">Entrada 1</a>
-                    <a class="dropdown-item" href="entrada2.html">Entrada 2</a> {% endcomment %}
                     <a class="dropdown-item" href="{% url 'formato_recepcion_materia_alergenos_view' %}">Registrar recepción de materias primas consideradas alérgenos</a>
                     <a class="dropdown-item" href="{% url 'formato_recepcion_material_empaque_view' %}">Registrar recepción de material de empaque</a>
                     <a class="dropdown-item" href="{% url 'formato_recepcion_materia_prima_view' %}">Registrar recepción de materia prima</a>
-                    {% comment %} <a class="dropdown-item" href="{% url 'formato_solicitud_analisis' %}">Solicitud de análisis</a> {% endcomment %}
-                    {% comment %} <a class="dropdown-item" href="{% url 'kardex' %}">KARDEX</a> {% endcomment %}
                   </div>
                 </li>
                 <li class="nav-item dropdown">
@@ -364,9 +325,7 @@
                     Produccion
                   </a>
                   <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                    <a class="dropdown-item" href="{% url 'menu_admin' %}">Orden de Produccion</a>
-                    {% comment %} <a class="dropdown-item" href="{% url 'control_aseguramiento_view' %}">Control de Aseguramiento</a> {% endcomment %}
-
+                    <a class="dropdown-item" href="{% url 'orden_produccion_list_viewv' %}">Orden de Produccion</a>
                   </div>
                 </li>
                 <li class="nav-item dropdown">
@@ -374,17 +333,10 @@
                       Calidad
                   </a>
                   <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                      {% comment %} <a class="dropdown-item" href="{% url 'orden_produccion_view' %}">Orden de Produccion</a> {% endcomment %}
-                      <a class="dropdown-item" href="{% url 'menu_admin' %}">Control de Aseguramiento</a>
+                      <a class="dropdown-item" href="{% url 'ordenproduccion_searchv' %}">Control de Aseguramiento</a>
 
                   </div>
                 </li>
-                {% comment %} <li class="nav-item">
-                  <a class="nav-link" href="product.html">Almacen</a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link" href="client.html">Produccion</a>
-                </li> {% endcomment %}
                 <li class="nav-item">
                   <a class="nav-link" href="{% url 'login' %}">Login</a>
                 </li>
@@ -404,10 +356,8 @@
           </nav>
         </div>
       </header>
-      <!-- hero section -->
       <section class="hero_section">
         <div class="hero_detail">
-          {% comment %} <img src="{% static 'images/logoSEPRISAsf.png' %}" alt="" /> {% endcomment %}
           <img class="logo2" src="{% static 'images/caps2SF.gif' %}" alt="" />
           <h1>
             <span>
@@ -436,87 +386,13 @@
             Servicios Y Productos Integrales Para La Salud S.A. de C.V.
           </h2>
         </div>
-        {% comment %} <div class="hero_btn-box">
-          <a href="">
-            Contact Us
-          </a>
-        </div> {% endcomment %}
       </section>
     </div>
-    <!-- end hero section -->
   </div>
 
-  <!-- end hero area -->
-
-
-  <!-- end about section -->
-
-  <!-- product section -->
-  
-
-
-  <!-- end product section -->
-
-  <!-- why section -->
-
-  
-
-  <!-- end why section -->
-
-
-
-  <!-- contact section -->
-  {% comment %} <section>
-  </section> {% endcomment %}
-
-  {% comment %} <section class="contact_section layout_padding">
-    <div class="container">
-      <div class="col-md-6">
-        <div class="d-flex mb-4 ml-4 ml-md-0">
-          <h2 class="custom_heading text-center">
-            CONTACT US
-          </h2>
-        </div>
-        <form action="">
-          <div>
-            <input type="text" placeholder="Name" />
-          </div>
-          <div>
-            <input type="email" placeholder="Email" />
-          </div>
-          <div>
-            <input type="text" placeholder="Pone Number" />
-          </div>
-          <div>
-            <input type="text" class="message-box" placeholder="Message" />
-          </div>
-          <div class="d-flex justify-content-center mt-4 ">
-            <button>
-              SEND
-            </button>
-          </div>
-        </form>
-      </div>
-    </div>
-  </section> {% endcomment %}
-
-  <!-- end contact section -->
-
-  <!-- client section -->
-
-  <!-- end info_section -->
-
-  <!-- footer section -->
-  
-  <!-- footer section -->
-
-  {% comment %} <script type="text/javascript" src="js/jquery-3.4.1.min.js"></script>
-  <script type="text/javascript" src="js/bootstrap.js"></script> {% endcomment %}
-  {% comment %} <script type="text/javascript" src="{% static 'js/jquery-3.4.1.min.js' %}"></script> {% endcomment %}
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   
   <script type="text/javascript" src="{% static 'js/bootstrap.js' %}"></script>
-  {% comment %} <script src="{%static 'bootstrap/js/bootstrap.min.js'%}"></script> {% endcomment %}
   
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>

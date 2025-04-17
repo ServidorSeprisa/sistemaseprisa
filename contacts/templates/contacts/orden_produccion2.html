@@ -116,7 +116,6 @@
             <tbody>
                 {% for FormatoRecepcionMateriaPrima in object_list %}
                 <tr>
-                    {% comment %} <td>{{ FormatoRecepcionMateriaPrima.materiaprima|default:'-'}}</td> {% endcomment %}
                     <td>{{ FormatoRecepcionMateriaPrima.fechaentrada|date:'d/m/Y h:i A'}}</td>
                     <td>{{ FormatoRecepcionMateriaPrima.materiaprima|default:'-' }}</td>
                     <td>{{ FormatoRecepcionMateriaPrima.loteseprisa|default:'-' }}</td>

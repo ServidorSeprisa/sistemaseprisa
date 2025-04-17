@@ -1,0 +1,246 @@
+{% extends 'contacts/menu_base.html' %} 
+
+{% load static %}
+
+{% block content %}
+    <style>
+        .header {
+            background-color: #007bff;
+            color: white;
+            padding: 20px;
+            border-radius: 5px;
+        }
+        .form-label {
+            font-weight: bold;
+        }
+        .table th {
+            background-color: #e9ecef;
+        }
+        .table-hover tbody tr:hover {
+            background-color: #f1f1f1;
+        }
+        .container{
+            background-color: #B0E0E6;
+        }
+        html, body{
+            background-color:rgb(221, 160, 221,0.8);
+        }
+    
+    </style>
+<body >
+    <div class="container py-5">
+    <div class="d-flex justify-content-between mb-3">
+
+        <div>
+            <a href="{% url 'orden_produccion2' %}" class="btn btn-outline-primary">Siguiente</a>
+            <a href="{% url 'export_orden_produccion_create_listview_pdf'  %}" class="btn btn-outline-primary">Descargar Orden de Producción</a>
+
+        </div>
+    </div>
+    
+    <form method="post" action="{% url 'ordenproduccion_create' %}" id="orden-produccion-form">
+        {% csrf_token %}
+        <input type="hidden" name="id" value="{% if OrdenProduccion %}{{ OrdenProduccion.id }}{% endif %}">
+    
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5 class="mb-0">Información de la Orden de Producción</h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label for="producto" class="form-label">Producto:</label>
+                    
+                        <input type="text" id="producto" name="producto" class="form-control" value="{% if orden_seleccionada %}{{ orden_seleccionada.producto }}{% endif %}" placeholder="Producto" required>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="clavesku_maquila" class="form-label">CLAVE/SKU Maquila:</label>
+                        <input type="text" id="clavesku_maquila" name="clavesku_maquila" class="form-control" value="{% if orden_seleccionada %}{{ orden_seleccionada.claveskumaquila }}{% endif %}" placeholder="CLAVE/SKU Maquila" required>
+                    </div>
+                </div>
+    
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label for="presentacion" class="form-label">Presentación:</label>
+                        <input type="text" id="presentacion" name="presentacion" class="form-control" value="{% if orden_seleccionada %}{{ orden_seleccionada.presentacion }}{% endif %}" placeholder="Presentación" required>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="noorden_produccion" class="form-label">No. Orden de Producción:</label>
+                        <input type="text" id="noorden_produccion" name="noorden_produccion" class="form-control" value="{% if orden_seleccionada %}{{ orden_seleccionada.noordenproduccion }}{% endif %}" placeholder="No. Orden de Producción" required>
+                    </div>
+                </div>
+    
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label for="numero_lote" class="form-label">Número de lote:</label>
+                        <input type="text" id="numero_lote" name="numero_lote" class="form-control" value="{% if orden_seleccionada %}{{ orden_seleccionada.numerolote }}{% endif %}" placeholder="Número de Lote" required>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="fecha_caducidad" class="form-label">Fecha de caducidad:</label>
+                        <input type="date" id="fecha_caducidad" name="fecha_caducidad" class="form-control" value="{% if orden_seleccionada %}{{ orden_seleccionada.fechacaducidad }}{% endif %}" required>
+                    </div>
+                </div>
+                
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label for="fechainicio_proceso" class="form-label">Fecha inicio proceso:</label>
+                        <input type="date" id="fechainicio_proceso" name="fechainicio_proceso" class="form-control" value="{% if orden_seleccionada %}{{ orden_seleccionada.fechainicioproceso }}{% endif %}" required>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="fechatermino_proceso" class="form-label">Fecha termino de proceso:</label>
+                        <input type="date" id="fechatermino_proceso" name="fechatermino_proceso" class="form-control" value="{% if orden_seleccionada %}{{ orden_seleccionada.fechaterminoproceso }}{% endif %}" required>
+                    </div>
+                </div>
+    
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label for="rendimiento_teorico" class="form-label">Rendimiento teorico:</label>
+                        <input type="number" id="rendimiento_teorico" name="rendimiento_teorico" class="form-control" value="{% if orden_seleccionada %}{{ orden_seleccionada.rendimientoteorico }}{% endif %}" placeholder="Rendimiento teorico" required>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="rendimiento_real" class="form-label">Rendimiento real:</label>
+                        <input type="number" id="rendimiento_real" name="rendimiento_real" class="form-control" value="{% if orden_seleccionada %}{{ orden_seleccionada.rendimientoreal }}{% endif %}" placeholder="Rendimiento real" required>
+
+                    </div>
+                </div>
+                
+                <div class="table-responsive mt-5">
+                   
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>SKU</th>
+                                <th>Material</th>
+                                <th>Lote</th>
+                                <th>Unidad</th>
+                                <th>Cantidad</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for detalle in detalles_orden %}
+                            <tr>
+                                <td>{{ detalle.skump }}</td>
+                                <td>{{ detalle.material }}</td>
+                                <td>{{ detalle.nolote }}</td>
+                                <td>{{ detalle.unidad }}</td>
+                                <td>{{ detalle.cantidad }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div> 
+
+                <input type="hidden" name="detalle_orden" id="detalle_orden">
+
+            </div>
+        </div>
+    </form>
+
+    <script>
+        document.getElementById('searchBox').addEventListener('input', function() {
+            let query = this.value;
+        
+            fetch(`${window.location.pathname}?q=${query}`, {
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest' 
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                let resultsTable = document.getElementById('resultsTable');
+                resultsTable.innerHTML = '';
+        
+                data.ordenes.forEach(orden => {
+                    let row = `<tr>
+                        <td>${orden.materiaprima}</td>
+                        <td>${orden.fechacaducidad}</td>
+                        <td>${orden.loteseprisa}</td>
+                        <td>${orden.fechaentrada}</td>
+                        <td>${orden.pesoneto} kg</td>
+                        <td>${orden.claveproveedor}</td>
+                        <td>${orden.sku}</td>
+                        <td>${orden.cantidadqueda}</td>
+                        <td>
+                            <div class="btn-group btn-group-sm">
+                                {% comment %} <a href="/kardex_prodlist/?id=${orden.id}" class="btn btn-primary">Salida</a> {% endcomment %}
+                                <a href="/kardexprodlist/?id=${orden.id}" class="btn btn-primary">Salida</a>
+                            </div>
+                        </td>
+                    </tr>`;
+                    resultsTable.innerHTML += row;
+                });
+            })
+            .catch(error => console.error('Error en la búsqueda:', error));
+        });
+        
+    </script>
+
+    <button type="submit" class="btn btn-primary" id="guardarOrden">Guardar</button>
+
+    <script>
+        function getDetalleOrdenData() {
+            var detalleOrden = [];
+            var rows = document.querySelectorAll("#detalleOrden tbody tr");
+            rows.forEach(row => {
+                var cells = row.querySelectorAll("td");
+                if (cells.length) {
+                    detalleOrden.push({
+                        sku: cells[0].innerText,
+                        material: cells[1].innerText,
+                        lote: cells[2].innerText,
+                        unidad: cells[3].innerText,
+                        cantidad: cells[4].innerText,
+                        surtio: cells[5].innerText,
+                        verifico: cells[6].innerText
+                    });
+                }
+            });
+            document.getElementById("detalle_orden").value = JSON.stringify(detalleOrden);
+        }
+    
+        document.getElementById("orden-produccion-form").addEventListener("submit", function(event) {
+            getDetalleOrdenData(); 
+        });
+    </script>
+
+    <script>
+
+        document.addEventListener("DOMContentLoaded", function() {
+            let detalleOrdenInput = document.getElementById("detalle_orden");
+        
+            if (detalleOrdenInput) {
+                document.getElementById("guardarOrden").addEventListener("click", function(event) {
+                    event.preventDefault(); 
+
+                    let detalles = [];
+                    document.querySelectorAll("#detalleOrden tbody tr").forEach(row => {
+                        let detalle = {
+                            sku: row.cells[0].innerText.trim(),
+                            material: row.cells[1].innerText.trim(),
+                            lote: row.cells[2].innerText.trim(),
+                            unidad: row.cells[3].innerText.trim(),
+                            cantidad: row.cells[4].innerText.trim(),
+                            surtio: row.cells[5].querySelector("input") ? row.cells[5].querySelector("input").value.trim() : "",
+                            verifico: row.cells[6].querySelector("input") ? row.cells[6].querySelector("input").value.trim() : ""
+                        };
+                        detalles.push(detalle);
+                    });
+        
+                    console.log("Datos recopilados antes de enviar:", detalles); 
+        
+                    if (detalleOrdenInput) {
+                        detalleOrdenInput.value = JSON.stringify(detalles);
+                    }
+        
+                    console.log("Valor en campo oculto detalle_orden:", detalleOrdenInput.value);
+        
+                    document.querySelector("form").submit();
+                });
+            } else {
+                console.error("El elemento con id 'detalle_orden' no existe en el DOM.");
+            }
+        });
+        
+    </script>
+        
+{% endblock content %}

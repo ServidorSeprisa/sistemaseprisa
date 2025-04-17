@@ -1,24 +1,16 @@
 {% extends 'contacts/menu_base.html' %} 
-{% comment %} {% extends 'contacts/menuprueba3.html' %}   {% endcomment %}
 
 {% load static %}
 
 {% block content %}
-{% comment %} <!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-    <title>Tabla de Muestras</title> {% endcomment %}
+
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-{% comment %} </head> {% endcomment %}
+
 <style>
     html, body {
         height: 100%;
         margin: 0;
-        {% comment %} background-color: black; /* Aplica el fondo negro a toda la vista */ {% endcomment %}
-        background-image: url("{% static 'images/fondo1.jpg' %}"); /* Cambia la ruta a tu imagen */
+        background-color: white; /* Aplica el fondo negro a toda la vista */
 
     }
     
@@ -31,26 +23,105 @@
         background-color:rgb(135, 206, 250,0.8)        ;
     }
     
+    
+    
 </style>
-{% comment %} <body> {% endcomment %}
 
 <div class="d-flex justify-content-between mb-3">
-    <form action="{% url 'buscar_orden_produccion' %}" method="get" style="max-width: 450px;">
-        <div class="input-group">
-            <input type="text" class="form-control" placeholder="Buscar por orden de producción" name="q" value="{{ request.GET.q }}">
-            <button class="btn btn-primary">Buscar</button>
-        </div>
-    </form>
     <div>
         <a href="{% url 'orden_produccion2' %}" class="btn btn-outline-primary">Siguiente</a>
-        <a href="{% url 'export_control_aseguramiento_pdf' %}" class="btn btn-outline-primary">Descargar Control de Aseguramiento</a>
+        <a href="#" id="btnDescargarControl" class="btn btn-outline-primary">Descargar Control de Aseguramiento</a>
         <a href="{% url 'export_control_aseguramiento_pdf2' %}" class="btn btn-outline-primary">Descargar Grafica</a>
 
     </div>
 </div>
 
+
+<form method="get" action="{% url 'ordenproduccion_search' %}" class="container">
+
+    <div class="row mb-3">
+        <div class="col-md-8">
+            <input type="text" id="search_noorden" name="search_noorden" class="form-control" placeholder="Buscar por No. Orden de Producción">
+        </div>
+        <div class="col-md-4">
+            <button type="submit" class="btn btn-primary">Buscar</button>
+        </div>
+    </div>
+
+    {% csrf_token %}
+    <input type="hidden" name="id" value="{% if OrdenProduccion %}{{ OrdenProduccion.noordenproduccion }}{% endif %}">
+
+
+    <div class="card mb-4">
+        <div class="card-header">
+            <h5 class="mb-0">Información de la Orden de Producción</h5>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label for="producto" class="form-label">Producto:</label>
+                    <input type="text" id="producto" name="producto" class="form-control" value="{% if OrdenProduccion %}{{ OrdenProduccion.producto }}{% endif %}" disabled>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label for="clavesku_maquila" class="form-label">CLAVE/SKU Maquila:</label>
+                    <input type="text" id="clavesku_maquila" name="clavesku_maquila" class="form-control" value="{% if OrdenProduccion %}{{ OrdenProduccion.claveskumaquila }}{% endif %}" disabled>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label for="presentacion" class="form-label">Presentación:</label>
+                    <input type="text" id="presentacion" name="presentacion" class="form-control" value="{% if OrdenProduccion %}{{ OrdenProduccion.presentacion }}{% endif %}" disabled>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label for="noorden_produccion" class="form-label">No. Orden de Producción:</label>
+                    <input type="text" id="noorden_produccion" name="noorden_produccion" class="form-control" value="{% if OrdenProduccion %}{{ OrdenProduccion.noordenproduccion }}{% endif %}" disabled>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label for="numero_lote" class="form-label">Número de lote:</label>
+                    <input type="text" id="numero_lote" name="numero_lote" class="form-control" value="{% if OrdenProduccion %}{{ OrdenProduccion.numerolote }}{% endif %}" placeholder="Número de Lote" disabled>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label for="fecha_caducidad" class="form-label">Fecha de caducidad:</label>
+                    <input type="date" id="fecha_caducidad" name="fecha_caducidad" class="form-control" value="{% if OrdenProduccion %}{{ OrdenProduccion.fechacaducidad }}{% endif %}" disabled>
+                </div>
+            </div>
+            
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label for="fechainicio_proceso" class="form-label">Fecha inicio proceso:</label>
+                    <input type="date" id="fechainicio_proceso" name="fechainicio_proceso" class="form-control" value="{% if OrdenProduccion %}{{ OrdenProduccion.fechainicioproceso }}{% endif %}" disabled>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label for="fechatermino_proceso" class="form-label">Fecha termino de proceso:</label>
+                    <input type="date" id="fechatermino_proceso" name="fechatermino_proceso" class="form-control" value="{% if OrdenProduccion %}{{ OrdenProduccion.fechaterminoproceso }}{% endif %}" disabled>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label for="rendimiento_teorico" class="form-label">Rendimiento teorico:</label>
+                    <input type="number" id="rendimiento_teorico" name="rendimiento_teorico" class="form-control" value="{% if etiqueta %}{{ OrdenProduccion.rendimientoteorico }}{% endif %}" placeholder="Rendimiento teorico" disabled>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label for="rendimiento_real" class="form-label">Rendimiento real:</label>
+                    <input type="number" id="rendimiento_real" name="rendimiento_real" class="form-control" value="{% if OrdenProduccion %}{{ OrdenProduccion.rendimientoreal }}{% endif %}" placeholder="Rendimiento real" disabled>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</form>
+
     <div class="container mt-5">
         <h2>Tabla de Muestras y Pesos</h2>
+       
+        {% if OrdenProduccion %}
+        <h3>Orden de Producción: {{ OrdenProduccion.noordenproduccion }}</h3>
+    
         <table id="tablaMuestras1" class="table">
             <thead>
                 <tr>
@@ -71,375 +142,63 @@
                 </tr>
             </thead>
             <tbody>
-                <!-- Filas de la tabla con inputs de número -->
-                <tr> <!-- Fila 1 -->
-                    <td>1</td>
-                    <td><input type="number" class="form-control" /></td>
-                    <td><input type="number" class="form-control" /></td>
-                    <td><input type="number" class="form-control" /></td>
-                    <td><input type="number" class="form-control" /></td>
-                    <td><input type="number" class="form-control" /></td>
-                    <td><input type="number" class="form-control" /></td>
-                    <td><input type="number" class="form-control" /></td>
-                    <td><input type="number" class="form-control" /></td>
-                    <td><input type="number" class="form-control" /></td>
-                    <td><input type="number" class="form-control" /></td>
-                    <td><input type="number" class="form-control" /></td>
-                    <td><input type="number" class="form-control" /></td>
-                    <td><input type="number" class="form-control" /></td>
-                    <!-- Resto de inputs -->
-                </tr>
-                <!-- Otras filas... -->
-                <tr> <!-- Fila 1 -->
-                    <td>2</td>
-                    <td><input type="number" class="form-control" /></td>
-                    <td><input type="number" class="form-control" /></td>
-                    <td><input type="number" class="form-control" /></td>
-                    <td><input type="number" class="form-control" /></td>
-                    <td><input type="number" class="form-control" /></td>
-                    <td><input type="number" class="form-control" /></td>
-                    <td><input type="number" class="form-control" /></td>
-                    <td><input type="number" class="form-control" /></td>
-                    <td><input type="number" class="form-control" /></td>
-                    <td><input type="number" class="form-control" /></td>
-                    <td><input type="number" class="form-control" /></td>
-                    <td><input type="number" class="form-control" /></td>
-                    <td><input type="number" class="form-control" /></td>
-                    <!-- Resto de inputs -->
-                </tr>
-                <tr> <!-- Fila 1 -->
-                    <td>3</td>
-                    <td><input type="number" class="form-control" /></td>
-                    <td><input type="number" class="form-control" /></td>
-                    <td><input type="number" class="form-control" /></td>
-                    <td><input type="number" class="form-control" /></td>
-                    <td><input type="number" class="form-control" /></td>
-                    <td><input type="number" class="form-control" /></td>
-                    <td><input type="number" class="form-control" /></td>
-                    <td><input type="number" class="form-control" /></td>
-                    <td><input type="number" class="form-control" /></td>
-                    <td><input type="number" class="form-control" /></td>
-                    <td><input type="number" class="form-control" /></td>
-                    <td><input type="number" class="form-control" /></td>
-                    <td><input type="number" class="form-control" /></td>
-                    <!-- Resto de inputs -->
-                </tr>
-                <tr> <!-- Fila 1 -->
-                    <td>4</td>
-                    <td><input type="number" class="form-control" /></td>
-                    <td><input type="number" class="form-control" /></td>
-                    <td><input type="number" class="form-control" /></td>
-                    <td><input type="number" class="form-control" /></td>
-                    <td><input type="number" class="form-control" /></td>
-                    <td><input type="number" class="form-control" /></td>
-                    <td><input type="number" class="form-control" /></td>
-                    <td><input type="number" class="form-control" /></td>
-                    <td><input type="number" class="form-control" /></td>
-                    <td><input type="number" class="form-control" /></td>
-                    <td><input type="number" class="form-control" /></td>
-                    <td><input type="number" class="form-control" /></td>
-                    <td><input type="number" class="form-control" /></td>
-                    <!-- Resto de inputs -->
-                </tr>
-                <tr> <!-- Fila 1 -->
-                    <td>5</td>
-                    <td><input type="number" class="form-control" /></td>
-                    <td><input type="number" class="form-control" /></td>
-                    <td><input type="number" class="form-control" /></td>
-                    <td><input type="number" class="form-control" /></td>
-                    <td><input type="number" class="form-control" /></td>
-                    <td><input type="number" class="form-control" /></td>
-                    <td><input type="number" class="form-control" /></td>
-                    <td><input type="number" class="form-control" /></td>
-                    <td><input type="number" class="form-control" /></td>
-                    <td><input type="number" class="form-control" /></td>
-                    <td><input type="number" class="form-control" /></td>
-                    <td><input type="number" class="form-control" /></td>
-                    <td><input type="number" class="form-control" /></td>
-                    <!-- Resto de inputs -->
-                </tr>
-                <tr> <!-- Fila 1 -->
-                    <td>6</td>
-                    <td><input type="number" class="form-control" /></td>
-                    <td><input type="number" class="form-control" /></td>
-                    <td><input type="number" class="form-control" /></td>
-                    <td><input type="number" class="form-control" /></td>
-                    <td><input type="number" class="form-control" /></td>
-                    <td><input type="number" class="form-control" /></td>
-                    <td><input type="number" class="form-control" /></td>
-                    <td><input type="number" class="form-control" /></td>
-                    <td><input type="number" class="form-control" /></td>
-                    <td><input type="number" class="form-control" /></td>
-                    <td><input type="number" class="form-control" /></td>
-                    <td><input type="number" class="form-control" /></td>
-                    <td><input type="number" class="form-control" /></td>
-                    <!-- Resto de inputs -->
-                </tr>
-                <tr> <!-- Fila 1 -->
-                    <td>7</td>
-                    <td><input type="number" class="form-control" /></td>
-                    <td><input type="number" class="form-control" /></td>
-                    <td><input type="number" class="form-control" /></td>
-                    <td><input type="number" class="form-control" /></td>
-                    <td><input type="number" class="form-control" /></td>
-                    <td><input type="number" class="form-control" /></td>
-                    <td><input type="number" class="form-control" /></td>
-                    <td><input type="number" class="form-control" /></td>
-                    <td><input type="number" class="form-control" /></td>
-                    <td><input type="number" class="form-control" /></td>
-                    <td><input type="number" class="form-control" /></td>
-                    <td><input type="number" class="form-control" /></td>
-                    <td><input type="number" class="form-control" /></td>
-                    <!-- Resto de inputs -->
-                </tr>
-                <tr> <!-- Fila 1 -->
-                    <td>8</td>
-                    <td><input type="number" class="form-control" /></td>
-                    <td><input type="number" class="form-control" /></td>
-                    <td><input type="number" class="form-control" /></td>
-                    <td><input type="number" class="form-control" /></td>
-                    <td><input type="number" class="form-control" /></td>
-                    <td><input type="number" class="form-control" /></td>
-                    <td><input type="number" class="form-control" /></td>
-                    <td><input type="number" class="form-control" /></td>
-                    <td><input type="number" class="form-control" /></td>
-                    <td><input type="number" class="form-control" /></td>
-                    <td><input type="number" class="form-control" /></td>
-                    <td><input type="number" class="form-control" /></td>
-                    <td><input type="number" class="form-control" /></td>
-                    <!-- Resto de inputs -->
-                </tr>
-                <tr> <!-- Fila 1 -->
-                    <td>9</td>
-                    <td><input type="number" class="form-control" /></td>
-                    <td><input type="number" class="form-control" /></td>
-                    <td><input type="number" class="form-control" /></td>
-                    <td><input type="number" class="form-control" /></td>
-                    <td><input type="number" class="form-control" /></td>
-                    <td><input type="number" class="form-control" /></td>
-                    <td><input type="number" class="form-control" /></td>
-                    <td><input type="number" class="form-control" /></td>
-                    <td><input type="number" class="form-control" /></td>
-                    <td><input type="number" class="form-control" /></td>
-                    <td><input type="number" class="form-control" /></td>
-                    <td><input type="number" class="form-control" /></td>
-                    <td><input type="number" class="form-control" /></td>
-                    <!-- Resto de inputs -->
-                </tr>
-                <tr> <!-- Fila 1 -->
-                    <td>10</td>
-                    <td><input type="number" class="form-control" /></td>
-                    <td><input type="number" class="form-control" /></td>
-                    <td><input type="number" class="form-control" /></td>
-                    <td><input type="number" class="form-control" /></td>
-                    <td><input type="number" class="form-control" /></td>
-                    <td><input type="number" class="form-control" /></td>
-                    <td><input type="number" class="form-control" /></td>
-                    <td><input type="number" class="form-control" /></td>
-                    <td><input type="number" class="form-control" /></td>
-                    <td><input type="number" class="form-control" /></td>
-                    <td><input type="number" class="form-control" /></td>
-                    <td><input type="number" class="form-control" /></td>
-                    <td><input type="number" class="form-control" /></td>
-                    <!-- Resto de inputs -->
-                </tr>
+                {% for muestra in tabla1_muestras %}
+                    <tr>
+                        <td>{{ muestra.fila }}</td> 
+                        {% for valor in muestra.valores %}
+                            <td>
+                                <input type="number" class="form-control" value="{{ valor }}" />
+                            </td>
+                        {% endfor %}
+                    </tr>
+                {% empty %}
+                    <tr>
+                        <td colspan="14">No se encontraron muestras.</td>
+                    </tr>
+                {% endfor %}
             </tbody>
         </table>
-        
+    
         <table id="tablaMuestras2" class="table">
             <thead>
                 <tr>
-                    <th>#</th>
-                    <th>Muestra 14</th>
-                    <th>Muestra 15</th>
-                    <th>Muestra 16</th>
-                    <th>Muestra 17</th>
-                    <th>Muestra 18</th>
-                    <th>Muestra 19</th>
-                    <th>Muestra 20</th>
-                    <th>Muestra 21</th>
-                    <th>Muestra 22</th>
-                    <th>Muestra 23</th>
-                    <th>Muestra 24</th>
-                    <th>Muestra 25</th>
-                    <th>Muestra 26</th>
+                    <th>Muestra</th>
+                    <th>Muestra 1</th>
+                    <th>Muestra 2</th>
+                    <th>Muestra 3</th>
+                    <th>Muestra 4</th>
+                    <th>Muestra 5</th>
+                    <th>Muestra 6</th>
+                    <th>Muestra 7</th>
+                    <th>Muestra 8</th>
+                    <th>Muestra 9</th>
+                    <th>Muestra 10</th>
+                    <th>Muestra 11</th>
+                    <th>Muestra 12</th>
+                    <th>Muestra 13</th>
                 </tr>
             </thead>
             <tbody>
-                <!-- Filas de la tabla con inputs de número -->
-                <tr> <!-- Fila 1 -->
-                    <td>1</td>
-                    <td><input type="number" class="form-control" /></td>
-                    <td><input type="number" class="form-control" /></td>
-                    <td><input type="number" class="form-control" /></td>
-                    <td><input type="number" class="form-control" /></td>
-                    <td><input type="number" class="form-control" /></td>
-                    <td><input type="number" class="form-control" /></td>
-                    <td><input type="number" class="form-control" /></td>
-                    <td><input type="number" class="form-control" /></td>
-                    <td><input type="number" class="form-control" /></td>
-                    <td><input type="number" class="form-control" /></td>
-                    <td><input type="number" class="form-control" /></td>
-                    <td><input type="number" class="form-control" /></td>
-                    <td><input type="number" class="form-control" /></td>
-                    <!-- Resto de inputs -->
-                </tr>
-                <tr> <!-- Fila 1 -->
-                    <td>2</td>
-                    <td><input type="number" class="form-control" /></td>
-                    <td><input type="number" class="form-control" /></td>
-                    <td><input type="number" class="form-control" /></td>
-                    <td><input type="number" class="form-control" /></td>
-                    <td><input type="number" class="form-control" /></td>
-                    <td><input type="number" class="form-control" /></td>
-                    <td><input type="number" class="form-control" /></td>
-                    <td><input type="number" class="form-control" /></td>
-                    <td><input type="number" class="form-control" /></td>
-                    <td><input type="number" class="form-control" /></td>
-                    <td><input type="number" class="form-control" /></td>
-                    <td><input type="number" class="form-control" /></td>
-                    <td><input type="number" class="form-control" /></td>
-                    <!-- Resto de inputs -->
-                </tr>
-                <!-- Otras filas... -->
-                <tr> <!-- Fila 1 -->
-                    <td>3</td>
-                    <td><input type="number" class="form-control" /></td>
-                    <td><input type="number" class="form-control" /></td>
-                    <td><input type="number" class="form-control" /></td>
-                    <td><input type="number" class="form-control" /></td>
-                    <td><input type="number" class="form-control" /></td>
-                    <td><input type="number" class="form-control" /></td>
-                    <td><input type="number" class="form-control" /></td>
-                    <td><input type="number" class="form-control" /></td>
-                    <td><input type="number" class="form-control" /></td>
-                    <td><input type="number" class="form-control" /></td>
-                    <td><input type="number" class="form-control" /></td>
-                    <td><input type="number" class="form-control" /></td>
-                    <td><input type="number" class="form-control" /></td>
-                    <!-- Resto de inputs -->
-                </tr>
-                <tr> <!-- Fila 1 -->
-                    <td>4</td>
-                    <td><input type="number" class="form-control" /></td>
-                    <td><input type="number" class="form-control" /></td>
-                    <td><input type="number" class="form-control" /></td>
-                    <td><input type="number" class="form-control" /></td>
-                    <td><input type="number" class="form-control" /></td>
-                    <td><input type="number" class="form-control" /></td>
-                    <td><input type="number" class="form-control" /></td>
-                    <td><input type="number" class="form-control" /></td>
-                    <td><input type="number" class="form-control" /></td>
-                    <td><input type="number" class="form-control" /></td>
-                    <td><input type="number" class="form-control" /></td>
-                    <td><input type="number" class="form-control" /></td>
-                    <td><input type="number" class="form-control" /></td>
-                    <!-- Resto de inputs -->
-                </tr>
-                <tr> <!-- Fila 1 -->
-                    <td>5</td>
-                    <td><input type="number" class="form-control" /></td>
-                    <td><input type="number" class="form-control" /></td>
-                    <td><input type="number" class="form-control" /></td>
-                    <td><input type="number" class="form-control" /></td>
-                    <td><input type="number" class="form-control" /></td>
-                    <td><input type="number" class="form-control" /></td>
-                    <td><input type="number" class="form-control" /></td>
-                    <td><input type="number" class="form-control" /></td>
-                    <td><input type="number" class="form-control" /></td>
-                    <td><input type="number" class="form-control" /></td>
-                    <td><input type="number" class="form-control" /></td>
-                    <td><input type="number" class="form-control" /></td>
-                    <td><input type="number" class="form-control" /></td>
-                    <!-- Resto de inputs -->
-                </tr>
-                <tr> <!-- Fila 1 -->
-                    <td>6</td>
-                    <td><input type="number" class="form-control" /></td>
-                    <td><input type="number" class="form-control" /></td>
-                    <td><input type="number" class="form-control" /></td>
-                    <td><input type="number" class="form-control" /></td>
-                    <td><input type="number" class="form-control" /></td>
-                    <td><input type="number" class="form-control" /></td>
-                    <td><input type="number" class="form-control" /></td>
-                    <td><input type="number" class="form-control" /></td>
-                    <td><input type="number" class="form-control" /></td>
-                    <td><input type="number" class="form-control" /></td>
-                    <td><input type="number" class="form-control" /></td>
-                    <td><input type="number" class="form-control" /></td>
-                    <td><input type="number" class="form-control" /></td>
-                    <!-- Resto de inputs -->
-                </tr>
-                <tr> <!-- Fila 1 -->
-                    <td>7</td>
-                    <td><input type="number" class="form-control" /></td>
-                    <td><input type="number" class="form-control" /></td>
-                    <td><input type="number" class="form-control" /></td>
-                    <td><input type="number" class="form-control" /></td>
-                    <td><input type="number" class="form-control" /></td>
-                    <td><input type="number" class="form-control" /></td>
-                    <td><input type="number" class="form-control" /></td>
-                    <td><input type="number" class="form-control" /></td>
-                    <td><input type="number" class="form-control" /></td>
-                    <td><input type="number" class="form-control" /></td>
-                    <td><input type="number" class="form-control" /></td>
-                    <td><input type="number" class="form-control" /></td>
-                    <td><input type="number" class="form-control" /></td>
-                    <!-- Resto de inputs -->
-                </tr>
-                <tr> <!-- Fila 1 -->
-                    <td>8</td>
-                    <td><input type="number" class="form-control" /></td>
-                    <td><input type="number" class="form-control" /></td>
-                    <td><input type="number" class="form-control" /></td>
-                    <td><input type="number" class="form-control" /></td>
-                    <td><input type="number" class="form-control" /></td>
-                    <td><input type="number" class="form-control" /></td>
-                    <td><input type="number" class="form-control" /></td>
-                    <td><input type="number" class="form-control" /></td>
-                    <td><input type="number" class="form-control" /></td>
-                    <td><input type="number" class="form-control" /></td>
-                    <td><input type="number" class="form-control" /></td>
-                    <td><input type="number" class="form-control" /></td>
-                    <td><input type="number" class="form-control" /></td>
-                    <!-- Resto de inputs -->
-                </tr>
-                <tr> <!-- Fila 1 -->
-                    <td>9</td>
-                    <td><input type="number" class="form-control" /></td>
-                    <td><input type="number" class="form-control" /></td>
-                    <td><input type="number" class="form-control" /></td>
-                    <td><input type="number" class="form-control" /></td>
-                    <td><input type="number" class="form-control" /></td>
-                    <td><input type="number" class="form-control" /></td>
-                    <td><input type="number" class="form-control" /></td>
-                    <td><input type="number" class="form-control" /></td>
-                    <td><input type="number" class="form-control" /></td>
-                    <td><input type="number" class="form-control" /></td>
-                    <td><input type="number" class="form-control" /></td>
-                    <td><input type="number" class="form-control" /></td>
-                    <td><input type="number" class="form-control" /></td>
-                    <!-- Resto de inputs -->
-                </tr>
-                <tr> <!-- Fila 1 -->
-                    <td>10</td>
-                    <td><input type="number" class="form-control" /></td>
-                    <td><input type="number" class="form-control" /></td>
-                    <td><input type="number" class="form-control" /></td>
-                    <td><input type="number" class="form-control" /></td>
-                    <td><input type="number" class="form-control" /></td>
-                    <td><input type="number" class="form-control" /></td>
-                    <td><input type="number" class="form-control" /></td>
-                    <td><input type="number" class="form-control" /></td>
-                    <td><input type="number" class="form-control" /></td>
-                    <td><input type="number" class="form-control" /></td>
-                    <td><input type="number" class="form-control" /></td>
-                    <td><input type="number" class="form-control" /></td>
-                    <td><input type="number" class="form-control" /></td>
-                    <!-- Resto de inputs -->
-                </tr>
+                {% for muestra in tabla2_muestras %}
+                    <tr>
+                        <td>{{ muestra.fila }}</td> 
+                        {% for valor in muestra.valores %}
+                            <td>
+                                <input type="number" class="form-control" value="{{ valor }}" />
+                            </td>
+                        {% endfor %}
+                    </tr>
+                {% empty %}
+                    <tr>
+                        <td colspan="14">No se encontraron muestras.</td>
+                    </tr>
+                {% endfor %}
             </tbody>
         </table>
+    
+    {% else %}
+        <p>No se encontró ninguna orden de producción con ese número.</p>
+    {% endif %}
         
         <button class="btn btn-primary" onclick="calcularPromedios()">Calcular Promedios</button>
         
@@ -450,18 +209,14 @@
             let grafica;
         
             function calcularPromedios() {
-                // Obtener las filas de las dos tablas
                 const filasTabla1 = document.querySelectorAll('#tablaMuestras1 tbody tr');
                 const filasTabla2 = document.querySelectorAll('#tablaMuestras2 tbody tr');
                 
-                // Definir el número total de muestras
-                const numMuestras = 26; // 13 muestras en cada tabla
+                const numMuestras = 26; 
         
-                // Crear arrays para las sumas y los contadores de cada muestra
                 const sumas = new Array(numMuestras).fill(0);
                 const counts = new Array(numMuestras).fill(0);
         
-                // Calcular los promedios para la primera tabla
                 filasTabla1.forEach(fila => {
                     for (let i = 1; i <= 13; i++) {
                         const input = fila.children[i].querySelector('input');
@@ -473,7 +228,6 @@
                     }
                 });
         
-                // Calcular los promedios para la segunda tabla
                 filasTabla2.forEach(fila => {
                     for (let i = 0; i < 13; i++) {
                         const input = fila.children[i + 1].querySelector('input');
@@ -485,15 +239,12 @@
                     }
                 });
         
-                // Calcular los promedios de las 26 muestras
                 const promedios = sumas.map((suma, i) => (counts[i] > 0 ? (suma / counts[i]).toFixed(2) : 0));
         
-                // Limpiar la gráfica anterior
                 if (grafica) {
                     grafica.destroy();
                 }
         
-                // Crear nueva gráfica
                 const ctx = document.getElementById('graficaPromedios').getContext('2d');
                 grafica = new Chart(ctx, {
                     type: 'line',
@@ -517,10 +268,8 @@
                     }
                 });
         
-                // Mostrar los promedios calculados en la consola
                 console.log(promedios);
         
-                // Eliminar las filas anteriores de promedios
                 const tabla1 = document.querySelector('#tablaMuestras1 tbody');
                 const tabla2 = document.querySelector('#tablaMuestras2 tbody');
                 const filaPromediosExistente1 = tabla1.querySelector('.fila-promedio');
@@ -529,13 +278,11 @@
                 if (filaPromediosExistente1) filaPromediosExistente1.remove();
                 if (filaPromediosExistente2) filaPromediosExistente2.remove();
         
-                // Crear la fila de promedios para la primera tabla
                 const filaPromedios1 = document.createElement('tr');
                 filaPromedios1.classList.add('fila-promedio');
                 filaPromedios1.innerHTML = `<td>Promedio</td>` + promedios.slice(0, 13).map(promedio => `<td>${promedio}</td>`).join('');
                 tabla1.appendChild(filaPromedios1);
         
-                // Crear la fila de promedios para la segunda tabla
                 const filaPromedios2 = document.createElement('tr');
                 filaPromedios2.classList.add('fila-promedio');
                 filaPromedios2.innerHTML = `<td>Promedio</td>` + promedios.slice(13, 26).map(promedio => `<td>${promedio}</td>`).join('');
@@ -543,17 +290,12 @@
             }
         </script>
 
-        
-        
-        
-    <!-- Botón para descargar la gráfica como imagen PNG -->
 <a href="#" id="descargarGrafica" class="btn btn-outline-primary">Descargar Gráfica</a>
 
-<!-- Botón para descargar la tabla como archivo CSV -->
 <a href="#" id="descargarTabla" class="btn btn-outline-primary">Descargar Tabla</a>
 
 <script>
-    // Función para descargar la gráfica como PNG
+
     document.getElementById('descargarGrafica').addEventListener('click', function() {
         const canvas = document.getElementById('graficaPromedios');
         const url = canvas.toDataURL('image/png');
@@ -563,28 +305,23 @@
         a.click();
     });
 
-    // Función para descargar la tabla como archivo CSV
     document.getElementById('descargarTabla').addEventListener('click', function() {
-        // Recoger los encabezados de ambas tablas
         const encabezadoTabla1 = Array.from(document.querySelectorAll('#tablaMuestras1 thead th'))
-            .slice(1) // Ignorar la columna de "Muestra"
+            .slice(1) 
             .map(th => th.textContent.trim()).join(',');
         
         const encabezadoTabla2 = Array.from(document.querySelectorAll('#tablaMuestras2 thead th'))
-            .slice(1) // Ignorar la columna de "Muestra"
+            .slice(1) 
             .map(th => th.textContent.trim()).join(',');
 
-        // Crear el CSV con los encabezados de ambas tablas
         let csvContent = 'Muestra,' + encabezadoTabla1 + '\n';
         
-        // Obtener las filas de ambas tablas
         const filasTabla1 = document.querySelectorAll('#tablaMuestras1 tbody tr');
         const filasTabla2 = document.querySelectorAll('#tablaMuestras2 tbody tr');
         
-        // Función para procesar las filas de la tabla y agregar sus valores al CSV
         const procesarFilas = (filas, tabla) => {
             filas.forEach(fila => {
-                const celdas = Array.from(fila.children).slice(0, -1); // Excluir columna de acción
+                const celdas = Array.from(fila.children).slice(0, -1); 
                 const valores = celdas.map(celda => celda.querySelector('input')?.value || '');
                 if (tabla === 1) {
                     csvContent += valores.join(',') + '\n';
@@ -594,17 +331,13 @@
             });
         };
 
-        // Procesar la primera tabla
         procesarFilas(filasTabla1, 1);
         
-        // Añadir una línea en blanco para separar las tablas
         csvContent += '\n';
 
-        // Ahora agregamos la segunda tabla
         csvContent += 'Muestra,' + encabezadoTabla2 + '\n';
         procesarFilas(filasTabla2, 2);
         
-        // Crear el blob y descargar el archivo
         const blob = new Blob([csvContent], { type: 'text/csv' });
         const a = document.createElement('a');
         a.href = URL.createObjectURL(blob);
@@ -612,8 +345,225 @@
         a.click();
     });
 </script>
+<button class="btn btn-success" onclick="guardarDatos()">Guardar Datos</button>
 
-{% comment %} </body>
-</html> {% endcomment %}
+
+<script>
+    function guardarDatos() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const numeroOrden = urlParams.get('id');  
+        if (!numeroOrden) {
+            alert('Número de orden no disponible');
+            return;  
+        }
+
+        const filasTabla1 = document.querySelectorAll('#tablaMuestras1 tbody tr');
+        const filasTabla2 = document.querySelectorAll('#tablaMuestras2 tbody tr');
+        
+        let datosTabla1 = [];
+        let datosTabla2 = [];
+
+        filasTabla1.forEach((fila, indexFila) => {
+            let celdas = fila.querySelectorAll('input');
+            celdas.forEach((celda, indexColumna) => {
+                let valor = parseFloat(celda.value) || 0;
+                datosTabla1.push({
+                    fila: indexFila + 1,  
+                    columna: indexColumna + 1,  
+                    valor: valor
+                });
+            });
+        });
+
+        filasTabla2.forEach((fila, indexFila) => {
+            let celdas = fila.querySelectorAll('input');
+            celdas.forEach((celda, indexColumna) => {
+                let valor = parseFloat(celda.value) || 0;
+                datosTabla2.push({
+                    fila: indexFila + 1, 
+                    columna: indexColumna + 14, 
+                    valor: valor
+                });
+            });
+        });
+
+        fetch('/guardar_muestras/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': getCookie('csrftoken') 
+            },
+            body: JSON.stringify({ 
+                numero_orden: numeroOrden, 
+                tabla1: datosTabla1, 
+                tabla2: datosTabla2 
+            })
+        })
+        .then(response => response.json())
+        .then(data => alert(data.mensaje || data.error))
+        .catch(error => console.error('Error:', error));
+    }
+
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            let cookies = document.cookie.split(';');
+            cookies.forEach(cookie => {
+                cookie = cookie.trim();
+                if (cookie.startsWith(name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                }
+            });
+        }
+        return cookieValue;
+    }
+</script>
+
+
+
+<script>
+    function buscarOrden() {
+        let numeroOrden = document.getElementById('numeroOrden').value;
+    
+        fetch(`/obtener_muestras/${numeroOrden}/`)
+        .then(response => response.json())
+        .then(data => {
+            if (data.error) {
+                alert(data.error);
+                return;
+            }
+    
+            document.querySelectorAll('#tablaMuestras1 tbody tr input').forEach(input => input.value = '');
+            document.querySelectorAll('#tablaMuestras2 tbody tr input').forEach(input => input.value = '');
+    
+            data.tabla1.forEach(muestra => {
+                let input = document.querySelector(`#tablaMuestras1 tbody tr:nth-child(${muestra.fila}) td:nth-child(${muestra.columna + 1}) input`);
+                if (input) input.value = muestra.valor;
+            });
+    
+            data.tabla2.forEach(muestra => {
+                let input = document.querySelector(`#tablaMuestras2 tbody tr:nth-child(${muestra.fila}) td:nth-child(${muestra.columna + 1}) input`);
+                if (input) input.value = muestra.valor;
+            });
+        })
+        .catch(error => console.error('Error:', error));
+    }
+    
+</script>
+
+ <!-- Script para el control de aseguramiento -->
+ <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Obtener el botón de descarga
+        const btnDescargar = document.getElementById('btnDescargarControl');
+        
+        if (btnDescargar) {
+            btnDescargar.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                // Array para almacenar los datos de todas las muestras
+                const muestras = [];
+                
+                // Procesar la primera tabla (Muestras 1-13)
+                procesarTabla('tablaMuestras1', 1, 13, muestras);
+                
+                // Procesar la segunda tabla (Muestras 14-26)
+                procesarTabla('tablaMuestras2', 14, 26, muestras);
+                
+                // Enviar los datos al servidor usando fetch
+                fetch('{% url "descargar_control" %}', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': getCookie('csrftoken')  // Función para obtener el token CSRF
+                    },
+                    body: JSON.stringify({ muestras: muestras })
+                })
+                .then(response => {
+                    if (response.ok) {
+                        return response.blob();
+                    }
+                    throw new Error('Error al generar el PDF');
+                })
+                .then(blob => {
+                    // Crear una URL para el blob y descargar el archivo
+                    const url = window.URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.style.display = 'none';
+                    a.href = url;
+                    a.download = 'ControlAseguramiento_modificado.pdf';
+                    document.body.appendChild(a);
+                    a.click();
+                    window.URL.revokeObjectURL(url);
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Error al generar el PDF: ' + error.message);
+                });
+            });
+        }
+        
+        // Función para procesar una tabla y extraer sus datos
+        function procesarTabla(tablaId, inicioMuestra, finMuestra, muestras) {
+            const tabla = document.getElementById(tablaId);
+            if (!tabla) return;
+            
+            const filas = tabla.querySelectorAll('tbody tr');
+            const columnas = tabla.querySelectorAll('thead th');
+            
+            // Procesar cada columna (muestra)
+            for (let j = 1; j < columnas.length; j++) {  // Empezamos desde 1 para omitir la primera columna "#"
+                const muestraIndex = j - 1 + inicioMuestra - 1; // Ajustar el índice según la tabla
+                const muestra = {
+                    nombre: columnas[j].textContent,
+                    valores: [],
+                    promedio: 0
+                };
+                
+                // Recolectar valores de cada fila para esta columna
+                let suma = 0;
+                let contador = 0;
+                
+                for (let i = 0; i < filas.length; i++) {
+                    const celdas = filas[i].querySelectorAll('td');
+                    const input = celdas[j].querySelector('input');
+                    const valor = input ? input.value : '';
+                    
+                    muestra.valores.push(valor);
+                    
+                    // Calcular el promedio
+                    if (valor && !isNaN(parseFloat(valor))) {
+                        suma += parseFloat(valor);
+                        contador++;
+                    }
+                }
+                
+                // Calcular promedio si hay valores válidos
+                if (contador > 0) {
+                    muestra.promedio = (suma / contador).toFixed(2);
+                }
+                
+                muestras.push(muestra);
+            }
+        }
+        
+        // Función para obtener el token CSRF de las cookies
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+    });
+</script>
+
 {% endblock content %}
 

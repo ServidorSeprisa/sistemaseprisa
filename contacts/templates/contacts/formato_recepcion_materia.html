@@ -1,5 +1,4 @@
 {% extends 'contacts/menu_base.html' %} 
-{% comment %} {% extends 'contacts/menuprueba3.html' %} {% endcomment %}
 {% load static %}
 {% block content %}
 <style>
@@ -124,7 +123,6 @@
 <div class="container mt-5">
     <h3>MATERIA PRIMA CONSIDERADAS ALERGENOS</h3>
 
-    <!-- Formulario de búsqueda -->
     <form method="get" class="mt-3 d-flex justify-content-between">
         <input type="text" name="q" class="form-control" placeholder="Buscar por nombre o clave del proveedor" value="{{ request.GET.q }}">
         <button type="submit" class="btn btn-primary ms-2">Buscar</button>
@@ -136,13 +134,11 @@
         Registrar materia prima consideradas alergenos
     </a>
     
-
-    <!-- Tabla de datos -->
     <div class="table-responsive mt-4">
         <table class="mt-5 table table-hover">
             <thead>
                 <tr>
-                    <th><input type="checkbox" id="select-all" /></th> <!-- Checkbox para seleccionar todos -->
+                    <th><input type="checkbox" id="select-all" /></th>
                     <th>F. de entrada</th>
                     <th>Materia prima</th>
                     <th>Lote SEPRISA</th>
@@ -165,7 +161,6 @@
                     <td>
                         <input type="checkbox" class="select-row" value="{{ FormatoRecepcionMateriaAlergenos.pk }}" />
                     </td>
-                    {% comment %} <td>{{ FormatoRecepcionMateriaAlergenos.materiaprima|default:'-'}}</td> {% endcomment %}
                     <td>{{ FormatoRecepcionMateriaAlergenos.fechaentrada|date:'d/m/Y h:i A' }}</td>
                     <td>{{ FormatoRecepcionMateriaAlergenos.materiaprima|default:'-' }}</td>
                     <td>{{ FormatoRecepcionMateriaAlergenos.loteseprisa|default:'-' }}</td>
@@ -193,7 +188,6 @@
         </table>
     </div>
 
-    <!-- Paginación -->
     <div class="d-flex justify-content-between align-items-center mt-4">
         <small class="text-muted">
             Página {{ page_obj.number }} de {{ page_obj.paginator.num_pages }}

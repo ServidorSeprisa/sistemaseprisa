@@ -1,5 +1,4 @@
 {% extends 'contacts/menu_base.html' %} 
-{% comment %} {% extends 'contacts/menuprueba3.html' %}   {% endcomment %}
 
 {% load static %}
 
@@ -31,18 +30,11 @@
 <body >
     <div class="container py-5">
     <div class="d-flex justify-content-between mb-3">
-        {% comment %} <form action="{% url 'buscar_orden_produccion' %}" method="get" style="max-width: 450px;">
-            <div class="input-group">
-                <input type="text" class="form-control" placeholder="Buscar por orden de producción" name="q" value="{{ request.GET.q }}">
-                <button class="btn btn-primary">Buscar</button>
-            </div>
-        </form> {% endcomment %}
         <div>
             <a href="{% url 'orden_produccion2' %}" class="btn btn-outline-primary">Siguiente</a>
             <a href="{% url 'export_orden_produccion_pdf' %}" class="btn btn-outline-primary">Descargar Orden de Producción</a>
         </div>
     </div>
-
     <form method="post" action="{% url 'ordenproduccion_new' %}">
         {% csrf_token %}
         <input type="hidden" name="id" value="{% if OrdenProduccion %}{{ OrdenProduccion.id }}{% endif %}">
@@ -74,7 +66,7 @@
                         </div>
                         <div class="col-md-6 mb-3">
                             <label for="noorden_produccion" class="form-label">No. Orden de Producción:</label>
-                            <input type="text" id="noorden_produccion" name="noorden_produccion" class="form-control" value="{% if OrdenProduccion %}{{ etiqueta.noordenproduccion }}{% endif %}" placeholder="No. Orden de Producción" required>
+                            <input type="text" id="noorden_produccion" name="noorden_produccion" class="form-control" value="{% if OrdenProduccion %}{{ OrdenProduccion.noordenproduccion }}{% endif %}" placeholder="No. Orden de Producción" required>
                         </div>
                     </div>
         
@@ -103,7 +95,7 @@
                     <div class="row">
                         <div class="col-md-6 mb-3">
                             <label for="rendimiento_teorico" class="form-label">Rendimiento teorico:</label>
-                            <input type="number" id="rendimiento_teorico" name="rendimiento_teorico" class="form-control" value="{% if etiqueta %}{{ OrdenProduccion.rendimientoteorico }}{% endif %}" placeholder="Rendimiento teorico" required>
+                            <input type="number" id="rendimiento_teorico" name="rendimiento_teorico" class="form-control" value="{% if OrdenProduccion %}{{ OrdenProduccion.rendimientoteorico }}{% endif %}" placeholder="Rendimiento teorico" required>
                         </div>
                         <div class="col-md-6 mb-3">
                             <label for="rendimiento_real" class="form-label">Rendimiento real:</label>
@@ -119,17 +111,15 @@
             </div>
         </div>
     </form>
-    <!-- Formulario de búsqueda -->
     <form method="get" class="mt-3 d-flex justify-content-between">
         <input type="text" name="q" class="form-control" placeholder="Buscar por nombre o clave del proveedor" value="{{ request.GET.q }}">
         <button type="submit" class="btn btn-primary ms-2">Buscar</button>
     </form>
-    <!-- Tabla de datos -->
     <div class="table-responsive mt-4">
         <table class="table table-hover">
             <thead>
                 <tr>
-                    <th><input type="checkbox" id="select-all" /></th> <!-- Checkbox para seleccionar todos -->
+                    <th><input type="checkbox" id="select-all" /></th> 
                     <th>Materia prima</th>
                     <th>F. de caducidad</th>
                     <th>Lote SEPRISA</th>
@@ -139,7 +129,6 @@
                     <th>SKU</th>
                     <th>Cantidad queda</th>
                     <th>Acciones</th>
-                    <th></th>
                 </tr>
             </thead>
             <tbody>
@@ -155,51 +144,27 @@
                     <td>{{ FormatoRecepcionMateriaPrima.pesoneto|default:"-" }} kg</td>
                     <td>{{ FormatoRecepcionMateriaPrima.claveproveedor|default:"-" }}</td>
                     <td>{{ FormatoRecepcionMateriaPrima.sku|default:"-" }}</td>
-                    <!-- Aquí accedes a los Kardex relacionados -->
-                    <td>
-                        {% if FormatoRecepcionMateriaPrima.kardexrecepcionmateriaprimaalmacen_set.all %}
-                            {% for kardex in FormatoRecepcionMateriaPrima.kardexrecepcionmateriaprimaalmacen_set.all %}
-                                {{ kardex.cantidadqueda|default:"-" }}
-                            {% endfor %}
-                        {% else %}
-                            -
-                        {% endif %}
+                    <td class="cantidad-disponible" data-id="{{ FormatoRecepcionMateriaPrima.id }}">
+                        {% with FormatoRecepcionMateriaPrima.kardexrecepcionmateriaprimaalmacen_set.last as ultimo_kardex %}
+                            {% if ultimo_kardex %}
+                                {{ ultimo_kardex.cantidadqueda|default:"0" }}
+                            {% else %}
+                                {{ FormatoRecepcionMateriaPrima.pesoneto|default:"0" }}
+                            {% endif %}
+                        {% endwith %}
                     </td>
+
                     <td>
-                        <!-- Botón para agregar el producto a la segunda tabla -->
                         <button type="button" class="btn btn-primary add-to-order" data-id="{{ FormatoRecepcionMateriaPrima.pk }}" data-nombre="{{ FormatoRecepcionMateriaPrima.materiaprima }}" data-sku="{{ FormatoRecepcionMateriaPrima.sku }}" data-lote="{{ FormatoRecepcionMateriaPrima.loteseprisa }}" data-cantidad="{{ FormatoRecepcionMateriaPrima.kardexrecepcionmateriaprimaalmacen_set.first.cantidadqueda|default:0 }}">Agregar a Orden</button>
                     </td>
-                    {% comment %} <td>
-                        <div class="btn-group btn-group-sm">
-                            <a href="{% url 'kardex_list' %}?id={{ FormatoRecepcionMateriaPrima.id }}" class="btn btn-primary">Salida</a>
-                        </div>
-                    </td> {% endcomment %}
-
-                    {% comment %} <td>
-                        <div class="btn-group btn-group-sm">
-                            <!-- Se pasa el id del objeto a la página de kardex -->
-                            <a href="{% url 'kardex_listlist' %}?id={{ FormatoRecepcionMateriaPrima.id }}" class="btn btn-primary">Salida</a>
-                        </div>
-                    </td> {% endcomment %}
-                    {% comment %} <td>
-                        <div class="btn-group btn-group-sm">
-                            <!-- Se pasa el id del objeto a la página de kardex -->
-                            <a href="{% url 'kardex_listlist' %}?id={{ FormatoRecepcionMateriaPrima.id }}" class="btn btn-primary">Solicitar</a>
-                        </div>
-                    </td> {% endcomment %}
-                    
-                    
                 </tr>
                 {% endfor %}
             </tbody>    
         </table>
     </div>
-    {% comment %} <a href="{% url 'detalleorden_new' %}" class="btn btn-outline-primary">
-        Registrar materia
-    </a> {% endcomment %}
-
-    <div class="table-responsive">
-        <table class="table table-hover mt-5">
+    
+    <div class="table-responsive mt-5">
+        <table id="detalleOrden" class="table table-hover">
             <thead>
                 <tr>
                     <th>SKU MP</th>
@@ -213,27 +178,90 @@
                 </tr>
             </thead> 
             <tbody>
-                {% for DetalleOrden in object_list %}
-                <tr>
-                    <td>{{ DetalleOrden.skump|default:'-' }}</td>
-                    <td>{{ DetalleOrden.material|default:'-' }}</td>
-                    <td>{{ DetalleOrden.nolote|default:'-' }}</td>
-                    <td>{{ DetalleOrden.unidad|default:'-' }}</td>
-                    <td>{{ DetalleOrden.cantidad|default:'-' }}</td>
-                    <td>{{ DetalleOrden.surtio|default:'-' }}</td>
-                    <td>{{ DetalleOrden.verifico|default:'-' }}</td>
-                    <td>
-                        <div class="btn-group btn-group-sm">
-                            <a href="{% url 'ordenproduccion_edit' DetalleOrden.pk %}" class="btn btn-primary">Editar</a>
-                            <a href="{% url 'ordenproduccion_delete' DetalleOrden.pk %}" class="btn btn-danger">Eliminar</a>
-                        </div>
-                    </td>
-                </tr>
-                {% endfor %}
             </tbody>
         </table>
     </div>
-</div>
-</body>
+    
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            document.querySelectorAll(".add-to-order").forEach(button => {
+                button.addEventListener("click", function () {
+                    const id = this.dataset.id;
+                    const sku = this.dataset.sku;
+                    const nombre = this.dataset.nombre;
+                    const lote = this.dataset.lote;
+    
+                    let cantidadDisponibleCell = document.querySelector(`.cantidad-disponible[data-id='${id}']`);
+                    let cantidadDisponible = parseFloat(cantidadDisponibleCell.innerText);
+    
+                    let cantidadRequerida = prompt(`Ingrese la cantidad requerida (disponible: ${cantidadDisponible} kg):`);
+                    cantidadRequerida = parseFloat(cantidadRequerida);
+    
+                    if (isNaN(cantidadRequerida) || cantidadRequerida <= 0) {
+                        alert("Por favor, ingrese una cantidad válida.");
+                        return;
+                    }
+    
+                    if (cantidadRequerida > cantidadDisponible) {
+                        alert("No puedes seleccionar más de la cantidad disponible.");
+                        return;
+                    }
+    
+                    let tableBody = document.querySelector("#detalleOrden tbody");
+                    let existingRow = tableBody.querySelector(`tr[data-id='${id}']`);
+    
+                    if (existingRow) {
+                        let existingCantidad = parseFloat(existingRow.querySelector(".cantidad").innerText);
+                        let nuevaCantidad = existingCantidad + cantidadRequerida;
+    
+                        if (nuevaCantidad > cantidadDisponible) {
+                            alert("La cantidad total supera la disponible.");
+                            return;
+                        }
+    
+                        existingRow.querySelector(".cantidad").innerText = nuevaCantidad;
+                    } else {
+                        let newRow = `
+                            <tr data-id="${id}">
+                                <td>${sku}</td>
+                                <td>${nombre}</td>
+                                <td>${lote}</td>
+                                <td>kg</td>
+                                <td class="cantidad">${cantidadRequerida}</td>
+                                <td><input type="text" name="surtio" class="form-control" placeholder="Nombre"></td>
+                                <td><input type="text" name="verifico" class="form-control" placeholder="Nombre"></td>
+                                <td>
+                                    <button type="button" class="btn btn-danger btn-sm remove-row">Eliminar</button>
+                                </td>
+                            </tr>
+                        `;
+                        tableBody.innerHTML += newRow;
+                    }
+    
+                    cantidadDisponibleCell.innerText = (cantidadDisponible - cantidadRequerida).toFixed(2);
+    
+                    updateRemoveButtons();
+                });
+            });
+    
+            function updateRemoveButtons() {
+                document.querySelectorAll(".remove-row").forEach(button => {
+                    button.addEventListener("click", function () {
+                        let row = this.closest("tr");
+                        let id = row.dataset.id;
+                        let cantidadRetirada = parseFloat(row.querySelector(".cantidad").innerText);
+                        
+                        let cantidadDisponibleCell = document.querySelector(`.cantidad-disponible[data-id='${id}']`);
+                        let cantidadDisponibleActual = parseFloat(cantidadDisponibleCell.innerText);
+                        cantidadDisponibleCell.innerText = (cantidadDisponibleActual + cantidadRetirada).toFixed(2);
+    
+                        row.remove();
+                    });
+                });
+            }
+        });
+    </script>
+    
+    
 
 {% endblock content %}

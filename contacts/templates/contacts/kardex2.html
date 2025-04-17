@@ -123,7 +123,6 @@
 <div class="container mt-5">
     <h3>KARDEX</h3>
 
-    <!-- Formulario de búsqueda -->
     <form method="get" class="mt-3 d-flex justify-content-between">
         <input type="text" name="q" class="form-control" placeholder="Buscar por nombre o clave del proveedor" value="{{ request.GET.q }}">
         <button type="submit" class="btn btn-primary ms-2">Buscar</button>
@@ -132,14 +131,11 @@
         Descargar PDF Seleccionado
     </button>
     
-    
-
-    <!-- Tabla de datos -->
     <div class="table-responsive mt-4">
         <table class="table table-hover">
             <thead>
                 <tr>
-                    <th><input type="checkbox" id="select-all" /></th> <!-- Checkbox para seleccionar todos -->
+                    <th><input type="checkbox" id="select-all" /></th> 
                     <th>Materia prima</th>
                     <th>F. de caducidad</th>
                     <th>Lote SEPRISA</th>
@@ -165,29 +161,21 @@
                     <td>{{ FormatoRecepcionMateriaPrima.pesoneto|default:"-" }} kg</td>
                     <td>{{ FormatoRecepcionMateriaPrima.claveproveedor|default:"-" }}</td>
                     <td>{{ FormatoRecepcionMateriaPrima.sku|default:"-" }}</td>
-                    <!-- Aquí accedes a los Kardex relacionados -->
                     <td>
-                        {% if FormatoRecepcionMateriaPrima.kardexrecepcionmateriaprimaalmacen_set.all %}
-                            {% for kardex in FormatoRecepcionMateriaPrima.kardexrecepcionmateriaprimaalmacen_set.all %}
-                                {{ kardex.cantidadqueda|default:"-" }}
-                            {% endfor %}
-                        {% else %}
-                            -
-                        {% endif %}
+                        {% with FormatoRecepcionMateriaPrima.kardexrecepcionmateriaprimaalmacen_set.last as ultimo_kardex %}
+                            {% if ultimo_kardex %}
+                                {{ ultimo_kardex.cantidadqueda|default:"0" }}
+                            {% else %}
+                                {{ FormatoRecepcionMateriaPrima.pesoneto|default:"0" }}
+                            {% endif %}
+                        {% endwith %}
                     </td>
-                    {% comment %} <td>
-                        <div class="btn-group btn-group-sm">
-                            <a href="{% url 'kardex_list' %}?id={{ FormatoRecepcionMateriaPrima.id }}" class="btn btn-primary">Salida</a>
-                        </div>
-                    </td> {% endcomment %}
-
+                    
                     <td>
                         <div class="btn-group btn-group-sm">
-                            <!-- Se pasa el id del objeto a la página de kardex -->
                             <a href="{% url 'kardex_listlist' %}?id={{ FormatoRecepcionMateriaPrima.id }}" class="btn btn-primary">Salida</a>
                         </div>
                     </td>
-                    
                     
                 </tr>
                 {% endfor %}
@@ -195,63 +183,6 @@
         </table>
     </div>
 
-    {% comment %} <div class="table-responsive mt-4">
-        <table class="table table-hover">
-            <thead>
-                <tr>
-                    <th><input type="checkbox" id="select-all" /></th> <!-- Checkbox para seleccionar todos -->
-                    <th>F. de entrada</th>
-                    <th>Materia prima</th>
-                    <th>Lote SEPRISA</th>
-                    <!-- Otras columnas -->
-                    <th>Peso Bruto</th>
-                    <th>Peso Neto</th>
-                    <th>No. Contenedores</th>
-                    <th>Clave del proveedor</th>
-                    <th>No. análisis</th>
-                    <th>SKU</th>
-                    <th>Lote proveedor</th>
-                    <th>F. de caducidad</th>
-                    <th>Recibe</th>
-                    <th>Acciones</th>
-                    <th></th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for FormatoRecepcionMateriaPrima in object_list %}
-                <tr>
-                    <td>
-                        <input type="checkbox" class="select-row" value="{{ FormatoRecepcionMateriaPrima.pk }}" />
-                    </td>
-                    <td>{{ FormatoRecepcionMateriaPrima.fechaentrada|date:'d/m/Y h:i A' }}</td>
-                    <td>{{ FormatoRecepcionMateriaPrima.materiaprima|default:'-' }}</td>
-                    <td>{{ FormatoRecepcionMateriaPrima.loteseprisa|default:'-' }}</td>
-                    <!-- Otras columnas -->
-                    <td>{{ FormatoRecepcionMateriaPrima.pesobruto|default:"-" }}</td>
-                    <td>{{ FormatoRecepcionMateriaPrima.pesoneto|default:"-" }}</td>
-                    <td>{{ FormatoRecepcionMateriaPrima.nocontenedores|default:"-" }}</td>
-                    <td>{{ FormatoRecepcionMateriaPrima.claveproveedor|default:"-" }}</td>
-                    <td>{{ FormatoRecepcionMateriaPrima.noanalisis|default:"-" }}</td>
-                    <td>{{ FormatoRecepcionMateriaPrima.sku|default:"-" }}</td>
-                    <td>{{ FormatoRecepcionMateriaPrima.noloteproveedor|default:"-" }}</td>
-                    <td>{{ FormatoRecepcionMateriaPrima.fechacaducidad|default:"-" }}</td>
-                    <td>{{ FormatoRecepcionMateriaPrima.recibe|default:"-" }}</td>
-
-                    <td>
-                        <div class="btn-group btn-group-sm">
-                            <a href="{% url 'formatorecepcionmateriaprima_edit' FormatoRecepcionMateriaPrima.pk %}" class ="btn btn-primary">Editar</a>
-                            <a href="{% url 'formatorecepcionmateriaprima_delete' FormatoRecepcionMateriaPrima.pk %}" class ="btn btn-danger">Eliminar</a>
-                        </div>
-                    </td>
-                </tr>
-                {% endfor %}
-            </tbody>
-
-            </tbody>
-        </table>
-    </div> {% endcomment %}
-
-    <!-- Paginación -->
     <div class="d-flex justify-content-between align-items-center mt-4">
         <small class="text-muted">
             Página {{ page_obj.number }} de {{ page_obj.paginator.num_pages }}

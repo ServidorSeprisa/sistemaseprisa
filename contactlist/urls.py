@@ -31,6 +31,8 @@ urlpatterns = [
     # path('',include('formatorecepcionmateriaalergenos.urls')), para la app de formatorecepcionmateriaalergenos
     path('accounts/', include('django.contrib.auth.urls')),
     path('login/', auth_views.LoginView.as_view(template_name='contacts/login.html'), name='login'),
+    # path('chat/', include('chat.urls')),
+
 ]
 
 # if settings.DEBUG:

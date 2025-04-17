@@ -1,21 +1,16 @@
 from django.urls import path
 
-# from .views import generate_pdf
 from contacts import views
 
 from .views import tu_vista_guardar, buscar_etiqueta_identificacion_materiales, buscar_orden_produccion, buscar_material,buscar_kardex, PruebaTablaListView,kardex_listlist
-# from .views import orden_produccion_view, menu_desplegable_view
 from django.urls import path
-# from .views import registro_usuario, login_usuario, menu_view, vista_protegida
 from .views import menu_principal,RegistroUsuario, menu_admin,menu_entrada,register,menu_almacen,menu_produccion,menu_calidad
 
 from django.contrib.auth.views import LogoutView
-# from .views import LoginView,RegistroUsuariosListView,RegistroUsuariosEditView,RegistroUsuariosDeleteView,
 from .views import LoginView,UserListView,UserEditView,UserDeleteView
-# from .views import orden_produccion_view, agregar_detalle
-
-
-
+from .views import guardar_muestras, buscar_orden,control_aseguramiento_calidad_list,ControlaseguramientocalidadListView,obtener_orden_produccion,buscar_ordenproduccion
+from .views import ordenproduccion_new, kardex_prodlist,OrdenProduccionView,ver_notificaciones, marcar_notificacion_leida, OrdenProduccionViewList,ControlaseguramientocalidadListViewV,buscar_orden_produccion_view
+from .views import EditarDetalleOrdenView, EliminarDetalleOrdenView
 urlpatterns = [
     #Vista contactos
     path('list', views.ContactListView.as_view(),name='contact_list'),
@@ -23,13 +18,7 @@ urlpatterns = [
     path('<int:pk>/edit/', views.ContactUpdateView.as_view(),name='contact_edit'),
     path('<int:pk>/delete/', views.ContactDeleteView.as_view(),name='contact_delete'),
 
-    # path('', home, name='home'),
     path('', menu_principal, name='menu_principal'),
-    # path('products/', products, name='products'),
-    # path('registrousuarios/', RegistroUsuario, name='registro_usuarios'),
-    # path('usuarios/', RegistroUsuariosListView.as_view(), name='registro_usuarios_list'),
-    # path('usuarios/editar/<int:pk>/', RegistroUsuariosEditView.as_view(), name='registro_usuarios_edit'),
-    # path('usuarios/eliminar/<int:pk>/', RegistroUsuariosDeleteView.as_view(), name='registro_usuarios_delete'),
     path('register/', register, name='register'),
     path('usuarios/', UserListView.as_view(), name='user_list'),
     path('usuarios/editar/<int:pk>/', UserEditView.as_view(), name='user_edit'),
@@ -56,17 +45,13 @@ urlpatterns = [
     path("menupproduccion/", views.MenuPProduccion.as_view(),name='MenuProduccion'),
     path("menupcalidad/", views.MenuPCalidad.as_view(),name='MenuCalidad'),
 
-    # path('menu/', Menu, name='menu'),
-
     # Vista Formato Recepcion Materia Prima Alargenos
     path("fomatorecepcionmateria/", views.FormatoRecepcionMateriaAlergenosView.as_view(),name='formato_recepcion_materia'),
     path("formatorecepcionmateriaalergenos/", views.FormatoRecepcionMateriaAlergenosListView.as_view(),name='formatorecepcionmateriaalergenos_list'),
     path('formatorecepcionmateriaalergenos/new/', views.FormatoRecepcionMateriaAlergenosCreateView.as_view(),name='formatorecepcionmateriaalergenos_new'),
     path('formatorecepcionmateriaalergenos/<int:pk>/edit/',views.FormatoRecepcionMateriaAlergenosUpdateView.as_view(),name='formatorecepcionmateriaalergenos_edit'),
     path('formatorecepcionmateriaalergenos/<int:pk>/delete/',views.FormatoRecepcionMateriaAlergenosDeleteView.as_view(),name='formatorecepcionmateriaalergenos_delete'),
-    # path("formatorecepcionmateriaalergenoslistview/",views.FormatoRecepcionMateriaAlergenosListViewView.as_view(),name='formatorecepcionmateriaalergenos_listview'),
     path('formatorecepcionmateriaalergenos/pdf/', views.export_formato_recepcion_materia_alergenos_pdf, name='export_formato_recepcion_materia_alergenos_pdf'),
-    # path('pruebatabla/', PruebaTablaListView.as_view(), name='formato_recepcion_list'),
     path('formatorecepcionmateriaalergenosview/',views.FormatoRecepcionMateriaAlergenosListViewView.as_view(),name='formato_recepcion_materia_alergenos_view'),
 
 
@@ -76,22 +61,8 @@ urlpatterns = [
     path('formatorecepcionmaterialempaque/new/', views.FormatoRecepcionMaterialEmpaqueCreateView.as_view(),name='formatorecepcionmaterialempaque_new'),
     path('formatorecepcionmaterialempaque/<int:pk>/edit/',views.FormatoRecepcionMaterialEmpaqueUpdateView.as_view(),name='formatorecepcionmaterialempaque_edit'),
     path('formatorecepcionmaterialempaque/<int:pk>/delete/',views.FormatoRecepcionMaterialEmpaqueDeleteView.as_view(),name='formatorecepcionmaterialempaque_delete'),
-    # path("formarorecepcionmaterialempaquelistview/",views.FormatoRecepcionMaterialEmpaqueListViewView.as_view(),name='formatorecepcionmaterialempaque_listview'),
     path('formatorecepcionmaterialempaque/pdf/', views.export_formato_recepcion_material_empaque_pdf, name='export_formato_recepcion_material_empaque_pdf'),
     path('formatorecepcionmaterialempaqueview/',views.FormatoRecepcionMaterialEmpaqueListViewView.as_view(),name='formato_recepcion_material_empaque_view'),
-
-    # path('registrousuarios/', views.RegistroUsuarioListView.as_view(), name='registrousuario_list'),
-    # path('registrousuarios/new/', views.RegistroUsuarioCreateView.as_view(), name='registrousuario_new'),
-    # path('registrousuarios/<int:pk>/edit/', views.RegistroUsuarioUpdateView.as_view(), name='registrousuario_edit'),
-    # path('registrousuarios/<int:pk>/delete/', views.RegistroUsuarioDeleteView.as_view(), name='registrousuario_delete'),
-
-    # # Vista Login
-    # path("login/", views.LoginView.as_view(), name='login'),
-    
-    # path('login/', views.CustomLoginView.as_view(), name='login'),
-    # path('logout/', LogoutView.as_view(next_page='login'), name='logout'),
-
-    # path('login/', views.LoginView.as_view(), name='login'),
 
     path('formatorecepcionmateriaprima/',views.FormatoRecepcionMateriaPrimaListView.as_view(),name='formato_recepcion_materia_prima'),
     path('formatorecepcionmateriaprima/new/', views.FormatoRecepcionMateriaPrimaCreateView.as_view(),name='formatorecepcionmateriaprima_new'),
@@ -103,6 +74,7 @@ urlpatterns = [
 
     # Vista Etiqueta Identificacion de Materiales
     path('etiq/', views.etiquetas.as_view(), name='etiquetas'),
+    path('descargar_etiqueta/<int:pk>/', views.descargar_etiqueta, name='descargar_etiqueta'),
     
     path('buscar/', buscar_etiqueta_identificacion_materiales, name='buscar_etiqueta'),
     path('guardar/', views.GuardarEtiquetaView.as_view(), name='guardar_etiqueta'),
@@ -114,30 +86,33 @@ urlpatterns = [
     path('orden/', views.orden_produccion.as_view(), name='orden_produccion'),
     path('orden2/', views.orden_produccion2.as_view(),name='orden_produccion2'),
     path('exportordenproduccion/pdf/', views.export_orden_produccion_pdf, name='export_orden_produccion_pdf'),
+
     path('exportordenproduccion2/pdf/', views.export_orden_produccion2_pdf, name='export_orden_produccion2_pdf'),
-    
+    path('exportordenproduccion3/pdf/', views.export_ordenes_produccion_pdf, name='export_ordenes_produccion_pdf'),
+    path('exportordenproduccioncreatelistview/pdf/', views.export_orden_produccion_create_listview_pdf, name='export_orden_produccion_create_listview_pdf'),
+    path('editar-detalle-orden/', EditarDetalleOrdenView.as_view(), name='editar_detalle_orden'),
+    path('eliminar-detalle-orden/', EliminarDetalleOrdenView.as_view(), name='eliminar_detalle_orden'),
+
     # Vista Etiqueta cuarentena
     path('etiquetacuarentena', views.Etiqueta_cuarentena.as_view(), name='etiqueta_cuarentena'),
 
     # Vista Kardex
-    # path('kardex/', views.kardex.as_view(), name='kardex'),
     path('kardex/pdf/', views.export_kardex_pdf, name='export_kardex_pdf'),
     path('kardex/list/',views.KardexListView.as_view(),name='kardex_list'),
     path('kardex/new/', views.KardexCreateView.as_view(),name='kardex_new'),
     path('kardex/<int:pk>/edit/',views.KardexUpdateView.as_view(),name='kardex_edit'),
     path('kardex/<int:pk>/delete/',views.KardexDeleteView.as_view(),name='kardex_delete'),
     path('kardex/buscar/', buscar_kardex, name='buscar_kardex'),
-    # path('guardar-kardex/', guardar_kardex, name='guardar_kardex'),
     path('kardex/guardar/', views.GuardarKardexView.as_view(), name='guardar_kardex'),
+    path('kardexprod/guardar/', views.GuardarKardexProdView.as_view(), name='guardar_kardexprod'),
     path('kardexview/',views.KardexListViewView.as_view(),name='kardex_view'),
     path('exportkardex/pdf/', views.export_formato_kardex_pdf2, name='export_formato_kardex_pdf2'),
     path('kardexlist/', kardex_listlist, name='kardex_listlist'),
+    path('kardexprodlist/', kardex_prodlist, name='kardex_prodlist'),
+
     path('kardexvview/',views.KardexListVView.as_view(),name='kardex_vview'),
 
-    # path('download-pdf/', views.generate_pdf.as_view(), name='download_pdf'),
-
     path('export/pdf/', views.export_contacts_pdf, name='export_contacts_pdf'),
-    # path('export-pdf/', export_formato_recepcion_materia_prima_pdf, name='export_formato_recepcion_msteria_prima_pdf'),
     path('exportformatorecepcionmateriaprima/pdf/', views.export_formato_recepcion_materia_prima_pdf, name='export_formato_recepcion_msteria_prima_pdf'),
     path('exportetiquetaidentificacionmateriales/pdf', views.export_etiqueta_identificacion_materiales_pdf, name='export_etiqueta_identificacion_materiales_pdf'),
     path('exportetiquetacuarentena/pdf', views.export_etiqueta_cuarentena_pdf, name='export_etiqueta_cuarentena_pdf'),
@@ -156,20 +131,40 @@ urlpatterns = [
     path('ordenproduccionlist/new/', views.OrdenProduccionCreateListView.as_view(),name='ordenproduccion_newlist'),
     path('ordenproduccionlist/<int:pk>/edit/', views.OrdenProduccionUpdateView.as_view(),name='ordenproduccion_edit'),
     path('ordenproduccionlist/<int:pk>/delete/', views.OrdenProduccionDeleteView.as_view(),name='ordenproduccion_delete'),
+    path('buscarorden/', buscar_ordenproduccion, name='buscar_ordenproduccion'),
+    path('ordenproduccionviewv/', buscar_ordenproduccion, name='ordenproduccionsearch'),
+
     path('buscar-orden/', buscar_orden_produccion, name='buscar_orden_produccion'),
     path('buscar-material/', buscar_material, name='buscar_material'),
     path('detalleorden/new/', views.DetalleOrdenCreateListView.as_view(),name='detalleorden_new'),
     path('ordenproduccionlists',views.OrdenProduccionList.as_view(),name='ordenproduccionlist'),
     path('ordenproduccionviewv/',views.OrdenProduccionListViewView.as_view(),name='ordenproduccion_view'),
-    # path("orden-produccion/", orden_produccion_view, name="orden_produccion"),
-    # path("agregar-detalle/", agregar_detalle, name="agregar_detalle"),
 
-    # Vista Control de Aseguramiento
+    path('ordenproduccionviewvv/',views.OrdenProduccionListViewViewV.as_view(),name='ordenproduccion_viewv'),
+    path('registrar_salida/<int:orden_id>/<int:kardex_id>/', views.registrar_salida, name='registrar_salida'),
+    path('guardar_detalle_orden/<int:orden_id>/', views.guardar_detalle_orden, name='guardar_detalle_orden'),
+    path('ordenproduccioncreate/',views.OrdenProduccionView.as_view(),name='ordenproduccionview'),
+    path('ordenproduccion/<int:kardex_id>/', OrdenProduccionView.as_view(), name='ordenproduccionview_kardex'),
+    path('ordenproduccionlistview/', views.OrdenProduccionListListView.as_view(), name='orden_produccion_list_view'),
+    path('ordenproduccionlistviewlist', views.OrdenProduccionListList.as_view(),name='ordenproduccion_listlist'),
+    path("ordenproduccion-create/", ordenproduccion_new, name="ordenproduccion_create"),
+    path('orden-produccion/<int:pk>/', OrdenProduccionViewList.as_view(), name='ordenproduccionviewlist'),
+    path('ordenproduccionlistviewv/', views.OrdenProduccionListViewV.as_view(), name='orden_produccion_list_viewv'),
+
     path('controlaseguramientoview/', views.ControlAseguramientoView.as_view(), name='control_aseguramiento_view'),
     path('controlaseguramientopdf/pdf/', views.export_control_aseguramiento_pdf, name='export_control_aseguramiento_pdf'),
     path('controlaseguramientopdf2/pdf/', views.export_control_aseguramiento2_pdf, name='export_control_aseguramiento_pdf2'),
+    path('guardar_muestras/', views.guardar_muestras, name='guardar_muestras'),
 
-    # Menu
+    path('buscar-ordenproduccionviewv/', buscar_orden_produccion, name='ordenproduccion_search'),
+    path('buscar-ordenproduccionviewvv/', buscar_orden_produccion_view, name='ordenproduccion_searchv'),
+    path('buscar_orden/', buscar_orden, name='buscar_orden'),
+    path('controlaseguramientolist/', control_aseguramiento_calidad_list,name='control_aseguramiento_calidad_list'),
+    path('controlaseguramientolists/', ControlaseguramientocalidadListView.as_view(), name='control_aseguramiento_list'),
+    path('controlaseguramientolistv/', ControlaseguramientocalidadListViewV.as_view(), name='control_aseguramiento_listv'),
+
+    path('obtener-orden-produccion/<str:no_orden>/', obtener_orden_produccion, name='obtener_orden_produccion'),
+
     path('menupview/', views.MenuPView.as_view(), name='menu_p_view'),
     path('menuprview/', views.MenuPrView.as_view(), name='menu_pr_view'),
 
@@ -180,6 +175,16 @@ urlpatterns = [
     path('bitacoraproductoterminado/new/', views.FormatoBitacoraProductoTerminadoCreateView.as_view(),name='formatobitacoraproductoterminado_new'),
     path('bitacoraproductoterminado/<int:pk>/edit/',views.FormatoBitacoraProductoTerminadoUpdateView.as_view(),name='formatobitacoraproductoterminado_edit'),
     path('bitacoraproductoterminado/<int:pk>/delete/',views.FormatoBitacoraProductoTerminadoDeleteView.as_view(),name='formatobitacoraproductoterminado_delete'),
-    path('bitacoraproductoterminadoviewview/', views.FormatoBitacoraProductoTerminadoListViewView.as_view(),name='formato_bitacora_producto_terminado_view')
+    path('bitacoraproductoterminadoviewview/', views.FormatoBitacoraProductoTerminadoListViewView.as_view(),name='formato_bitacora_producto_terminado_view'),
+    path('bitacoraproductoterminadoviewvv/',views.BitacoraProductoterminadoListViewView.as_view(),name='bitacoraproductoterminado_view'),
+
+    path('chat/', views.chat_room, name='chat_room'),
+    path('notificaciones/', views.ver_notificaciones, name='ver_notificaciones'),
+    path('notificacion/leida/<int:notificacion_id>/', views.marcar_notificacion_leida, name='marcar_notificacion_leida'),
+    path('notificacion/redirigir/<int:notificacion_id>/', views.redirigir_a_orden, name='redirigir_a_orden'),
+
+    path('descargar_control/', views.descargar_control, name='descargar_control'),
+    path('descargar_control/', views.descargar_control, name='descargar_control'),
+    path('descargar-control/', views.descargar_control, name='descargar_control_alt'), 
 
 ]

@@ -1,5 +1,4 @@
 {% extends 'contacts/menu_base.html' %}
-{% comment %} {% extends 'contacts/menuprueba3.html' %} {% endcomment %}
 {% load static %}
 {% block content %}
 <style>
@@ -124,7 +123,6 @@
 <div class="container mt-5">
     <h3>MATERIA PRIMA</h3>
 
-    <!-- Formulario de búsqueda -->
     <form method="get" class="mt-3 d-flex justify-content-between">
         <input type="text" name="q" class="form-control" placeholder="Buscar por nombre o clave del proveedor" value="{{ request.GET.q }}">
         <button type="submit" class="btn btn-primary ms-2">Buscar</button>
@@ -136,17 +134,14 @@
         Registrar materia prima
     </a>
     
-
-    <!-- Tabla de datos -->
     <div class="table-responsive mt-4">
         <table class="table table-hover">
             <thead>
                 <tr>
-                    <th><input type="checkbox" id="select-all" /></th> <!-- Checkbox para seleccionar todos -->
+                    <th><input type="checkbox" id="select-all" /></th> 
                     <th>F. de entrada</th>
                     <th>Materia prima</th>
                     <th>Lote SEPRISA</th>
-                    <!-- Otras columnas -->
                     <th>Peso Bruto</th>
                     <th>Peso Neto</th>
                     <th>No. Contenedores</th>
@@ -169,7 +164,6 @@
                     <td>{{ FormatoRecepcionMateriaPrima.fechaentrada|date:'d/m/Y h:i A' }}</td>
                     <td>{{ FormatoRecepcionMateriaPrima.materiaprima|default:'-' }}</td>
                     <td>{{ FormatoRecepcionMateriaPrima.loteseprisa|default:'-' }}</td>
-                    <!-- Otras columnas -->
                     <td>{{ FormatoRecepcionMateriaPrima.pesobruto|default:"-" }} kg</td>
                     <td>{{ FormatoRecepcionMateriaPrima.pesoneto|default:"-" }} kg</td>
                     <td>{{ FormatoRecepcionMateriaPrima.nocontenedores|default:"-" }}</td>
@@ -185,60 +179,17 @@
                             <a href="{% url 'formatorecepcionmateriaprima_edit' FormatoRecepcionMateriaPrima.pk %}" class ="btn btn-primary">Editar</a>
                             <a href="{% url 'formatorecepcionmateriaprima_delete' FormatoRecepcionMateriaPrima.pk %}" class ="btn btn-danger">Eliminar</a>
                             <a href="{% url 'formatorecepcionmateriaprima_new' %}?materiaprima={{ FormatoRecepcionMateriaPrima.materiaprima }}&loteseprisa={{ FormatoRecepcionMateriaPrima.loteseprisa }}&pesobruto={{ FormatoRecepcionMateriaPrima.pesobruto }}&pesoneto={{ FormatoRecepcionMateriaPrima.pesoneto }}&nocontenedores={{ FormatoRecepcionMateriaPrima.nocontenedores }}&claveproveedor={{ FormatoRecepcionMateriaPrima.claveproveedor }}&noanalisis={{ FormatoRecepcionMateriaPrima.noanalisis }}&sku={{ FormatoRecepcionMateriaPrima.sku }}&noloteproveedor={{ FormatoRecepcionMateriaPrima.noloteproveedor }}&fechacaducidad={{ FormatoRecepcionMateriaPrima.fechacaducidad }}&recibe={{ FormatoRecepcionMateriaPrima.recibe }}" class="btn btn-success">Duplicar</a>
+                            <a href="{% url 'descargar_etiqueta' FormatoRecepcionMateriaPrima.pk %}" class="btn btn-info">Descargar Etiqueta</a>
+
                         </div>
                     </td>
                 </tr>
                 {% endfor %}
             </tbody>
-            
-            {% comment %} <thead>
-                <tr>
-                    <th>F. de entrada</th>
-                    <th>Materia prima</th>
-                    <th>Lote SEPRISA</th>
-                    <th>Peso Bruto</th>
-                    <th>Peso Neto</th>
-                    <th>No. Contenedores</th>
-                    <th>Clave del proveedor</th>
-                    <th>No. análisis</th>
-                    <th>SKU</th>
-                    <th>Lote proveedor</th>
-                    <th>F. de caducidad</th>
-                    <th>Recibe</th>
-                    <th>Acciones</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for item in object_list %}
-                <tr>
-                    <td>{{ item.fechaentrada|date:"d/m/Y h:i A" }}</td>
-                    <td>{{ item.materiaprima|default:"-" }}</td>
-                    <td>{{ item.loteseprisa|default:"-" }}</td>
-                    <td>{{ item.pesobruto|default:"-" }}</td>
-                    <td>{{ item.pesoneto|default:"-" }}</td>
-                    <td>{{ item.nocontenedores|default:"-" }}</td>
-                    <td>{{ item.claveproveedor|default:"-" }}</td>
-                    <td>{{ item.noanalisis|default:"-" }}</td>
-                    <td>{{ item.sku|default:"-" }}</td>
-                    <td>{{ item.noloteproveedor|default:"-" }}</td>
-                    <td>{{ item.fechacaducidad|default:"-" }}</td>
-                    <td>{{ item.recibe|default:"-" }}</td>
-                    <td>
-                        <a href="{% url 'formatorecepcionmateriaprima_edit' item.pk %}" class="btn btn-sm btn-primary">Editar</a>
-                        <a href="{% url 'formatorecepcionmateriaprima_delete' item.pk %}" class="btn btn-sm btn-danger">Eliminar</a>
-                    </td>
-                </tr>
-                {% empty %}
-                <tr>
-                    <td colspan="13" class="text-center">No se encontraron resultados.</td>
-                </tr>
-                {% endfor %} {% endcomment %}
-
             </tbody>
         </table>
     </div>
 
-    <!-- Paginación -->
     <div class="d-flex justify-content-between align-items-center mt-4">
         <small class="text-muted">
             Página {{ page_obj.number }} de {{ page_obj.paginator.num_pages }}
@@ -312,5 +263,3 @@
 </script>
 
 {% endblock %}
-
-

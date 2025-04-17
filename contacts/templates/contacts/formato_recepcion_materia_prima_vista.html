@@ -1,5 +1,4 @@
 {% extends 'contacts/menu_base.html' %} 
-{% comment %} {% extends 'contacts/menu_p_almacen.html' %} {% endcomment %}
 
 {% load static %} 
     
@@ -70,13 +69,6 @@
                     <td>{{ FormatoRecepcionMateriaPrima.noloteproveedor|default:'-' }}</td>
                     <td>{{ FormatoRecepcionMateriaPrima.fechacaducidad|default:'-' }}</td>
                     <td>{{ FormatoRecepcionMateriaPrima.recibe|default:'-' }}</td>
-
-                    {% comment %} <td>
-                        <div class="btn-group btn-group-sm">
-                            <a href="{% url 'formatorecepcionmateriaprima_edit' FormatoRecepcionMateriaPrima.pk %}" class ="btn btn-primary">Editar</a>
-                            <a href="{% url 'formatorecepcionmateriaprima_delete' FormatoRecepcionMateriaPrima.pk %}" class ="btn btn-danger">Eliminar</a>
-                        </div>
-                    </td> {% endcomment %}
                 </tr>
                 <div></div>
                 {% endfor %}

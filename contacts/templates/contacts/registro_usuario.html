@@ -64,7 +64,6 @@
                 <div class="col-md-6">
                     <label for="contraseña" class="form-label">Contraseña:</label>
                     <input type="password" id="contraseña" name="contraseña" class="form-control" required>
-                    <!-- Contenedor para el mensaje de error de contraseña -->
                     <div id="error-contraseña" class="error-message"></div> 
                 </div>
             </div>
@@ -72,7 +71,6 @@
                 <div class="col-md-6">
                     <label for="confirmacioncontraseña" class="form-label">Confirmar Contraseña:</label>
                     <input type="password" id="confirmacioncontraseña" name="confirmacioncontraseña" class="form-control" required>
-                    <!-- Contenedor para el mensaje de error de confirmación -->
                     <div id="error-confirmacion" class="error-message"></div>
                 </div>
             </div>
@@ -80,7 +78,6 @@
         </form>
         
         <script>
-            // Función para validar que las contraseñas coincidan
             function validarContrasenas() {
                 var contraseña = document.getElementById('contraseña').value;
                 var confirmacioncontraseña = document.getElementById('confirmacioncontraseña').value;
@@ -88,18 +85,15 @@
                 var errorContraseña = document.getElementById('error-contraseña');
                 var errorConfirmacion = document.getElementById('error-confirmacion');
 
-                // Limpiar cualquier mensaje de error anterior
                 errorContraseña.textContent = '';
                 errorConfirmacion.textContent = '';
 
-                // Verificar si las contraseñas coinciden
                 if (contraseña !== confirmacioncontraseña) {
-                    // Mostrar el mensaje de error debajo de los campos de contraseña
                     errorContraseña.textContent = 'Las contraseñas no coinciden.';
                     errorConfirmacion.textContent = 'Las contraseñas no coinciden.';
-                    return false; // Impide que el formulario se envíe
+                    return false; 
                 }
-                return true; // Permite que el formulario se envíe
+                return true; 
             }
         </script>
     </div>
@@ -123,7 +117,6 @@
             <tbody>
                 {% for RegistroUsuario in object_list %}
                 <tr>
-                    {% comment %} <td>{{ FormatoRecepcionMateriaPrima.materiaprima|default:'-'}}</td> {% endcomment %}
                     <td>{{ RegistroUsuario.nombre|default:'-' }}</td>
                     <td>{{ RegistroUsuario.apellidopaterno|default:'-' }}</td>
                     <td>{{ RegistroUsuario.apellidomaterno|default:'-' }}</td>
@@ -147,7 +140,6 @@
         </table>
     </div>
     
-    {% comment %} Añadido para la paginación {% endcomment %}
     <div class="text-end mb-5">
         {{ page_obj.paginator.count }} resultado{{ page_obj.paginator.count|pluralize }}
     </div>

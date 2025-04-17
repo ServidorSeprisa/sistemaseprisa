@@ -65,6 +65,33 @@ class RegistroUsuario(AbstractUser):
 #     def __str__(self) -> str:
 #         return self.nombre
 
+# class Notificacion(models.Model):
+#     usuario = models.ForeignKey(RegistroUsuario, on_delete=models.CASCADE, related_name="notificaciones")
+#     mensaje = models.TextField()
+#     leida = models.BooleanField(default=False)
+#     fecha_creacion = models.DateTimeField(auto_now_add=True)
+
+#     def __str__(self):
+#         return f"Notificación para {self.usuario.username} - {self.mensaje[:20]}"
+
+class Notificacion(models.Model):
+    usuario = models.ForeignKey(RegistroUsuario, on_delete=models.CASCADE)
+    TIPOS_USUARIO = [
+        ('admin', 'Administrador'),
+        ('entrada', 'Entrada'),
+        ('alm', 'Almacenista'),
+        ('prod', 'Productor'),
+        ('cal', 'Calidad'),
+    ]
+    mensaje = models.TextField()
+    leida = models.BooleanField(default=False)
+    fecha_creacion = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Notificación para {self.usuario.username} - {self.mensaje[:20]}"
+
+
+
 class FormatoRecepcionMateriaAlergenos(models.Model):
 
     fechaentrada = models.DateTimeField(auto_now_add=True)
@@ -216,7 +243,7 @@ class DetalleOrden(models.Model):
     material = models.CharField(max_length=100,verbose_name='Material', null=True,blank=True)
     nolote = models.CharField(max_length=100,verbose_name='No. Lpte', null=True,blank=True)
     unidad = models.CharField(max_length=100,verbose_name='Unidad', null=True,blank=True)
-    cantidad = models.CharField(max_length=100,verbose_name='Cantidad', null=True,blank=True)
+    cantidad = models.DecimalField(max_digits=10, decimal_places=2, verbose_name='Cantidad', null=True, blank=True)  # Cambiado a DecimalField
     surtio = models.CharField(max_length=100,verbose_name='Surtió', null=True,blank=True)
     verifico = models.CharField(max_length=100,verbose_name='Verificó', null=True,blank=True)
     observaciones = models.CharField(max_length=100,verbose_name='Observaciones',null=True,blank=True)
@@ -240,3 +267,91 @@ class FormatoBitacoraProductoTerminado(models.Model):
     def __str__(self) -> str:
         return self.producto
     
+# class Muestra(models.Model):
+#     fila = models.IntegerField()
+#     columna = models.IntegerField()
+#     valor = models.FloatField()
+
+#     def __str__(self):
+#         return f"Fila {self.fila}, Columna {self.columna}: {self.valor}"
+    
+#     from django.db import models
+# BIENNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN
+# class Muestra(models.Model):
+#     fila = models.IntegerField()  # Número de fila
+#     columna = models.IntegerField()  # Número de columna (dependiendo de la tabla, por ejemplo, de 1 a 14 o 14 en adelante)
+#     valor = models.FloatField()  # El valor de la muestra
+
+#     def __str__(self):
+#         return f"Muestra F{self.fila} C{self.columna}"
+
+# class Tabla(models.Model):
+#     # Definir relaciones con las muestras de las tablas
+#     tabla1_muestras = models.ManyToManyField(Muestra, related_name='tabla1', blank=True)
+#     tabla2_muestras = models.ManyToManyField(Muestra, related_name='tabla2', blank=True)
+
+#     def __str__(self):
+#         return f"Registro de Tablas {self.id}"
+
+# class Tabla(models.Model):
+#     orden_produccion = models.ForeignKey(OrdenProduccion, on_delete=models.CASCADE, related_name='tablas')  # Relación con OrdenProduccion
+#     tabla1_muestras = models.ManyToManyField(Muestra, related_name='tabla1', blank=True)
+#     tabla2_muestras = models.ManyToManyField(Muestra, related_name='tabla2', blank=True)
+
+#     def __str__(self):
+#         return f"Registro de Tablas {self.id} para la orden {self.orden_produccion.noordenproduccion}"
+
+
+# class ControlCalidad(models.Model):
+#     ordenproduccion = models.ForeignKey("contacts.OrdenProduccion", verbose_name=_(""), on_delete=models.CASCADE)
+#     orden = models.ForeignKey(OrdenProduccion, related_name='detalles', on_delete=models.CASCADE)
+
+#FUNCIONA CORRECTAMENTE
+# class Muestra(models.Model):
+#     orden_produccion = models.ForeignKey(OrdenProduccion, on_delete=models.CASCADE, related_name="muestras", null=True)
+#     fila = models.IntegerField()  # Número de fila
+#     columna = models.IntegerField()  # Número de columna (dependiendo de la tabla, por ejemplo, de 1 a 14 o 14 en adelante)
+#     valor = models.FloatField()  # El valor de la muestra
+
+
+#     def __str__(self):
+#         return f"Muestra F{self.fila} C{self.columna} - Orden: {self.orden_produccion.noordenproduccion}"
+
+# TERCERO DEL BIEN
+class Muestra(models.Model):
+    orden_produccion = models.ForeignKey(OrdenProduccion, on_delete=models.CASCADE,null=True)
+    # noordenproduccion = models.CharField(max_length=100, default='Valor predeterminado')  # Valor predeterminado aquí
+    noordenproduccion = models.CharField(max_length=100, default='NULL')  # Valor predeterminado aquí
+    fila = models.IntegerField()
+    columna = models.IntegerField()
+    valor = models.FloatField()
+
+    def save(self, *args, **kwargs):
+        # Si no se asigna un valor para noordenproduccion, tomamos el valor del objeto relacionado
+        if not self.noordenproduccion:
+            self.noordenproduccion = self.orden_produccion.noordenproduccion
+        super().save(*args, **kwargs)
+
+
+# SEGUNDO DEL BIEN
+# class Muestra(models.Model):
+#     orden_produccion = models.ForeignKey(OrdenProduccion, on_delete=models.CASCADE)
+#     noordenproduccion = models.CharField(max_length=100)  # Este campo es para guardar el número de orden.
+#     fila = models.IntegerField()
+#     columna = models.IntegerField()
+#     valor = models.FloatField()
+    
+#     def save(self, *args, **kwargs):
+#         # Asegúrate de que `noordenproduccion` se guarde cuando se cree un objeto Muestra.
+#         if not self.noordenproduccion:
+#             self.noordenproduccion = self.orden_produccion.noordenproduccion
+#         super().save(*args, **kwargs)
+
+
+class Tabla(models.Model):
+    orden_produccion = models.ForeignKey(OrdenProduccion, on_delete=models.CASCADE, related_name="tablas",null=True)
+    tabla1_muestras = models.ManyToManyField(Muestra, related_name='tabla1', blank=True)
+    tabla2_muestras = models.ManyToManyField(Muestra, related_name='tabla2', blank=True)
+
+    def __str__(self):
+        return f"Registro de Tablas {self.id} - Orden: {self.orden_produccion.noordenproduccion}"

@@ -41,3 +41,4 @@ class RegistroUsuarioCreationForm(UserCreationForm):
         if RegistroUsuario.objects.filter(email=email).exists():
             raise forms.ValidationError('Este correo electrónico ya está registrado')
         return email
+

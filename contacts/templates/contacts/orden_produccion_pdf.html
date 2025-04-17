@@ -110,47 +110,35 @@
         <thead>
             <tr>
                 <th>PRODUCTO:</th>
-                <th> </th>
+                <th><p>{{ OrdenProduccion.producto }}</p></th>
                 <th>CLAVE/SKU MAQUILA:</th>
-                <th> </th>
+                <th>{{ OrdenProduccion.claveskumaquila }}</th>
             </tr>
             <tr>
                 <th>PRESENTACIÓN:</th>
-                <th> </th>
+                <th>{{ OrdenProduccion.presentacion }}</th>
                 <th>No. ORDEN DE PRODUCCIÓN: </th>
-                <th> </th>
+                <th>{{ OrdenProduccion.noordenproduccion }}</th>
             </tr>
             <tr>
                 <th>NÚMERO DE LOTE:</th>
-                <th> </th>
+                <th>{{ OrdenProduccion.numerolote }} </th>
                 <th>FECHA DE CADUCIDAD: </th>
-                <th> </th>
+                <th>{{ OrdenProduccion.fechacaducidad }}</th>
             </tr>
             <tr>
                 <th>FECHA INICIO PROCESO:</th>
-                <th> </th>
+                <th> {{ OrdenProduccion.fechainicioproceso }} </th>
                 <th>FECHA TERMINO DE PROCESO: </th>
-                <th> </th>
+                <th> {{ OrdenProduccion.fechaterminoproceso }}</th>
             </tr>
             <tr>
                 <th>RENDIMIENTO TEORICO:</th>
-                <th> </th>
+                <th> {{ OrdenProduccion.rendimientoteorico }}</th>
                 <th>RENDIMIENTO REAL: </th>
-                <th> </th>
+                <th> {{ OrdenProduccion.rendimientoreal }}</th>
             </tr>
         </thead>
-        <tbody>
-            {% for item in object_list %}
-            <tr>
-                <td>{{ item.fechaentrada|date:'d/m/Y h:i A'}}</td>
-                <td>{{ item.materiaprima }}</td>
-                <td>{{ item.loteseprisa }}</td>
-                <td>{{ item.pesobruto }}</td>
-                <td>{{ item.pesoneto }}</td>
-                <td>{{ item.fechacaducidad }}</td>
-            </tr>
-            {% endfor %}
-        </tbody>
     </table>
     <table class="orden">
         <thead>
@@ -167,28 +155,15 @@
         <tbody>
             {% for item in object_list %}
             <tr>
-                <td>{{ item.fechaentrada|date:'d/m/Y h:i A'}}</td>
-                <td>{{ item.materiaprima }}</td>
-                <td>{{ item.loteseprisa }}</td>
-                <td>{{ item.pesobruto }}</td>
-                <td>{{ item.pesoneto }}</td>
-                <td>{{ item.fechacaducidad }}</td>
+                <td>{{ item.skump }}</td>
+                <td>{{ item.material }}</td>
+                <td>{{ item.nolote }}</td>
+                <td>{{ item.unidad }}</td>
+                <td>{{ item.cantidad }}</td>
+                <td>{{ item.surtio }}</td>
+                <td>{{ item.verifico }}</td>
             </tr>
             {% endfor %}
-            <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
-            <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
-            <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
-            <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
-            <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
-            <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
-            <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
-            <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
-            <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
-            <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
-            <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
-            <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
-            <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
-
         </tbody>
     </table>
     <table>
@@ -201,8 +176,6 @@
         </tr>
     </table>
     <div class="rectangulo"></div>
-    
-
 
     <h2>© Queda prohibida la reproducción total o parcial de este documento por cualquier medio, así como transportarlo fuera de las instalaciones SEPRISA S.A. DE C.V., sin autorización previa del Director General</h2>
 </body>

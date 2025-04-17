@@ -1,0 +1,318 @@
+{% extends 'contacts/menu_base.html' %} 
+
+{% load static %}
+
+{% block content %}
+    <style>
+        .header {
+            background-color: #007bff;
+            color: white;
+            padding: 20px;
+            border-radius: 5px;
+        }
+        .form-label {
+            font-weight: bold;
+        }
+        .table th {
+            background-color: #e9ecef;
+        }
+        .table-hover tbody tr:hover {
+            background-color: #f1f1f1;
+        }
+        .container{
+            background-color: #B0E0E6;
+        }
+        html, body{
+            background-color:rgb(221, 160, 221,0.8);
+        }
+    
+    </style>
+<body >
+    <div class="container py-5">
+    <div class="d-flex justify-content-between mb-3">
+        <div>
+            <a href="{% url 'orden_produccion2' %}" class="btn btn-outline-primary">Siguiente</a>
+            <a href="{% url 'export_orden_produccion_pdf' %}" class="btn btn-outline-primary">Descargar Orden de Producción</a>
+        </div>
+    </div>
+    <form method="get" class="mt-3 d-flex">
+        <input type="text" id="search_noorden" name="search_noorden" class="form-control" 
+               placeholder="Buscar por No. Orden de Producción" value="{{ search_noorden }}">
+        <button type="submit" class="btn btn-primary ms-2">Buscar</button>
+    </form>
+    
+    <form method="post" action="{% url 'ordenproduccion_new' %}">
+        {% csrf_token %}
+        <input type="hidden" name="id" value="{% if OrdenProduccion %}{{ OrdenProduccion.id }}{% endif %}">
+    
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5 class="mb-0">Información de la Orden de Producción</h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label for="producto" class="form-label">Producto:</label>
+                        <input type="text" id="producto" name="producto" class="form-control" 
+                               value="{% if OrdenProduccion %}{{ OrdenProduccion.producto }}{% endif %}" 
+                               placeholder="Producto" required>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="clavesku_maquila" class="form-label">CLAVE/SKU Maquila:</label>
+                        <input type="text" id="clavesku_maquila" name="clavesku_maquila" class="form-control" 
+                               value="{% if OrdenProduccion %}{{ OrdenProduccion.claveskumaquila }}{% endif %}" 
+                               placeholder="CLAVE/SKU Maquila" required>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label for="presentacion" class="form-label">Presentación:</label>
+                        <input type="text" id="presentacion" name="presentacion" class="form-control" 
+                               value="{% if OrdenProduccion %}{{ OrdenProduccion.presentacion }}{% endif %}" 
+                               placeholder="Presentación" required>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="noorden_produccion" class="form-label">No. Orden de Producción:</label>
+                        <input type="text" id="noorden_produccion" name="noorden_produccion" class="form-control" 
+                               value="{% if OrdenProduccion %}{{ OrdenProduccion.noordenproduccion }}{% endif %}" 
+                               placeholder="No. Orden de Producción" required>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label for="numero_lote" class="form-label">Número de lote:</label>
+                        <input type="text" id="numero_lote" name="numero_lote" class="form-control" value="{% if OrdenProduccion %}{{ OrdenProduccion.numerolote }}{% endif %}" placeholder="Número de Lote" required>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="fecha_caducidad" class="form-label">Fecha de caducidad:</label>
+                        <input type="date" id="fecha_caducidad" name="fecha_caducidad" class="form-control" value="{% if OrdenProduccion %}{{ OrdenProduccion.fechacaducidad }}{% endif %}" required>
+                    </div>
+                </div>
+                
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label for="fechainicio_proceso" class="form-label">Fecha inicio proceso:</label>
+                        <input type="date" id="fechainicio_proceso" name="fechainicio_proceso" class="form-control" value="{% if OrdenProduccion %}{{ OrdenProduccion.fechainicioproceso }}{% endif %}" required>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="fechatermino_proceso" class="form-label">Fecha termino de proceso:</label>
+                        <input type="date" id="fechatermino_proceso" name="fechatermino_proceso" class="form-control" value="{% if OrdenProduccion %}{{ OrdenProduccion.fechaterminoproceso }}{% endif %}" required>
+                    </div>
+                </div>
+    
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label for="rendimiento_teorico" class="form-label">Rendimiento teorico:</label>
+                        <input type="number" id="rendimiento_teorico" name="rendimiento_teorico" class="form-control" value="{% if OrdenProduccion %}{{ OrdenProduccion.rendimientoteorico }}{% endif %}" placeholder="Rendimiento teorico" required>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="rendimiento_real" class="form-label">Rendimiento real:</label>
+                        <input type="number" id="rendimiento_real" name="rendimiento_real" class="form-control" value="{% if OrdenProduccion %}{{ OrdenProduccion.rendimientoreal }}{% endif %}" placeholder="Rendimiento real" required>
+                    </div>
+                </div>
+    
+                <div class="d-flex justify-content-between">
+                    <button type="submit" class="btn btn-primary">Guardar</button>
+                    <a href="{% url 'Menu' %}" class="btn btn-secondary">Volver</a>
+                </div>
+            </div>
+        </div>
+    </form>
+    <form method="get" class="mt-3 d-flex justify-content-between">
+        <input type="text" name="q" class="form-control" placeholder="Buscar por nombre o clave del proveedor" value="{{ request.GET.q }}">
+        <button type="submit" class="btn btn-primary ms-2">Buscar</button>
+    </form>
+    <div class="table-responsive mt-4">
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th><input type="checkbox" id="select-all" /></th> 
+                    <th>Materia prima</th>
+                    <th>F. de caducidad</th>
+                    <th>Lote SEPRISA</th>
+                    <th>F. de entrada</th>
+                    <th>Peso Neto</th>
+                    <th>Clave del proveedor</th>
+                    <th>SKU</th>
+                    <th>Cantidad queda</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for FormatoRecepcionMateriaPrima in object_list %}
+                <tr>
+                    <td>
+                        <input type="checkbox" class="select-row" value="{{ FormatoRecepcionMateriaPrima.pk }}" />
+                    </td>
+                    <td>{{ FormatoRecepcionMateriaPrima.materiaprima|default:'-' }}</td>
+                    <td>{{ FormatoRecepcionMateriaPrima.fechaentrada|date:'d/m/Y ' }}</td>
+                    <td>{{ FormatoRecepcionMateriaPrima.loteseprisa|default:'-' }}</td>
+                    <td>{{ FormatoRecepcionMateriaPrima.fechacaducidad|date:'d/m/Y ' }}</td>
+                    <td>{{ FormatoRecepcionMateriaPrima.pesoneto|default:"-" }} kg</td>
+                    <td>{{ FormatoRecepcionMateriaPrima.claveproveedor|default:"-" }}</td>
+                    <td>{{ FormatoRecepcionMateriaPrima.sku|default:"-" }}</td>
+                    <td class="cantidad-disponible" data-id="{{ FormatoRecepcionMateriaPrima.id }}">
+                        {% with FormatoRecepcionMateriaPrima.kardexrecepcionmateriaprimaalmacen_set.last as ultimo_kardex %}
+                            {% if ultimo_kardex %}
+                                {{ ultimo_kardex.cantidadqueda|default:"0" }}
+                            {% else %}
+                                {{ FormatoRecepcionMateriaPrima.pesoneto|default:"0" }}
+                            {% endif %}
+                        {% endwith %}
+                    </td>
+
+                    <td>
+                        <button type="button" class="btn btn-primary add-to-order" data-id="{{ FormatoRecepcionMateriaPrima.pk }}" data-nombre="{{ FormatoRecepcionMateriaPrima.materiaprima }}" data-sku="{{ FormatoRecepcionMateriaPrima.sku }}" data-lote="{{ FormatoRecepcionMateriaPrima.loteseprisa }}" data-cantidad="{{ FormatoRecepcionMateriaPrima.kardexrecepcionmateriaprimaalmacen_set.first.cantidadqueda|default:0 }}">Agregar a Orden</button>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>    
+        </table>
+    </div>
+    
+    <div class="table-responsive mt-5">
+        <table id="detalleOrden" class="table table-hover">
+            <thead>
+                <tr>
+                    <th>SKU MP</th>
+                    <th>Material</th>
+                    <th>No. Lote</th>
+                    <th>Unidad</th>
+                    <th>Cantidad</th>
+                    <th>Surtió</th>
+                    <th>Verificó</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead> 
+            <tbody>
+            </tbody>
+        </table>
+    </div>
+    <input type="hidden" id="detalle_orden" name="detalle_orden">
+
+    <button type="submit" class="btn btn-primary" id="guardarOrden">Guardar</button>
+
+    <div class="modal" tabindex="-1" id="modalCantidad">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Ingrese la cantidad y detalles</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="formCantidad">
+                        <div class="mb-3">
+                            <label for="cantidadRequerida" class="form-label">Cantidad Requerida (Disponible: <span id="cantidadDisponibleModal">0</span> kg):</label>
+                            <input type="number" class="form-control" id="cantidadRequerida" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="surtio" class="form-label">Surtió:</label>
+                            <input type="text" class="form-control" id="surtio" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="verifico" class="form-label">Verificó:</label>
+                            <input type="text" class="form-control" id="verifico" required>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                    <button type="button" class="btn btn-primary" id="submitCantidad">Agregar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            document.querySelectorAll(".add-to-order").forEach(button => {
+                button.addEventListener("click", function () {
+                    const id = this.dataset.id;
+                    const sku = this.dataset.sku;
+                    const nombre = this.dataset.nombre;
+                    const lote = this.dataset.lote;
+        
+                    let cantidadDisponibleCell = document.querySelector(`.cantidad-disponible[data-id='${id}']`);
+                    let cantidadDisponible = parseFloat(cantidadDisponibleCell.innerText);
+        
+                    document.getElementById("cantidadDisponibleModal").innerText = cantidadDisponible;
+        
+                    $('#modalCantidad').modal('show');
+        
+                    document.getElementById("submitCantidad").onclick = function () {
+                        let cantidadRequerida = parseFloat(document.getElementById("cantidadRequerida").value);
+                        let surtio = document.getElementById("surtio").value;
+                        let verifico = document.getElementById("verifico").value;
+        
+                        if (isNaN(cantidadRequerida) || cantidadRequerida <= 0) {
+                            alert("Por favor, ingrese una cantidad válida.");
+                            return;
+                        }
+        
+                        if (cantidadRequerida > cantidadDisponible) {
+                            alert("No puedes seleccionar más de la cantidad disponible.");
+                            return;
+                        }
+        
+                        let tableBody = document.querySelector("#detalleOrden tbody");
+                        let existingRow = tableBody.querySelector(`tr[data-id='${id}']`);
+        
+                        if (existingRow) {
+                            let existingCantidad = parseFloat(existingRow.querySelector(".cantidad").innerText);
+                            let nuevaCantidad = existingCantidad + cantidadRequerida;
+        
+                            if (nuevaCantidad > cantidadDisponible) {
+                                alert("La cantidad total supera la disponible.");
+                                return;
+                            }
+        
+                            existingRow.querySelector(".cantidad").innerText = nuevaCantidad;
+                        } else {
+                            let newRow = `
+                                <tr data-id="${id}">
+                                    <td>${sku}</td>
+                                    <td>${nombre}</td>
+                                    <td>${lote}</td>
+                                    <td>kg</td>
+                                    <td class="cantidad">${cantidadRequerida}</td>
+                                    <td>${surtio}</td>
+                                    <td>${verifico}</td>
+                                    <td>
+                                        <button type="button" class="btn btn-danger btn-sm remove-row">Eliminar</button>
+                                    </td>
+                                </tr>
+                            `;
+                            tableBody.innerHTML += newRow;
+                        }
+        
+                        cantidadDisponibleCell.innerText = (cantidadDisponible - cantidadRequerida).toFixed(2);
+        
+                        $('#modalCantidad').modal('hide');
+        
+                        document.getElementById("formCantidad").reset();
+        
+                        updateRemoveButtons();
+                    };
+                });
+            });
+        
+            function updateRemoveButtons() {
+                document.querySelectorAll(".remove-row").forEach(button => {
+                    button.addEventListener("click", function () {
+                        let row = this.closest("tr");
+                        let id = row.dataset.id;
+                        let cantidadRetirada = parseFloat(row.querySelector(".cantidad").innerText);
+                        
+                        let cantidadDisponibleCell = document.querySelector(`.cantidad-disponible[data-id='${id}']`);
+                        let cantidadDisponibleActual = parseFloat(cantidadDisponibleCell.innerText);
+                        cantidadDisponibleCell.innerText = (cantidadDisponibleActual + cantidadRetirada).toFixed(2);
+        
+                        row.remove();
+                    });
+                });
+            }
+        });
+        
+    </script>
+
+{% endblock content %}

@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat - Sala de Chat</title>
+    <!-- Enlazar Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        /* Estilo adicional para la caja de chat */
+        .chat-box {
+            height: 400px;
+            overflow-y: auto;
+            border: 1px solid #ccc;
+            padding: 10px;
+            margin-bottom: 20px;
+            background-color: #f8f9fa;
+        }
+
+        .chat-message {
+            padding: 8px;
+            margin: 4px 0;
+            border-radius: 5px;
+        }
+
+        .chat-message.left {
+            background-color: #e9ecef;
+        }
+
+        .chat-message.right {
+            background-color: #007bff;
+            color: white;
+            text-align: right;
+        }
+
+        .input-message {
+            width: 100%;
+        }
+
+        .send-btn {
+            width: 100%;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container mt-5">
+        <div class="row">
+            <div class="col-md-8 offset-md-2">
+                <div class="card">
+                    <div class="card-header bg-primary text-white">
+                        <h4>Chat Room: Sala de Ejemplo</h4>
+                    </div>
+                    <div class="card-body">
+                        <!-- Caja de chat donde se mostrarán los mensajes -->
+                        <div class="chat-box" id="chat-box">
+                            <!-- Los mensajes se agregarán aquí -->
+                            <div class="chat-message left">
+                                <strong>Usuario 1</strong>: ¡Hola! ¿Cómo estás?
+                            </div>
+                            <div class="chat-message right">
+                                <strong>Me</strong>: ¡Hola! Todo bien, ¿y tú?
+                            </div>
+                            <div class="chat-message left">
+                                <strong>Usuario 2</strong>: ¡Todo excelente!
+                            </div>
+                        </div>
+
+                        <!-- Campo para escribir mensaje -->
+                        <input type="text" id="chat-message-input" class="form-control input-message" placeholder="Escribe un mensaje...">
+                    </div>
+
+                    <!-- Botón de enviar mensaje -->
+                    <div class="card-footer">
+                        <button id="send-message" class="btn btn-primary send-btn">Enviar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Script (no funcional, solo para el diseño) -->
+    <script>
+        // Este script está solo para mostrar el diseño, no hace nada funcional
+        document.querySelector('#send-message').onclick = function () {
+            const messageInputDom = document.querySelector('#chat-message-input');
+            const messageText = messageInputDom.value;
+
+            if (messageText.trim() !== "") {
+                // Mostrar el mensaje ingresado en la caja de chat
+                document.querySelector('#chat-box').innerHTML += `
+                    <div class="chat-message right">
+                        <strong>Me</strong>: ${messageText}
+                    </div>
+                `;
+                messageInputDom.value = ''; // Limpiar campo de texto
+            }
+        };
+    </script>
+</body>
+
+</html>
