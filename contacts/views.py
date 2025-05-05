@@ -451,7 +451,7 @@ def formato_recepcion_list(request):
 
 class FormatoRecepcionMateriaPrimaCreateView(generic.CreateView):
     model = FormatoRecepcionMateriaPrima
-    fields = ('materiaprima', 'loteseprisa', 'pesobruto', 'pesoneto', 'nocontenedores', 'claveproveedor', 'noanalisis', 'sku', 'noloteproveedor', 'fechacaducidad', 'recibe')
+    fields = ('materiaprima', 'loteseprisa', 'pesobruto', 'pesoneto', 'nocontenedores','cantidadneto', 'claveproveedor', 'noanalisis', 'sku', 'noloteproveedor', 'fechacaducidad', 'recibe')
     success_url = reverse_lazy('formato_recepcion_list')
     template_name = 'contacts/formato_recepcion_materia_prima_form.html'
 
@@ -468,7 +468,7 @@ class FormatoRecepcionMateriaPrimaCreateView(generic.CreateView):
 
 class FormatoRecepcionMateriaPrimaUpdateView(generic.UpdateView):
     model = FormatoRecepcionMateriaPrima
-    fields = ('materiaprima','loteseprisa','pesobruto','pesoneto','nocontenedores','claveproveedor','noanalisis','sku','noloteproveedor','fechacaducidad','recibe')
+    fields = ('materiaprima','loteseprisa','pesobruto','pesoneto','nocontenedores','cantidadneto','claveproveedor','noanalisis','sku','noloteproveedor','fechacaducidad','recibe')
     success_url = reverse_lazy('formato_recepcion_list')
     template_name='contacts/formato_recepcion_materia_prima_form.html'
 
@@ -1375,14 +1375,18 @@ class OrdenProduccionListViewV(generic.ListView):
     model = OrdenProduccion
     paginate_by = 15
     template_name = 'contacts/orden_produccion_list_list_view.html'
+    context_object_name = "object_list"
 
-    def get_queryset(self) -> QuerySet[Any]:
-        q = self.request.GET.get('q')
-
-        queryset = OrdenProduccion.objects.all()
-
-        if q:
-            queryset = queryset.filter(noordenproduccion__icontains=q)
+    def get_queryset(self):
+        query = self.request.GET.get("q")
+        queryset = super().get_queryset()
+        if query:
+            queryset = queryset.filter(
+                Q(producto=query) |
+                Q(claveskumaquila=query) |
+                Q(numerolote=query) |
+                Q(noordenproduccion=query)
+            )
         return queryset
 
 class OrdenProduccionListList(View):
@@ -1470,7 +1474,6 @@ def ordenproduccion_new(request):
                     material=detalle_data['material'],
                     nolote=detalle_data['lote'],
                     unidad=detalle_data['unidad'],
-                    # cantidad=detalle_data['cantidad'],
                     cantidad=cantidad,
                     surtio=detalle_data['surtio'],
                     verifico=detalle_data['verifico']
@@ -1948,7 +1951,7 @@ class GuardarKardexView(View):
         ).order_by('-id').first()
 
         cantidad_queda_anterior = (
-            ultima_salida.cantidadqueda if ultima_salida else formato_recepcion.pesoneto
+            ultima_salida.cantidadqueda if ultima_salida else formato_recepcion.cantidadneto
         )
 
         cantidad_queda_anterior = Decimal(str(cantidad_queda_anterior)) if cantidad_queda_anterior is not None else Decimal("0")
@@ -1969,7 +1972,7 @@ class GuardarKardexView(View):
                 sku=formato_recepcion.sku,
                 fechasalida=fechasalida,
                 clienteusointerno=request.POST.get('cliente_usointerno', ''),
-                noloteproveedor=request.POST.get('lote_proveedor', ''),
+                noloteproveedor=formato_recepcion.noloteproveedor,
                 cantidadsale=cantidad_sale,
                 cantidadqueda=cantidad_queda_actual,
                 realizo=request.POST.get('realizo', ''),
@@ -2073,10 +2076,14 @@ def kardex_listlist(request):
 
     if id:
         etiqueta = get_object_or_404(FormatoRecepcionMateriaPrima, pk=id)
+
+        pesoneto = etiqueta.pesoneto or 0
+        nocontenedores = etiqueta.nocontenedores or 0
+        cantidad_neta = pesoneto * nocontenedores
         
         salidas = etiqueta.kardexrecepcionmateriaprimaalmacen_set.all()
         
-        return render(request, 'contacts/kardex.html', {'etiqueta': etiqueta, 'salidas': salidas})
+        return render(request, 'contacts/kardex.html', {'etiqueta': etiqueta, 'salidas': salidas, 'cantidad_neta': cantidad_neta})
     else:
         return render(request, 'contacts/kardex.html', {'error': 'ID no proporcionado'})
     
@@ -2294,48 +2301,40 @@ def buscar_orden_produccion_view(request):
 
     if search_query:
         try:
-            # Obtener la orden de producción por el número de orden
             orden_produccion = OrdenProduccion.objects.get(noordenproduccion=search_query)
             
-            # Obtener muestras solo para la primera tabla (columnas 1-13)
             muestras1 = Muestra.objects.filter(orden_produccion=orden_produccion, columna__gte=1, columna__lte=13).order_by('fila', 'columna')
 
-            # Obtener muestras solo para la segunda tabla (columnas 14-26)
             muestras2 = Muestra.objects.filter(orden_produccion=orden_produccion, columna__gte=14, columna__lte=26).order_by('fila', 'columna')
 
-            # Organizar las muestras por filas para la primera tabla
             filas1 = {}
             for muestra in muestras1:
                 if muestra.fila not in filas1:
-                    filas1[muestra.fila] = [None] * 13  # 13 columnas
+                    filas1[muestra.fila] = [None] * 13  
                 
                 if 1 <= muestra.columna <= 13:
-                    filas1[muestra.fila][muestra.columna - 1] = muestra.valor  # Ajuste de índice
+                    filas1[muestra.fila][muestra.columna - 1] = muestra.valor  
 
             tabla1_muestras = [{'fila': fila, 'valores': valores} for fila, valores in filas1.items()]
 
-            # Asegurarse de que todas las filas 1-10 estén presentes en tabla1
             for fila in range(1, 11):
                 if fila not in filas1:
-                    filas1[fila] = [None] * 13  # Filas vacías
+                    filas1[fila] = [None] * 13  
 
             tabla1_muestras = [{'fila': fila, 'valores': filas1.get(fila, [None] * 13)} for fila in range(1, 11)]
 
-            # Organizar las muestras por filas para la segunda tabla
             filas2 = {}
             for muestra in muestras2:
                 if muestra.fila not in filas2:
-                    filas2[muestra.fila] = [None] * 13  # 13 columnas
+                    filas2[muestra.fila] = [None] * 13  
                 
                 if 14 <= muestra.columna <= 26:
-                    filas2[muestra.fila][muestra.columna - 14] = muestra.valor  # Ajuste de índice
-
+                    filas2[muestra.fila][muestra.columna - 14] = muestra.valor  
             tabla2_muestras = [{'fila': fila, 'valores': valores} for fila, valores in filas2.items()]
 
-            # Asegurarse de que todas las filas 1-10 estén presentes en tabla2
             for fila in range(1, 11):
                 if fila not in filas2:
-                    filas2[fila] = [None] * 13  # Filas vacías
+                    filas2[fila] = [None] * 13  
 
             tabla2_muestras = [{'fila': fila, 'valores': filas2.get(fila, [None] * 13)} for fila in range(1, 11)]
 
@@ -2356,10 +2355,8 @@ def buscar_orden(request):
         messages.error(request, "Número de orden no recibido")
         return redirect('ruta_donde_redirigir')
     
-    # Lógica para procesar la orden y guardar los datos
     orden = OrdenProduccion.objects.filter(numero=search_noorden).first()
     if orden:
-        # Guardar datos o lo que sea necesario
         pass
     else:
         messages.error(request, "No se encontró la orden")
@@ -2694,14 +2691,12 @@ from django.views.decorators.csrf import csrf_exempt
 def descargar_control(request):
     if request.method == "POST":
         try:
-            # Obtener datos del formulario JSON
             try:
                 data = json.loads(request.body)
                 muestras = data.get('muestras', [])
             except json.JSONDecodeError:
                 return HttpResponse("Error al decodificar JSON", status=400)
             
-            # Ruta del PDF original
             pdf_path = os.path.join(settings.BASE_DIR, 'contacts', 'templates', 'contacts', 'ControlAseguramiento.pdf')
             
             if not os.path.exists(pdf_path):
@@ -2710,130 +2705,104 @@ def descargar_control(request):
             reader = PdfReader(pdf_path)
             writer = PdfWriter()
             
-            # Crear capa con datos en memoria
             packet = io.BytesIO()
             can = canvas.Canvas(packet, pagesize=letter)
             
-            # Definir coordenadas específicas para cada muestra de la primera tabla (1-13)
-            # Formato: [x_tabla1, y_tabla1, x_tabla2, y_tabla2]
-            # Donde tabla1 es la parte superior y tabla2 es la parte inferior
             coordenadas_muestras_1 = {
-                0: [200, 379, 200, 329],  # Muestra 1
-                1: [248, 379, 248, 329],  # Muestra 2
-                2: [292, 379, 292, 329],  # Muestra 3
-                3: [337, 379, 337, 329],  # Muestra 4
-                4: [385, 379, 385, 329],  # Muestra 5
-                5: [432, 379, 432, 329],  # Muestra 6
-                6: [481, 379, 481, 329],  # Muestra 7
-                7: [530, 379, 530, 329],  # Muestra 8
-                8: [578, 379, 578, 329],  # Muestra 9
-                9: [623, 379, 623, 329],  # Muestra 10
-                10: [670, 379, 670, 329], # Muestra 11
-                11: [695, 379, 710, 329], # Muestra 12
-                12: [800, 379, 800, 329]  # Muestra 13
+                0: [200, 379, 200, 329],  
+                1: [248, 379, 248, 329],  
+                2: [292, 379, 292, 329],  
+                3: [337, 379, 337, 329],  
+                4: [385, 379, 385, 329],  
+                5: [432, 379, 432, 329],  
+                6: [481, 379, 481, 329],  
+                7: [530, 379, 530, 329],  
+                8: [578, 379, 578, 329],  
+                9: [623, 379, 623, 329],  
+                10: [670, 379, 670, 329], 
+                11: [695, 379, 710, 329], 
+                12: [800, 379, 800, 329]  
             }
             
-            # Definir coordenadas específicas para cada muestra de la segunda tabla (14-26)
-            # Usamos el mismo formato pero con coordenadas para la segunda tabla
             coordenadas_muestras_2 = {
-                0: [200, 221, 200, 221],  # Muestra 14
-                1: [248, 221, 248, 221],  # Muestra 15
-                2: [292, 221, 292, 221],  # Muestra 16
-                3: [337, 221, 337, 221],  # Muestra 17
-                4: [385, 221, 385, 221],  # Muestra 18
-                5: [432, 221, 432, 221],  # Muestra 19
-                6: [481, 221, 481, 221],  # Muestra 20
-                7: [530, 221, 530, 221],  # Muestra 21
-                8: [578, 221, 578, 221],  # Muestra 22
-                9: [623, 221, 623, 221],  # Muestra 23
-                10: [650, 221, 650, 221], # Muestra 24
-                11: [695, 221, 695, 221], # Muestra 25
-                12: [800, 221, 800, 221]  # Muestra 26
+                0: [200, 221, 200, 221],  
+                1: [248, 221, 248, 221],  
+                2: [292, 221, 292, 221],  
+                3: [337, 221, 337, 221],  
+                4: [385, 221, 385, 221],  
+                5: [432, 221, 432, 221],  
+                6: [481, 221, 481, 221],  
+                7: [530, 221, 530, 221],  
+                8: [578, 221, 578, 221],  
+                9: [623, 221, 623, 221],  
+                10: [650, 221, 650, 221], 
+                11: [695, 221, 695, 221], 
+                12: [800, 221, 800, 221]  
             }
 
             
-            # Coordenadas Y para las filas en cada tabla
-            # Primera tabla (muestras 1-13)
-            filas_tabla1_y = [379, 369, 359, 349, 339]  # 5 filas de la tabla superior
-            filas_tabla2_y = [329, 319, 309, 299, 289]  # 5 filas de la tabla inferior
+            filas_tabla1_y = [379, 369, 359, 349, 339]  
+            filas_tabla2_y = [329, 319, 309, 299, 289]  
             
-            # Segunda tabla (muestras 14-26)
-            filas_tabla3_y = [221, 211, 201, 191, 181]  # 5 filas para la tercera sección (tabla superior 2)
-            filas_tabla4_y = [171, 161, 151, 141, 131]  # 5 filas para la cuarta sección (tabla inferior 2)
+            filas_tabla3_y = [221, 211, 201, 191, 181]  
+            filas_tabla4_y = [171, 161, 151, 141, 131]  
             
-            # Coordenada Y para promedios en cada tabla
-            promedio_tabla1_y = 329 - 10  # Promedio para la primera tabla (si se necesita)
-            promedio_tabla2_y = 279       # Promedio para la segunda tabla
-            promedio_tabla3_y = 229 - 10  # Promedio para la tercera tabla (si se necesita)
-            promedio_tabla4_y = 123       # Promedio para la cuarta tabla
+            promedio_tabla1_y = 329 - 10  
+            promedio_tabla2_y = 279       
+            promedio_tabla3_y = 229 - 10  
+            promedio_tabla4_y = 123       
             
-            # Colocar datos de la primera tabla (muestras 1-13)
             for col_idx, muestra in enumerate(muestras[:13]):
                 if col_idx >= len(coordenadas_muestras_1):
                     break
                     
-                # Obtener coordenadas específicas para esta muestra
                 tabla1_x = coordenadas_muestras_1[col_idx][0]
                 tabla1_y_base = coordenadas_muestras_1[col_idx][1]
                 tabla2_x = coordenadas_muestras_1[col_idx][2]
                 tabla2_y_base = coordenadas_muestras_1[col_idx][3]
                 
-                # Primera mitad de los valores (filas 1-5) para la tabla superior
                 for row_idx in range(0, 5):
                     if row_idx < len(muestra.get('valores', [])):
                         valor = muestra.get('valores', [])[row_idx]
                         if valor:
-                            # Usar coordenada Y específica para esta fila
                             row_y = filas_tabla1_y[row_idx]
                             can.drawString(tabla1_x - 15, row_y - 5, str(valor))
                 
-                # Segunda mitad de los valores (filas 6-10) para la tabla inferior
                 for row_idx in range(5, 10):
                     if row_idx < len(muestra.get('valores', [])):
                         valor = muestra.get('valores', [])[row_idx]
                         if valor:
-                            # Ajustar el índice para la segunda tabla (restar 5)
                             adjusted_row_idx = row_idx - 5
-                            # Usar coordenada Y específica para esta fila
                             row_y = filas_tabla2_y[adjusted_row_idx]
                             can.drawString(tabla2_x - 15, row_y - 5, str(valor))
                 
-                # Promedio para la segunda tabla
                 if 'promedio' in muestra and muestra['promedio']:
                     can.drawString(tabla2_x - 15, promedio_tabla2_y - 5, str(muestra['promedio']))
             
-            # Colocar datos de la segunda tabla (muestras 14-26)
             for col_idx, muestra in enumerate(muestras[13:26]):
                 if col_idx >= len(coordenadas_muestras_2):
                     break
                     
-                # Obtener coordenadas específicas para esta muestra
                 tabla3_x = coordenadas_muestras_2[col_idx][0]
                 tabla3_y_base = coordenadas_muestras_2[col_idx][1]
                 tabla4_x = coordenadas_muestras_2[col_idx][2]
                 tabla4_y_base = coordenadas_muestras_2[col_idx][3]
                 
-                # Primera mitad de los valores (filas 1-5) para la tabla superior de la segunda sección
                 for row_idx in range(0, 5):
                     if row_idx < len(muestra.get('valores', [])):
                         valor = muestra.get('valores', [])[row_idx]
                         if valor:
-                            # Usar coordenada Y específica para esta fila
                             row_y = filas_tabla3_y[row_idx]
                             can.drawString(tabla3_x - 15, row_y - 5, str(valor))
                 
-                # Segunda mitad de los valores (filas 6-10) para la tabla inferior de la segunda sección
                 for row_idx in range(5, 10):
                     if row_idx < len(muestra.get('valores', [])):
                         valor = muestra.get('valores', [])[row_idx]
                         if valor:
-                            # Ajustar el índice para la segunda tabla (restar 5)
                             adjusted_row_idx = row_idx - 5
-                            # Usar coordenada Y específica para esta fila
                             row_y = filas_tabla4_y[adjusted_row_idx]
                             can.drawString(tabla4_x - 15, row_y - 5, str(valor))
                 
-                # Promedio para la cuarta tabla
                 if 'promedio' in muestra and muestra['promedio']:
                     can.drawString(tabla4_x - 15, promedio_tabla4_y - 5, str(muestra['promedio']))
             
@@ -2842,14 +2811,12 @@ def descargar_control(request):
             
             overlay = PdfReader(packet)
             
-            # Combinar overlay con PDF original
             for i in range(len(reader.pages)):
                 page = reader.pages[i]
-                if i == 0:  # Asumiendo que la tabla está en la primera página
+                if i == 0:  
                     page.merge_page(overlay.pages[0])
                 writer.add_page(page)
             
-            # Guardar PDF modificado
             output_pdf_path = os.path.join(settings.BASE_DIR, 'contacts', 'ControlAseguramiento_modificado.pdf')
             with open(output_pdf_path, "wb") as output_pdf:
                 writer.write(output_pdf)

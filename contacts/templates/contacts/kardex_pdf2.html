@@ -67,7 +67,7 @@
                 <th class="large-cell">
                     SEPRISA, SERVICIOS Y PRODUCTOS INTEGRALES PARA LA SALUD S.A. <br>
                     DE C.V.<br>
-                    FORMATO <br>
+                    KARDEX <br>
                     RECEPCIÓN DE MATERIA PRIMA <br>
                 </th>
             
@@ -98,22 +98,21 @@
             {% for item in FormatoRecepcionMateriaPrimax %}
             <tr>
                 <td>{{ item.materiaprima }}</td>
-                <td>{{ item.fechacaducidad|date:'d/m/Y' }}</td>
+                <td>{{ item.fechacaducidad|date:'d M Y'|upper }}</td>
                 <td>{{ item.loteseprisa }}</td>
-                <td>{{ item.fechaentrada|date:'d/m/Y' }}</td>
+                <td>{{ item.fechaentrada|date:'d M Y'|upper }}</td>
                 <td>{{ item.pesoneto }}</td>
                 <td>{{ item.claveproveedor }}</td>
                 <td>{{ item.sku }}</td>
                 <td>
-                    {% if item.kardexrecepcionmateriaprimaalmacen_set.all %}
-                        {% for kardex in item.kardexrecepcionmateriaprimaalmacen_set.all %}
-                            {{ kardex.cantidadqueda|default:"-" }}
-                        {% endfor %}
-                    {% else %}
-                        -
-                    {% endif %}
+                    {% with FormatoRecepcionMateriaPrima.kardexrecepcionmateriaprimaalmacen_set.last as ultimo_kardex %}
+                        {% if ultimo_kardex %}
+                            {{ ultimo_kardex.cantidadqueda|default:"0" }}
+                        {% else %}
+                            {{ FormatoRecepcionMateriaPrima.pesoneto|default:"0" }}
+                        {% endif %}
+                    {% endwith %}
                 </td>
-                
             </tr>
             {% endfor %}
         </tbody>

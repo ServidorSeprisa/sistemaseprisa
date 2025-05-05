@@ -11,6 +11,7 @@ from .views import LoginView,UserListView,UserEditView,UserDeleteView
 from .views import guardar_muestras, buscar_orden,control_aseguramiento_calidad_list,ControlaseguramientocalidadListView,obtener_orden_produccion,buscar_ordenproduccion
 from .views import ordenproduccion_new, kardex_prodlist,OrdenProduccionView,ver_notificaciones, marcar_notificacion_leida, OrdenProduccionViewList,ControlaseguramientocalidadListViewV,buscar_orden_produccion_view
 from .views import EditarDetalleOrdenView, EliminarDetalleOrdenView
+
 urlpatterns = [
     #Vista contactos
     path('list', views.ContactListView.as_view(),name='contact_list'),
@@ -64,6 +65,7 @@ urlpatterns = [
     path('formatorecepcionmaterialempaque/pdf/', views.export_formato_recepcion_material_empaque_pdf, name='export_formato_recepcion_material_empaque_pdf'),
     path('formatorecepcionmaterialempaqueview/',views.FormatoRecepcionMaterialEmpaqueListViewView.as_view(),name='formato_recepcion_material_empaque_view'),
 
+    # Vista Formato Recepción Materia Prima
     path('formatorecepcionmateriaprima/',views.FormatoRecepcionMateriaPrimaListView.as_view(),name='formato_recepcion_materia_prima'),
     path('formatorecepcionmateriaprima/new/', views.FormatoRecepcionMateriaPrimaCreateView.as_view(),name='formatorecepcionmateriaprima_new'),
     path('formatorecepcionmateriaprima/<int:pk>/edit/',views.FormatoRecepcionMateriaPrimaUpdateView.as_view(),name='formatorecepcionmateriaprima_edit'),

@@ -124,7 +124,7 @@
     <h3>KARDEX</h3>
 
     <form method="get" class="mt-3 d-flex justify-content-between">
-        <input type="text" name="q" class="form-control" placeholder="Buscar por nombre o clave del proveedor" value="{{ request.GET.q }}">
+        <input type="text" name="q" class="form-control" placeholder="Buscar por materia prima, lote SEPRISA o SKU" value="{{ request.GET.q }}">
         <button type="submit" class="btn btn-primary ms-2">Buscar</button>
     </form>
     <button id="download-pdf" class="btn btn-outline-primary">
@@ -155,9 +155,10 @@
                         <input type="checkbox" class="select-row" value="{{ FormatoRecepcionMateriaPrima.pk }}" />
                     </td>
                     <td>{{ FormatoRecepcionMateriaPrima.materiaprima|default:'-' }}</td>
-                    <td>{{ FormatoRecepcionMateriaPrima.fechaentrada|date:'d/m/Y ' }}</td>
+                    <td>{{ FormatoRecepcionMateriaPrima.fechaentrada|date:'d M Y '|upper }}</td>
                     <td>{{ FormatoRecepcionMateriaPrima.loteseprisa|default:'-' }}</td>
-                    <td>{{ FormatoRecepcionMateriaPrima.fechacaducidad|date:'d/m/Y ' }}</td>
+                    <td>{{ FormatoRecepcionMateriaPrima.fechacaducidad|date:'d M Y '|upper }}</td>
+
                     <td>{{ FormatoRecepcionMateriaPrima.pesoneto|default:"-" }} kg</td>
                     <td>{{ FormatoRecepcionMateriaPrima.claveproveedor|default:"-" }}</td>
                     <td>{{ FormatoRecepcionMateriaPrima.sku|default:"-" }}</td>
@@ -166,7 +167,7 @@
                             {% if ultimo_kardex %}
                                 {{ ultimo_kardex.cantidadqueda|default:"0" }}
                             {% else %}
-                                {{ FormatoRecepcionMateriaPrima.pesoneto|default:"0" }}
+                                {{ FormatoRecepcionMateriaPrima.cantidadneto|default:"0" }}
                             {% endif %}
                         {% endwith %}
                     </td>

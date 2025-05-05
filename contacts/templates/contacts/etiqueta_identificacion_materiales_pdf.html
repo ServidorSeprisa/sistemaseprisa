@@ -86,15 +86,14 @@
                 <td colspan="3">{{ etiqueta.lote_interno|default:'-'}}</td>
                 <td>P. Bruto {{ etiqueta.peso_bruto|default:'-'}}</td>
                 <td>P. Tara {{ etiqueta.peso_bruto|default:'-'}}</td>
-                <td>P. Neto {{ etiqueta.peso_bruto|default:'-'}}</td>
+                <td>P. Neto {{ etiqueta.peso_neto|default:'-'}}</td>
                 <td>Contenedor {{ etiqueta.contenedor|default:'-'}} de {{ etiqueta.de|default:'-'}}</td>
-
             </tr>
             <tr>
                 <td>SKU</td>
                 <td colspan="3">{{ etiqueta.sku|default:'-'}}</td>
                 <td>Fecha de caducidad</td>
-                <td colspan="3">{{ etiqueta.fechacaducidad|default:'-'}}</td>
+                <td colspan="3">{{ etiqueta.fechacaducidad|date:'d M Y'|upper}}</td>
             </tr>
             <tr>
                 <td>Realizó</td>

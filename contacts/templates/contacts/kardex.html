@@ -1,185 +1,203 @@
-    <!-- kardex.html -->
-    {% extends 'contacts/menu_base.html' %} 
-    {% load static %}
+{% extends 'contacts/menu_base.html' %} 
+{% load static %}
 
-    {% block content %}
-    <div class="container">
-        <div class="p5 border border-1 shadow">
-            <h1 class="fw-bold text-primary">KARDEX</h1>
-            <h2>Busca el material que requieres y agrega la información solicitada.</h2>
-            <p>Consulta, crea, actualiza y elimina tus etiquetas de forma fácil y segura.</p>
+{% block content %}
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+
+<div class="container">
+    <div class="p5 border border-1 shadow">
+        <h1 class="fw-bold text-primary">KARDEX</h1>
+        <h2>Busca el material que requieres y agrega la información solicitada.</h2>
+        <p>Consulta, crea, actualiza y elimina tus etiquetas de forma fácil y segura.</p>
+    </div>
+
+    <div class="mt-5">
+        <div class="mt-3 d-flex justify-content-between">
+            <a href="{% url 'export_kardex_pdf' %}?q={{ request.GET.q }}" class="btn btn-outline-primary">Descargar Kardex</a>
+        </div>
+    </div>
+
+    <form method="post" action="{% url 'guardar_kardex' %}">
+        {% csrf_token %}
+        <input type="hidden" name="id" value="{% if etiqueta %}{{ etiqueta.id }}{% endif %}">
+        
+        <label for="pneto" class="form-label">ENTRADAS:</label>
+        <div class="mt-3">
+            <div class="row">
+                <div class="col-md-6">
+                    <label for="material" class="form-label">Materia Prima:</label>
+                    <input type="text" id="material" name="material" class="form-control" value="{% if etiqueta %}{{ etiqueta.materiaprima }}{% endif %}" placeholder="Producto" readonly>
+                </div>
+            </div>
+        
+            <div class="row mt-3">
+                <div class="col-md-6">
+                    <label for="fecha_caducidad" class="form-label">Fecha de caducidad:</label>
+                    <input type="text" id="fecha_caducidad" name="fecha_caducidad" class="form-control" value="{% if etiqueta %}{{ etiqueta.fechacaducidad|date:'d/m/Y' }}{% endif %}" placeholder="Fecha de caducidad" readonly>
+                </div>
+                <div class="col-md-6">
+                    <label for="lote_seprisa" class="form-label">No. de Lote SEPRISA</label>
+                    <input type="text" id="lote_seprisa" name="lote_seprisa" class="form-control" value="{% if etiqueta %}{{ etiqueta.loteseprisa }}{% endif %}" placeholder="No. Lote SEPRISA" readonly>
+                </div>
+            </div>
+        
+            <div class="row mt-3">
+                <div class="col-md-6">
+                    <label for="fecha_entrada" class="form-label">Fecha de entrada</label>
+                    <input type="text" id="fecha_entrada" name="fecha_entrada" class="form-control" value="{% if etiqueta %}{{ etiqueta.fechaentrada|date:'d/m/Y' }}{% endif %}" placeholder="Fecha de Entrada" readonly>
+                </div>
+                <div class="col-md-6">
+                    <label for="cantidad_neto" class="form-label">Cantidad Neto:</label>
+                    <input type="text" id="cantidad_neto" name="cantidad_neto" class="form-control" value="{% if etiqueta %}{{ etiqueta.cantidadneto }} kg{% endif %}" placeholder="Cantidad Neto" readonly>
+                </div>
+            </div>
+        
+            <div class="row mt-3">
+                <div class="col-md-6">
+                    <label for="codigo_proveedorcliente" class="form-label">Código del Proveedor/Cliente:</label>
+                    <input type="text" id="codigo_proveedorcliente" name="codigo_proveedorcliente" class="form-control" value="{% if etiqueta %}{{ etiqueta.claveproveedor }}{% endif %}" placeholder="Código del Proveedor" readonly>
+                </div>
+                <div class="col-md-6">
+                    <label for="sku" class="form-label">SKU:</label>
+                    <input type="text" id="sku" name="sku" class="form-control" value="{% if etiqueta %}{{ etiqueta.sku }}{% endif %}" placeholder="SKU" readonly>
+                </div>
+            </div>
         </div>
 
         <div class="mt-5">
-            <div class="mt-3 d-flex justify-content-between">
-                <a href="{% url 'export_kardex_pdf' %}?q={{ request.GET.q }}" class="btn btn-outline-primary">Descargar Kardex</a>
-            </div>
-        </div>
-
-        <form method="post" action="{% url 'guardar_kardex' %}">
-            {% csrf_token %}
-            <input type="hidden" name="id" value="{% if etiqueta %}{{ etiqueta.id }}{% endif %}">
-        
-            <label for="pneto" class="form-label">ENTRADAS:</label>
-            <div class="mt-3">
-                <div class="row">
-                    <div class="col-md-6">
-                        <label for="material" class="form-label">Materia Prima:</label>
-                        <input type="text" id="material" name="material" class="form-control" value="{% if etiqueta %}{{ etiqueta.materiaprima }}{% endif %}" placeholder="Producto" readonly>
-                    </div>
+            <h3>SALIDAS</h3>
+            <div class="row">
+                <div class="col-md-6">
+                    <label for="fecha_salida" class="form-label">Fecha de salida</label>
+                    <input type="date" id="fecha_salida" name="fecha_salida" class="form-control">
                 </div>
-        
-                <div class="row mt-3">
-                    <div class="col-md-6">
-                        <label for="fecha_caducidad" class="form-label">Fecha de caducidad:</label>
-                        <input type="text" id="fecha_caducidad" name="fecha_caducidad" class="form-control" value="{% if etiqueta %}{{ etiqueta.fechacaducidad|date:'d/m/Y' }}{% endif %}" placeholder="Fecha de caducidad" readonly>
-                    </div>
-                    <div class="col-md-6">
-                        <label for="lote_seprisa" class="form-label">No. de Lote SEPRISA</label>
-                        <input type="text" id="lote_seprisa" name="lote_seprisa" class="form-control" value="{% if etiqueta %}{{ etiqueta.loteseprisa }}{% endif %}" placeholder="No. Lote SEPRISA" readonly>
-                    </div>
-                </div>
-        
-                <div class="row mt-3">
-                    <div class="col-md-6">
-                        <label for="fecha_entrada" class="form-label">Fecha de entrada</label>
-                        <input type="text" id="fecha_entrada" name="fecha_entrada" class="form-control" value="{% if etiqueta %}{{ etiqueta.fechaentrada|date:'d/m/Y' }}{% endif %}" placeholder="Fecha de Entrada" readonly>
-                    </div>
-                    <div class="col-md-6">
-                        <label for="cantidad_neto" class="form-label">Cantidad Neto:</label>
-                        <input type="text" id="cantidad_neto" name="cantidad_neto" class="form-control" value="{% if etiqueta %}{{ etiqueta.pesoneto }} kg{% endif %}" placeholder="Cantidad Neto" readonly>
-                    </div>
-                </div>
-        
-                <div class="row mt-3">
-                    <div class="col-md-6">
-                        <label for="codigo_proveedorcliente" class="form-label">Código del Proveedor/Cliente:</label>
-                        <input type="text" id="codigo_proveedorcliente" name="codigo_proveedorcliente" class="form-control" value="{% if etiqueta %}{{ etiqueta.claveproveedor }}{% endif %}" placeholder="Código del Proveedor" readonly>
-                    </div>
-                    <div class="col-md-6">
-                        <label for="sku" class="form-label">SKU:</label>
-                        <input type="text" id="sku" name="sku" class="form-control" value="{% if etiqueta %}{{ etiqueta.sku }}{% endif %}" placeholder="SKU" readonly>
-                    </div>
+                <div class="col-md-6">
+                    <label for="cliente_usointerno" class="form-label">Cliente/Uso Interno</label>
+                    <input type="text" id="cliente_usointerno" name="cliente_usointerno" class="form-control">
                 </div>
             </div>
 
-            <div class="mt-5">
-                <h3>SALIDAS</h3>
-                <div class="row">
-                    <div class="col-md-6">
-                        <label for="fecha_salida" class="form-label">Fecha de salida</label>
-                        <input type="date" id="fecha_salida" name="fecha_salida" class="form-control">
-                    </div>
-                    <div class="col-md-6">
-                        <label for="cliente_usointerno" class="form-label">Cliente/Uso Interno</label>
-                        <input type="text" id="cliente_usointerno" name="cliente_usointerno" class="form-control">
-                    </div>
+            <div class="row mt-3">
+                <div class="col-md-6">
+                    <label for="codigo_proveedorcliente" class="form-label">Lote Proveedor:</label>
+                    <input type="text" id="codigo_proveedorcliente" name="codigo_proveedorcliente" class="form-control" value="{% if etiqueta %}{{ etiqueta.noloteproveedor }}{% endif %}" placeholder="Código del Proveedor" readonly>
                 </div>
-
-                <div class="row mt-3">
-                    <div class="col-md-6">
-                        <label for="lote_proveedor" class="form-label">Lote Proveedor</label>
-                        <input type="text" id="lote_proveedor" name="lote_proveedor" class="form-control">
-                    </div>
-                    <div class="col-md-6">
-                        <label for="cantidad_sale" class="form-label">Cantidad Salida</label>
-                        <input type="double" id="cantidad_sale" name="cantidad_sale" class="form-control">
-                    </div>
+                <div class="col-md-6">
+                    <label for="cantidad_sale" class="form-label">Cantidad Salida</label>
+                    <input type="double" id="cantidad_sale" name="cantidad_sale" class="form-control">
+                </div>
                     
-                </div>
+            </div>
 
-                <div class="row mt-3">
-                    <div class="col-md-6">
-                        <label for="cantidad_queda" class="form-label">Cantidad Queda</label>
-                        <input type="text" id="cantidad_queda" name="cantidad_queda" class="form-control" value="{% if salidas %}{{ salidas.last.cantidadqueda }}{% else %}{{ etiqueta.pesoneto }}{% endif %}" readonly>
-                    </div>
-                    <div class="col-md-6">
-                        <label for="realizo" class="form-label">Realizó</label>
-                        <input type="text" id="realizo" name="realizo" class="form-control">
-                    </div>
+            <div class="row mt-3">
+                <div class="col-md-6">
+                    <label for="cantidad_queda" class="form-label">Cantidad Queda</label>
+                    <input type="text" id="cantidad_queda" name="cantidad_queda" class="form-control" value="{% if salidas %}{{ salidas.last.cantidadqueda }}{% else %}{{ etiqueta.cantidadneto }}{% endif %}" readonly>
                 </div>
-
-                <div class="row mt-3">
-                    <div class="col-md-12">
-                        <label for="observaciones" class="form-label">Observaciones</label>
-                        <textarea id="observaciones" name="observaciones" class="form-control"></textarea>
-                    </div>
+                <div class="col-md-6">
+                    <label for="realizo" class="form-label">Realizó</label>
+                    <input type="text" id="realizo" name="realizo" class="form-control">
                 </div>
             </div>
 
-            <button type="submit" class="btn btn-primary mt-4">Registrar Salida</button>
-        </form>
-
-        <div class="table-responsive">
-            <table class="mt-5 table table-hover">
-                <thead>
-                    <tr>
-                        <th>Fecha Salida</th>
-                        <th>Cliente/Uso Interno</th>
-                        <th># Lote Proveedor</th>
-                        <th>Cantidad Sale</th>
-                        <th>Cantidad Queda</th>
-                        <th>Realizó</th>
-                        <th>Observaciones</th>
-                        <th>Acciones</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for salida in salidas %}
-                    <tr>
-                        <td>{{ salida.fechasalida|date:'d/m/Y' }}</td>
-                        <td>{{ salida.clienteusointerno }}</td>
-                        <td>{{ salida.noloteproveedor }}</td>
-                        <td>{{ salida.cantidadsale }}</td>
-                        <td>{{ salida.cantidadqueda }}</td>
-                        <td>{{ salida.realizo }}</td>
-                        <td>{{ salida.observaciones }}</td>
-                        <td>
-                            <div class="btn-group btn-group-sm">
-                                <a href="{% url 'kardex_edit' salida.pk %}" class="btn btn-primary">Editar</a>
-                                <a href="{% url 'kardex_delete' salida.pk %}" class="btn btn-danger">Eliminar</a>
-                            </div>
-                        </td>
-                        
-                    </tr>
-                    {% empty %}
-                        <tr>
-                            <td colspan="8" class="text-center">No hay registros disponibles.</td>
-                        </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
+            <div class="row mt-3">
+                <div class="col-md-12">
+                    <label for="observaciones" class="form-label">Observaciones</label>
+                    <textarea id="observaciones" name="observaciones" class="form-control"></textarea>
+                </div>
+            </div>
         </div>
+
+        <button type="submit" class="btn btn-primary mt-4">Registrar Salida</button>
+    </form>
+
+    <div class="table-responsive">
+        <table class="mt-5 table table-hover">
+            <thead>
+                <tr>
+                    <th>Fecha Salida</th>
+                    <th>Cliente/Uso Interno</th>
+                    <th># Lote Proveedor</th>
+                    <th>Cantidad Sale</th>
+                    <th>Cantidad Queda</th>
+                    <th>Realizó</th>
+                    <th>Observaciones</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for salida in salidas %}
+                <tr>
+                    <td>{{ salida.fechasalida|date:"d M Y"|upper }}</td>
+                    <td>{{ salida.clienteusointerno }}</td>
+                    <td>{{ salida.noloteproveedor }}</td>
+                    <td>{{ salida.cantidadsale }}</td>
+                    <td>{{ salida.cantidadqueda }}</td>
+                    <td>{{ salida.realizo }}</td>
+                    <td>{{ salida.observaciones }}</td>
+                    <td>
+                        <div class="btn-group btn-group-sm">
+                            <a href="{% url 'kardex_edit' salida.pk %}" class="btn btn-primary">Editar</a>
+                            <a href="{% url 'kardex_delete' salida.pk %}" class="btn btn-danger">Eliminar</a>
+                        </div>
+                    </td>
+                        
+                </tr>
+                {% empty %}
+                    <tr>
+                        <td colspan="8" class="text-center">No hay registros disponibles.</td>
+                    </tr>
+                {% endfor %}
+
+            </tbody>
+        </table>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const material = localStorage.getItem('materialSeleccionado');
+            const cantidadNeto = localStorage.getItem('cantidadNetoCalculada');
+          
+            if (material && cantidadNeto) {
+                const cantidadInput = document.getElementById('cantidad_neto');
+                if (cantidadInput) {
+                    {% comment %} cantidadInput.value = cantidadNeto + ' kg'; {% endcomment %}
+                    cantidadInput.value = cantidadNeto;
+                }
+          
+                localStorage.removeItem('materialSeleccionado');
+                localStorage.removeItem('cantidadNetoCalculada');
+            }
+        });
+    </script>
+          
+    <script src="{% static 'bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            let cantidadSaleInput = document.getElementById('cantidad_sale');
+            let cantidadQuedaInput = document.getElementById('cantidad_queda');
         
-        <script src="{% static 'bootstrap/js/bootstrap.bundle.min.js' %}"></script>
-        <script>
-            document.addEventListener("DOMContentLoaded", function () {
-                let cantidadSaleInput = document.getElementById('cantidad_sale');
-                let cantidadQuedaInput = document.getElementById('cantidad_queda');
+            function updateCantidadQueda() {
+                let cantidadNetoOriginal = parseFloat(cantidadQuedaInput.dataset.original) || 0; 
+                let cantidadSale = parseFloat(cantidadSaleInput.value) || 0;
         
-                function updateCantidadQueda() {
-                    let cantidadNetoOriginal = parseFloat(cantidadQuedaInput.dataset.original) || 0; 
-                    let cantidadSale = parseFloat(cantidadSaleInput.value) || 0;
+                let nuevaCantidadQueda = cantidadNetoOriginal - cantidadSale;
         
-                    let nuevaCantidadQueda = cantidadNetoOriginal - cantidadSale;
-        
-                    if (nuevaCantidadQueda < 0) {
-                        alert('No puedes sacar más de la cantidad disponible.');
-                        cantidadSaleInput.value = cantidadNetoOriginal;  
-                        nuevaCantidadQueda = 0;
-                    }
-        
-                    cantidadQuedaInput.value = nuevaCantidadQueda.toFixed(2); 
+                if (nuevaCantidadQueda < 0) {
+                    alert('No puedes sacar más de la cantidad disponible.');
+                    cantidadSaleInput.value = cantidadNetoOriginal;  
+                    nuevaCantidadQueda = 0;
                 }
         
-                cantidadQuedaInput.setAttribute("data-original", cantidadQuedaInput.value);
+                cantidadQuedaInput.value = nuevaCantidadQueda.toFixed(2); 
+            }
         
-                cantidadSaleInput.addEventListener("input", updateCantidadQueda);
-            });
-        </script>
+            cantidadQuedaInput.setAttribute("data-original", cantidadQuedaInput.value);
         
-        
-    </div>
+            cantidadSaleInput.addEventListener("input", updateCantidadQueda);
+        });
+    </script>
+
+</div>
 {% endblock %}
-
-

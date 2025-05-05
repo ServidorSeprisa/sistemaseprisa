@@ -84,7 +84,7 @@
     <table>
         <thead>
             <tr>
-                <th>F. de entrada</th>
+                <th>F. de ent67rada</th>
                 <th>Materia prima</th>
                 <th>Lote SEPRISA</th>
                 <th>Peso Bruto</th>
@@ -101,7 +101,7 @@
         <tbody>
             {% for item in FormatoRecepcionMateriaPrimax %}
             <tr>
-                <td>{{ item.fechaentrada|date:'d/m/Y h:i A'}}</td>
+                <td>{{ item.fechaentrada|date:'d M Y'|upper}}</td>
                 <td>{{ item.materiaprima }}</td>
                 <td>{{ item.loteseprisa }}</td>
                 <td>{{ item.pesobruto }} kg</td>
@@ -111,7 +111,7 @@
                 <td>{{ item.noanalisis }}</td>
                 <td>{{ item.sku }}</td>
                 <td>{{ item.noloteproveedor }}</td>
-                <td>{{ item.fechacaducidad|date:'d/m/Y' }}</td>
+                <td>{{ item.fechacaducidad|date:'d M Y'|upper }}</td>
                 <td>{{ item.recibe }}</td>
             </tr>
             {% endfor %}

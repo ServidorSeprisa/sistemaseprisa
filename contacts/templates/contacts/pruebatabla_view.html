@@ -157,7 +157,7 @@
                     <td>
                         <input type="checkbox" class="select-row" value="{{ FormatoRecepcionMateriaPrima.pk }}" />
                     </td>
-                    <td>{{ FormatoRecepcionMateriaPrima.fechaentrada|date:'d/m/Y h:i A' }}</td>
+                    <td>{{ FormatoRecepcionMateriaPrima.fechaentrada|date:'d M Y'|upper }}</td>
                     <td>{{ FormatoRecepcionMateriaPrima.materiaprima|default:'-' }}</td>
                     <td>{{ FormatoRecepcionMateriaPrima.loteseprisa|default:'-' }}</td>
                     <td>{{ FormatoRecepcionMateriaPrima.pesobruto|default:"-" }} kg</td>
@@ -167,7 +167,7 @@
                     <td>{{ FormatoRecepcionMateriaPrima.noanalisis|default:"-" }}</td>
                     <td>{{ FormatoRecepcionMateriaPrima.sku|default:"-" }}</td>
                     <td>{{ FormatoRecepcionMateriaPrima.noloteproveedor|default:"-" }}</td>
-                    <td>{{ FormatoRecepcionMateriaPrima.fechacaducidad|default:"-" }}</td>
+                    <td>{{ FormatoRecepcionMateriaPrima.fechacaducidad|date:'d M Y'|upper }}</td>
                     <td>{{ FormatoRecepcionMateriaPrima.recibe|default:"-" }}</td>
                 </tr>
                 {% endfor %}

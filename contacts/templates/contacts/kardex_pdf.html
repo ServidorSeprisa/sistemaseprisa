@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -73,7 +72,6 @@
             margin-top: 5px; /* Reduce el espacio entre la tabla y el texto */
             margin-bottom: 5px; /* Reduce el espacio entre la tabla y el texto */
         }
-
     </style>
 </head>
 <body>
@@ -119,13 +117,13 @@
             </tr>
             <tr>
                 <th>Fecha de Caducidad:</th>
-                <th>{{ etiqueta.fechacaducidad }}</th>
+                <th>{{ etiqueta.fechacaducidad|date:'d M Y'|upper }}</th>
                 <th>No. de Lote SEPRISA: </th>
                 <th>{{ etiqueta.loteseprisa }}</th>
             </tr>
             <tr>
                 <th>Fecha de Entrada:</th>
-                <th>{{ etiqueta.fechaentrada }}</th>
+                <th>{{ etiqueta.fechaentrada|date:'d M Y'|upper }}</th>
                 <th>Cantidad Neto: </th>
                 <th>{{ etiqueta.pesoneto }} kg</th>
             </tr>
@@ -140,12 +138,12 @@
         <tbody>
             {% for item in object_list %}
             <tr>
-                <td>{{ item.fechaentrada|date:'d/m/Y h:i A'}}</td>
+                <td>{{ item.fechaentrada|date:'d/m/Y'|upper}}</td>
                 <td>{{ item.materiaprima }}</td>
                 <td>{{ item.loteseprisa }}</td>
                 <td>{{ item.pesobruto }}</td>
                 <td>{{ item.pesoneto }}</td>
-                <td>{{ item.fechacaducidad }}</td>
+                <td>{{ item.fechacaducidad|date:'d M Y'|upper }}</td>
             </tr>
             {% endfor %}
         </tbody>
@@ -167,7 +165,7 @@
         <tbody>
             {% for salida in salidas %}
             <tr>
-                <td>{{ salida.fechasalida|date:"d/m/Y" }}</td>
+                <td>{{ salida.fechasalida|date:"d M Y"|upper }}</td>
                 <td>{{ salida.clienteusointerno }}</td>
                 <td>{{ salida.noloteproveedor }}</td>
                 <td>{{ salida.cantidadsale }}</td>
@@ -184,3 +182,4 @@
     </table>
 </body>
 </html>
+

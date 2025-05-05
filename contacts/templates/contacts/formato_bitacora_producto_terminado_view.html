@@ -156,7 +156,7 @@
                     <td>
                         <input type="checkbox" class="select-row" value="{{ FormatoBitacoraProductoTerminado.pk }}" />
                     </td>
-                    <td>{{ FormatoBitacoraProductoTerminado.fechaentrada|date:'d/m/Y' }}</td>
+                    <td>{{ FormatoBitacoraProductoTerminado.fechaentrada|date:'d M Y'|upper }}</td>
                     <td>{{ FormatoBitacoraProductoTerminado.producto|default:"-" }}</td>
                     <td>{{ FormatoBitacoraProductoTerminado.lote|default:"-" }}</td>
                     <td>{{ FormatoBitacoraProductoTerminado.sku|default:"-" }}</td>
@@ -164,7 +164,7 @@
                     <td>{{ FormatoBitacoraProductoTerminado.contenedores|default:'-' }}</td>
                     <td>{{ FormatoBitacoraProductoTerminado.cliente|default:'-' }}</td>
                     <td>{{ FormatoBitacoraProductoTerminado.noanalisis|default:'-' }}</td>
-                    <td>{{ FormatoBitacoraProductoTerminado.fechacaducidad|date:'d/m/Y'  }}</td>
+                    <td>{{ FormatoBitacoraProductoTerminado.fechacaducidad|date:'d M Y'|upper  }}</td>
                     <td>{{ FormatoBitacoraProductoTerminado.recibe|default:'-' }}</td>
                     <td>{{ FormatoBitacoraProductoTerminado.observaciones|default:'-' }}</td>
                 </tr>

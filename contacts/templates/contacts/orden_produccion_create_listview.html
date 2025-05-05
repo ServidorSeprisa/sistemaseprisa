@@ -77,18 +77,18 @@
                     </div>
                     <div class="col-md-6 mb-3">
                         <label for="fecha_caducidad" class="form-label">Fecha de caducidad:</label>
-                        <input type="date" id="fecha_caducidad" name="fecha_caducidad" class="form-control" value="{% if orden_seleccionada %}{{ orden_seleccionada.fechacaducidad }}{% endif %}" required>
+                        <input type="date" id="fecha_caducidad" name="fecha_caducidad" class="form-control" value="{% if orden_seleccionada %}{{ orden_seleccionada.fechacaducidad|date:'Y-m-d' }}{% endif %}" required>
                     </div>
                 </div>
                 
                 <div class="row">
                     <div class="col-md-6 mb-3">
                         <label for="fechainicio_proceso" class="form-label">Fecha inicio proceso:</label>
-                        <input type="date" id="fechainicio_proceso" name="fechainicio_proceso" class="form-control" value="{% if orden_seleccionada %}{{ orden_seleccionada.fechainicioproceso }}{% endif %}" required>
+                        <input type="date" id="fechainicio_proceso" name="fechainicio_proceso" class="form-control" value="{% if orden_seleccionada %}{{ orden_seleccionada.fechainicioproceso|date:'Y-m-d' }}{% endif %}" required>
                     </div>
                     <div class="col-md-6 mb-3">
                         <label for="fechatermino_proceso" class="form-label">Fecha termino de proceso:</label>
-                        <input type="date" id="fechatermino_proceso" name="fechatermino_proceso" class="form-control" value="{% if orden_seleccionada %}{{ orden_seleccionada.fechaterminoproceso }}{% endif %}" required>
+                        <input type="date" id="fechatermino_proceso" name="fechatermino_proceso" class="form-control" value="{% if orden_seleccionada %}{{ orden_seleccionada.fechaterminoproceso|date:'Y-m-d' }}{% endif %}" required>
                     </div>
                 </div>
     
@@ -174,8 +174,6 @@
         });
         
     </script>
-
-    <button type="submit" class="btn btn-primary" id="guardarOrden">Guardar</button>
 
     <script>
         function getDetalleOrdenData() {

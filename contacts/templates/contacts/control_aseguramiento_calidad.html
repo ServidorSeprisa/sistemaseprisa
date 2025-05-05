@@ -15,17 +15,18 @@
     }
     
     .container {
-        background-color: rgb(0, 255, 255,0.8); /* Esto se puede dejar o eliminar */
+        background-color: white; /* Aplica el fondo negro a toda la vista */
         padding: 20px; /* Ajusta el padding según sea necesario */
         border-radius: 5px; /* Opcional, para un aspecto más estilizado */
     }
     .table {
-        background-color:rgb(135, 206, 250,0.8)        ;
+        background-color:rgb(135, 206, 250,0.8);
     }
     
     
     
 </style>
+<div class="container mt-5">
 
 <div class="d-flex justify-content-between mb-3">
     <div>
@@ -35,7 +36,6 @@
 
     </div>
 </div>
-
 
 <form method="get" action="{% url 'ordenproduccion_search' %}" class="container">
 
@@ -49,7 +49,7 @@
     </div>
 
     {% csrf_token %}
-    <input type="hidden" name="id" value="{% if OrdenProduccion %}{{ OrdenProduccion.noordenproduccion }}{% endif %}">
+    <input type="hidden" id="ordenId" value="{{ OrdenProduccion.noordenproduccion }}">
 
 
     <div class="card mb-4">
@@ -86,25 +86,25 @@
                 </div>
                 <div class="col-md-6 mb-3">
                     <label for="fecha_caducidad" class="form-label">Fecha de caducidad:</label>
-                    <input type="date" id="fecha_caducidad" name="fecha_caducidad" class="form-control" value="{% if OrdenProduccion %}{{ OrdenProduccion.fechacaducidad }}{% endif %}" disabled>
+                    <input type="date" id="fecha_caducidad" name="fecha_caducidad" class="form-control" value="{% if OrdenProduccion.fechacaducidad %}{{ OrdenProduccion.fechacaducidad|date:'Y-m-d' }}{% endif %}" disabled>
                 </div>
             </div>
             
             <div class="row">
                 <div class="col-md-6 mb-3">
                     <label for="fechainicio_proceso" class="form-label">Fecha inicio proceso:</label>
-                    <input type="date" id="fechainicio_proceso" name="fechainicio_proceso" class="form-control" value="{% if OrdenProduccion %}{{ OrdenProduccion.fechainicioproceso }}{% endif %}" disabled>
+                    <input type="date" id="fechainicio_proceso" name="fechainicio_proceso" class="form-control" value="{% if OrdenProduccion %}{{ OrdenProduccion.fechainicioproceso|date:'Y-m-d' }}{% endif %}" disabled>
                 </div>
                 <div class="col-md-6 mb-3">
                     <label for="fechatermino_proceso" class="form-label">Fecha termino de proceso:</label>
-                    <input type="date" id="fechatermino_proceso" name="fechatermino_proceso" class="form-control" value="{% if OrdenProduccion %}{{ OrdenProduccion.fechaterminoproceso }}{% endif %}" disabled>
+                    <input type="date" id="fechatermino_proceso" name="fechatermino_proceso" class="form-control" value="{% if OrdenProduccion %}{{ OrdenProduccion.fechaterminoproceso|date:'Y-m-d' }}{% endif %}" disabled>
                 </div>
             </div>
 
             <div class="row">
                 <div class="col-md-6 mb-3">
                     <label for="rendimiento_teorico" class="form-label">Rendimiento teorico:</label>
-                    <input type="number" id="rendimiento_teorico" name="rendimiento_teorico" class="form-control" value="{% if etiqueta %}{{ OrdenProduccion.rendimientoteorico }}{% endif %}" placeholder="Rendimiento teorico" disabled>
+                    <input type="number" id="rendimiento_teorico" name="rendimiento_teorico" class="form-control" value="{% if OrdenProduccion %}{{ OrdenProduccion.rendimientoteorico }}{% endif %}" placeholder="Rendimiento teorico" disabled>
                 </div>
                 <div class="col-md-6 mb-3">
                     <label for="rendimiento_real" class="form-label">Rendimiento real:</label>
@@ -346,16 +346,20 @@
     });
 </script>
 <button class="btn btn-success" onclick="guardarDatos()">Guardar Datos</button>
+</div>
 
 
 <script>
     function guardarDatos() {
         const urlParams = new URLSearchParams(window.location.search);
-        const numeroOrden = urlParams.get('id');  
+        {% comment %} const numeroOrden = urlParams.get('id');   {% endcomment %}
+        const numeroOrden = document.getElementById('ordenId')?.value;
+
         if (!numeroOrden) {
             alert('Número de orden no disponible');
             return;  
         }
+        {% comment %} console.log("Número de orden en input hidden:", numeroOrden); {% endcomment %}
 
         const filasTabla1 = document.querySelectorAll('#tablaMuestras1 tbody tr');
         const filasTabla2 = document.querySelectorAll('#tablaMuestras2 tbody tr');
@@ -451,31 +455,25 @@
     
 </script>
 
- <!-- Script para el control de aseguramiento -->
  <script>
     document.addEventListener('DOMContentLoaded', function() {
-        // Obtener el botón de descarga
         const btnDescargar = document.getElementById('btnDescargarControl');
         
         if (btnDescargar) {
             btnDescargar.addEventListener('click', function(e) {
                 e.preventDefault();
                 
-                // Array para almacenar los datos de todas las muestras
                 const muestras = [];
                 
-                // Procesar la primera tabla (Muestras 1-13)
                 procesarTabla('tablaMuestras1', 1, 13, muestras);
                 
-                // Procesar la segunda tabla (Muestras 14-26)
                 procesarTabla('tablaMuestras2', 14, 26, muestras);
                 
-                // Enviar los datos al servidor usando fetch
                 fetch('{% url "descargar_control" %}', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
-                        'X-CSRFToken': getCookie('csrftoken')  // Función para obtener el token CSRF
+                        'X-CSRFToken': getCookie('csrftoken')  
                     },
                     body: JSON.stringify({ muestras: muestras })
                 })
@@ -486,7 +484,6 @@
                     throw new Error('Error al generar el PDF');
                 })
                 .then(blob => {
-                    // Crear una URL para el blob y descargar el archivo
                     const url = window.URL.createObjectURL(blob);
                     const a = document.createElement('a');
                     a.style.display = 'none';
@@ -503,7 +500,6 @@
             });
         }
         
-        // Función para procesar una tabla y extraer sus datos
         function procesarTabla(tablaId, inicioMuestra, finMuestra, muestras) {
             const tabla = document.getElementById(tablaId);
             if (!tabla) return;
@@ -511,16 +507,14 @@
             const filas = tabla.querySelectorAll('tbody tr');
             const columnas = tabla.querySelectorAll('thead th');
             
-            // Procesar cada columna (muestra)
-            for (let j = 1; j < columnas.length; j++) {  // Empezamos desde 1 para omitir la primera columna "#"
-                const muestraIndex = j - 1 + inicioMuestra - 1; // Ajustar el índice según la tabla
+            for (let j = 1; j < columnas.length; j++) { 
+                const muestraIndex = j - 1 + inicioMuestra - 1;
                 const muestra = {
                     nombre: columnas[j].textContent,
                     valores: [],
                     promedio: 0
                 };
                 
-                // Recolectar valores de cada fila para esta columna
                 let suma = 0;
                 let contador = 0;
                 
@@ -531,14 +525,12 @@
                     
                     muestra.valores.push(valor);
                     
-                    // Calcular el promedio
                     if (valor && !isNaN(parseFloat(valor))) {
                         suma += parseFloat(valor);
                         contador++;
                     }
                 }
                 
-                // Calcular promedio si hay valores válidos
                 if (contador > 0) {
                     muestra.promedio = (suma / contador).toFixed(2);
                 }
@@ -547,7 +539,6 @@
             }
         }
         
-        // Función para obtener el token CSRF de las cookies
         function getCookie(name) {
             let cookieValue = null;
             if (document.cookie && document.cookie !== '') {
@@ -566,4 +557,3 @@
 </script>
 
 {% endblock content %}
-

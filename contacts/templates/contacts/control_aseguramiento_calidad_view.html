@@ -8,12 +8,11 @@
     html, body {
         height: 100%;
         margin: 0;
-        background-image: url("{% static 'images/fondo1.jpg' %}"); /* Cambia la ruta a tu imagen */
-
+        background-color: white; /* Aplica el fondo negro a toda la vista */
     }
     
     .container {
-        background-color: rgb(0, 255, 255,0.8); /* Esto se puede dejar o eliminar */
+        background-color: white; /* Aplica el fondo negro a toda la vista */
         padding: 20px; /* Ajusta el padding según sea necesario */
         border-radius: 5px; /* Opcional, para un aspecto más estilizado */
     }
@@ -24,7 +23,7 @@
     
     
 </style>
-
+<div class="container mt-5">
 <div class="d-flex justify-content-between mb-3">
     
     <div>
@@ -86,25 +85,25 @@
                 </div>
                 <div class="col-md-6 mb-3">
                     <label for="fecha_caducidad" class="form-label">Fecha de caducidad:</label>
-                    <input type="date" id="fecha_caducidad" name="fecha_caducidad" class="form-control" value="{% if OrdenProduccion %}{{ OrdenProduccion.fechacaducidad }}{% endif %}" disabled>
+                    <input type="date" id="fecha_caducidad" name="fecha_caducidad" class="form-control" value="{% if OrdenProduccion %}{{ OrdenProduccion.fechacaducidad|date:'Y-m-d'  }}{% endif %}" disabled>
                 </div>
             </div>
             
             <div class="row">
                 <div class="col-md-6 mb-3">
                     <label for="fechainicio_proceso" class="form-label">Fecha inicio proceso:</label>
-                    <input type="date" id="fechainicio_proceso" name="fechainicio_proceso" class="form-control" value="{% if OrdenProduccion %}{{ OrdenProduccion.fechainicioproceso }}{% endif %}" disabled>
+                    <input type="date" id="fechainicio_proceso" name="fechainicio_proceso" class="form-control" value="{% if OrdenProduccion %}{{ OrdenProduccion.fechainicioproceso|date:'Y-m-d'  }}{% endif %}" disabled>
                 </div>
                 <div class="col-md-6 mb-3">
                     <label for="fechatermino_proceso" class="form-label">Fecha termino de proceso:</label>
-                    <input type="date" id="fechatermino_proceso" name="fechatermino_proceso" class="form-control" value="{% if OrdenProduccion %}{{ OrdenProduccion.fechaterminoproceso }}{% endif %}" disabled>
+                    <input type="date" id="fechatermino_proceso" name="fechatermino_proceso" class="form-control" value="{% if OrdenProduccion %}{{ OrdenProduccion.fechaterminoproceso|date:'Y-m-d'  }}{% endif %}" disabled>
                 </div>
             </div>
 
             <div class="row">
                 <div class="col-md-6 mb-3">
                     <label for="rendimiento_teorico" class="form-label">Rendimiento teorico:</label>
-                    <input type="number" id="rendimiento_teorico" name="rendimiento_teorico" class="form-control" value="{% if etiqueta %}{{ OrdenProduccion.rendimientoteorico }}{% endif %}" placeholder="Rendimiento teorico" disabled>
+                    <input type="number" id="rendimiento_teorico" name="rendimiento_teorico" class="form-control" value="{% if OrdenProduccion %}{{ OrdenProduccion.rendimientoteorico }}{% endif %}" placeholder="Rendimiento teorico" disabled>
                 </div>
                 <div class="col-md-6 mb-3">
                     <label for="rendimiento_real" class="form-label">Rendimiento real:</label>
@@ -121,7 +120,6 @@
         {% if OrdenProduccion %}
         <h3>Orden de Producción: {{ OrdenProduccion.noordenproduccion }}</h3>
     
-        <!-- Primera Tabla de Muestras -->
         <table id="tablaMuestras1" class="table">
             <thead>
                 <tr>
@@ -181,7 +179,7 @@
             <tbody>
                 {% for muestra in tabla2_muestras %}
                     <tr>
-                        <td>{{ muestra.fila }}</td> <!-- Muestra la fila -->
+                        <td>{{ muestra.fila }}</td>
                         {% for valor in muestra.valores %}
                             <td>
                                 <input type="number" class="form-control" value="{{ valor }}" />
@@ -296,7 +294,7 @@
 <a href="#" id="descargarGrafica" class="btn btn-outline-primary">Descargar Gráfica</a>
 
 <a href="#" id="descargarTabla" class="btn btn-outline-primary">Descargar Tabla</a>
-
+    </div>
 <script>
     document.getElementById('descargarGrafica').addEventListener('click', function() {
         const canvas = document.getElementById('graficaPromedios');

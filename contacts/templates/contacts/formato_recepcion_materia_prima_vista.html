@@ -67,7 +67,7 @@
                     <td>{{ FormatoRecepcionMateriaPrima.noanalisis|default:'-' }}</td>
                     <td>{{ FormatoRecepcionMateriaPrima.sku|default:'-' }}</td>
                     <td>{{ FormatoRecepcionMateriaPrima.noloteproveedor|default:'-' }}</td>
-                    <td>{{ FormatoRecepcionMateriaPrima.fechacaducidad|default:'-' }}</td>
+                    <td>{{ FormatoRecepcionMateriaPrima.fechacaducidad|date:'d M Y'|upper }}</td>
                     <td>{{ FormatoRecepcionMateriaPrima.recibe|default:'-' }}</td>
                 </tr>
                 <div></div>

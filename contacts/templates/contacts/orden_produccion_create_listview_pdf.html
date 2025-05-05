@@ -61,16 +61,43 @@
         .orden {
             background: #bceeff;
         }
-        
-          .rectangulo {
-            width: 150px;
-            height: 30px;
-            background: red;
-            border: 1px solid #000;
-            position: relative; /* Asegura que el div se pueda posicionar correctamente */
-            display: block; /* Asegura que se renderice como bloque */
+
+        .firmas-container {
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            gap: 40px;
+            margin-top: 30px;
         }
-        
+    
+        .firma {
+            text-align: center;
+        }
+        .rectangulo {
+            width: 100px;
+            height: 25px;
+            background: transparent;
+            border: 1px solid #000;
+            display: block; /* Asegura que se renderice como bloque */
+            margin-bottom: 5px;
+            margin: 0 auto 5px auto;
+
+        }
+        #rectangle {
+            width:50%;
+            height:30px;
+            background:#00f;
+            position:fixed;
+            top:0;
+            left:0;
+        }
+        @media print {
+            .rectangulo {
+                width: 100px;
+                height: 25px;
+                border: 1px solid black;
+            }
+        }
     </style>
 </head>
 <body>
@@ -78,7 +105,7 @@
         <thead>
             <tr>
                 <th rowspan="4" class="left">
-                    <img src="C:\Users\ceci2\OneDrive\Documentos\LABORATORIO SEPRISA\sistemaseprisa\static\images\logoSEPRISA4.png" alt="Logo">
+                    <img src="static\images\logoSEPRISA4.png" alt="Logo">
                 </th>
             
                 <th rowspan="4" class="large-cell">
@@ -124,13 +151,13 @@
                 <th>NÚMERO DE LOTE:</th>
                 <th>{{ OrdenProduccion.numerolote }} </th>
                 <th>FECHA DE CADUCIDAD: </th>
-                <th>{{ OrdenProduccion.fechacaducidad }}</th>
+                <th>{{ OrdenProduccion.fechacaducidad|date:'d M Y'|upper }}</th>
             </tr>
             <tr>
                 <th>FECHA INICIO PROCESO:</th>
-                <th> {{ OrdenProduccion.fechainicioproceso }} </th>
+                <th> {{ OrdenProduccion.fechainicioproceso|date:'d M Y'|upper }} </th>
                 <th>FECHA TERMINO DE PROCESO: </th>
-                <th> {{ OrdenProduccion.fechaterminoproceso }}</th>
+                <th> {{ OrdenProduccion.fechaterminoproceso|date:'d M Y'|upper }}</th>
             </tr>
             <tr>
                 <th>RENDIMIENTO TEORICO:</th>
@@ -155,16 +182,27 @@
         <tbody>
             {% for item in object_list %}
             <tr>
-                <td>{{ item.skump }}</td>
-                <td>{{ item.material }}</td>
-                <td>{{ item.nolote }}</td>
-                <td>{{ item.unidad }}</td>
-                <td>{{ item.cantidad }}</td>
-                <td>{{ item.surtio }}</td>
-                <td>{{ item.verifico }}</td>
+                <td>{{ item.skump|default_if_none:"" }}</td>
+                <td>{{ item.material|default_if_none:"" }}</td>
+                <td>{{ item.nolote|default_if_none:"" }}</td>
+                <td>{{ item.unidad|default_if_none:"" }}</td>
+                <td>{{ item.cantidad|default_if_none:"" }}</td>
+                <td>{{ item.surtio|default_if_none:"" }}</td>
+                <td>&nbsp;</td> 
+            </tr>
+            {% empty %}
+            <tr>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
             </tr>
             {% endfor %}
         </tbody>
+            
     </table>
     <table>
         <tr>
@@ -175,7 +213,18 @@
             <td>  </td>
         </tr>
     </table>
-    <div class="rectangulo"></div>
+    
+    <div class="firmas-container">
+        <div class="firma">
+            <div class="rectangulo">&nbsp;</div>
+            <div>EMISIÓN Y FECHA</div>
+        </div>
+        <div class="firma">
+            <div class="rectangulo">&nbsp;</div>
+            <div>AUTORIZA Y FECHA</div>
+        </div>
+    </div>
+    </table>
     
     <h2>© Queda prohibida la reproducción total o parcial de este documento por cualquier medio, así como transportarlo fuera de las instalaciones SEPRISA S.A. DE C.V., sin autorización previa del Director General</h2>
 </body>
