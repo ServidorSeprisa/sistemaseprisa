@@ -81,7 +81,7 @@
         <thead>
             <tr>
                 <th rowspan="4" class="left">
-                    <img src="C:/Users/AMD/Documents/Proyecto/logoSEPRISA4.png" alt="Logo">
+                    <img src="static/images/logoSEPRISA4.png" alt="Logo">
                 </th>
             
                 <th rowspan="4" class="large-cell">
@@ -113,8 +113,10 @@
     
     <p>Graficar el peso promedio obtenido de cada muestreo, en la siguiente gráfica, verificar que el proceso no salga de límites establecidos en el punto</p>
     <p>anterior</p>
+    <img src="{{ grafica_base64 }}" alt="Gráfica de Calidad">
+
     
-    <table class="orden">
+    {% comment %} <table class="orden">
         <thead>
             <tr>
                 <th colspan="3">Promedio</th>
@@ -149,6 +151,7 @@
         <tbody>
             <tr><td colspan="2">Límite superior</td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
             <tr><td colspan="2" rowspan="10">Promedio</td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
+            
             <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
             <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
             <tr><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
@@ -162,9 +165,10 @@
 
         </body>
         
-    </table>
+    </table> {% endcomment %}
 
     <table><thead><th>Realizó y fecha</th><th> </th><th>Verificó y fecha</th><th> </th><thead></table>
+        
     <table>
         <thead>
             <th>Observaciones</th>

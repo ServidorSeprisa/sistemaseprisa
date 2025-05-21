@@ -32,9 +32,10 @@
     <div class="d-flex justify-content-between mb-3">
 
         <div>
-            <a href="{% url 'orden_produccion2' %}" class="btn btn-outline-primary">Siguiente</a>
-            <a href="{% url 'export_orden_produccion_create_listview_pdf'  %}" class="btn btn-outline-primary">Descargar Orden de Producción</a>
-
+            {% comment %} <a href="{% url 'orden_produccion2' %}" class="btn btn-outline-primary">Siguiente</a> {% endcomment %}
+            {% comment %} <a href="{% url 'export_orden_produccion_create_listview_pdf'  %}" class="btn btn-outline-primary">Descargar Orden de Producción</a> {% endcomment %}
+            {% comment %} <a href="{% url 'export_orden_produccion_create_listview_pdf' orden_seleccionada.pk %}">Descargar PDF</a> {% endcomment %}
+            <a href="{% url 'export_orden_produccion_create_listview_pdf' orden_seleccionada.pk %}" class="btn btn-outline-primary">Descargar Orden de Produccion</a>
         </div>
     </div>
     

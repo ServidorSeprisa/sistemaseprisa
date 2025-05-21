@@ -22,99 +22,100 @@
     .table {
         background-color:rgb(135, 206, 250,0.8);
     }
-    
-    
-    
 </style>
+
 <div class="container mt-5">
-
-<div class="d-flex justify-content-between mb-3">
-    <div>
-        <a href="{% url 'orden_produccion2' %}" class="btn btn-outline-primary">Siguiente</a>
-        <a href="#" id="btnDescargarControl" class="btn btn-outline-primary">Descargar Control de Aseguramiento</a>
-        <a href="{% url 'export_control_aseguramiento_pdf2' %}" class="btn btn-outline-primary">Descargar Grafica</a>
-
-    </div>
-</div>
-
-<form method="get" action="{% url 'ordenproduccion_search' %}" class="container">
-
-    <div class="row mb-3">
-        <div class="col-md-8">
-            <input type="text" id="search_noorden" name="search_noorden" class="form-control" placeholder="Buscar por No. Orden de Producción">
-        </div>
-        <div class="col-md-4">
-            <button type="submit" class="btn btn-primary">Buscar</button>
-        </div>
-    </div>
-
-    {% csrf_token %}
-    <input type="hidden" id="ordenId" value="{{ OrdenProduccion.noordenproduccion }}">
-
-
-    <div class="card mb-4">
-        <div class="card-header">
-            <h5 class="mb-0">Información de la Orden de Producción</h5>
-        </div>
-        <div class="card-body">
-            <div class="row">
-                <div class="col-md-6 mb-3">
-                    <label for="producto" class="form-label">Producto:</label>
-                    <input type="text" id="producto" name="producto" class="form-control" value="{% if OrdenProduccion %}{{ OrdenProduccion.producto }}{% endif %}" disabled>
-                </div>
-                <div class="col-md-6 mb-3">
-                    <label for="clavesku_maquila" class="form-label">CLAVE/SKU Maquila:</label>
-                    <input type="text" id="clavesku_maquila" name="clavesku_maquila" class="form-control" value="{% if OrdenProduccion %}{{ OrdenProduccion.claveskumaquila }}{% endif %}" disabled>
-                </div>
-            </div>
-
-            <div class="row">
-                <div class="col-md-6 mb-3">
-                    <label for="presentacion" class="form-label">Presentación:</label>
-                    <input type="text" id="presentacion" name="presentacion" class="form-control" value="{% if OrdenProduccion %}{{ OrdenProduccion.presentacion }}{% endif %}" disabled>
-                </div>
-                <div class="col-md-6 mb-3">
-                    <label for="noorden_produccion" class="form-label">No. Orden de Producción:</label>
-                    <input type="text" id="noorden_produccion" name="noorden_produccion" class="form-control" value="{% if OrdenProduccion %}{{ OrdenProduccion.noordenproduccion }}{% endif %}" disabled>
-                </div>
-            </div>
-
-            <div class="row">
-                <div class="col-md-6 mb-3">
-                    <label for="numero_lote" class="form-label">Número de lote:</label>
-                    <input type="text" id="numero_lote" name="numero_lote" class="form-control" value="{% if OrdenProduccion %}{{ OrdenProduccion.numerolote }}{% endif %}" placeholder="Número de Lote" disabled>
-                </div>
-                <div class="col-md-6 mb-3">
-                    <label for="fecha_caducidad" class="form-label">Fecha de caducidad:</label>
-                    <input type="date" id="fecha_caducidad" name="fecha_caducidad" class="form-control" value="{% if OrdenProduccion.fechacaducidad %}{{ OrdenProduccion.fechacaducidad|date:'Y-m-d' }}{% endif %}" disabled>
-                </div>
-            </div>
-            
-            <div class="row">
-                <div class="col-md-6 mb-3">
-                    <label for="fechainicio_proceso" class="form-label">Fecha inicio proceso:</label>
-                    <input type="date" id="fechainicio_proceso" name="fechainicio_proceso" class="form-control" value="{% if OrdenProduccion %}{{ OrdenProduccion.fechainicioproceso|date:'Y-m-d' }}{% endif %}" disabled>
-                </div>
-                <div class="col-md-6 mb-3">
-                    <label for="fechatermino_proceso" class="form-label">Fecha termino de proceso:</label>
-                    <input type="date" id="fechatermino_proceso" name="fechatermino_proceso" class="form-control" value="{% if OrdenProduccion %}{{ OrdenProduccion.fechaterminoproceso|date:'Y-m-d' }}{% endif %}" disabled>
-                </div>
-            </div>
-
-            <div class="row">
-                <div class="col-md-6 mb-3">
-                    <label for="rendimiento_teorico" class="form-label">Rendimiento teorico:</label>
-                    <input type="number" id="rendimiento_teorico" name="rendimiento_teorico" class="form-control" value="{% if OrdenProduccion %}{{ OrdenProduccion.rendimientoteorico }}{% endif %}" placeholder="Rendimiento teorico" disabled>
-                </div>
-                <div class="col-md-6 mb-3">
-                    <label for="rendimiento_real" class="form-label">Rendimiento real:</label>
-                    <input type="number" id="rendimiento_real" name="rendimiento_real" class="form-control" value="{% if OrdenProduccion %}{{ OrdenProduccion.rendimientoreal }}{% endif %}" placeholder="Rendimiento real" disabled>
-                </div>
-            </div>
+    <div class="d-flex justify-content-between mb-3">
+        <div>
+            {% comment %} <a href="{% url 'orden_produccion2' %}" class="btn btn-outline-primary">Siguiente</a> {% endcomment %}
+            <a href="{% url 'export_control_aseguramiento_pdf' %}?search_noorden={{ OrdenProduccion.noordenproduccion }}" class="btn btn-primary">
+                Descargar PDF Control de Aseguramiento
+            </a>
+            {% if OrdenProduccion %}
+                <a href="{% url 'export_control_aseguramiento_pdf2' OrdenProduccion.id %}" class="btn btn-outline-primary">Descargar PDF</a>
+            {% endif %}
 
         </div>
     </div>
-</form>
+
+    <form method="get" action="{% url 'ordenproduccion_search' %}">
+        {% comment %} <form method="get" action="{% url 'ordenproduccion_search' %}" class="container"> {% endcomment %}
+
+        <div class="row mb-3">
+            <div class="col-md-8">
+                <input type="text" id="search_noorden" name="search_noorden" class="form-control" placeholder="Buscar por No. Orden de Producción">
+            </div>
+            <div class="col-md-4">
+                <button type="submit" class="btn btn-primary">Buscar</button>
+            </div>
+        </div>
+
+        {% csrf_token %}
+        <input type="hidden" id="ordenId" value="{{ OrdenProduccion.noordenproduccion }}">
+
+
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5 class="mb-0">Información de la Orden de Producción</h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label for="producto" class="form-label">Producto:</label>
+                        <input type="text" id="producto" name="producto" class="form-control" value="{% if OrdenProduccion %}{{ OrdenProduccion.producto }}{% endif %}" disabled>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="clavesku_maquila" class="form-label">CLAVE/SKU Maquila:</label>
+                        <input type="text" id="clavesku_maquila" name="clavesku_maquila" class="form-control" value="{% if OrdenProduccion %}{{ OrdenProduccion.claveskumaquila }}{% endif %}" disabled>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label for="presentacion" class="form-label">Presentación:</label>
+                        <input type="text" id="presentacion" name="presentacion" class="form-control" value="{% if OrdenProduccion %}{{ OrdenProduccion.presentacion }}{% endif %}" disabled>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="noorden_produccion" class="form-label">No. Orden de Producción:</label>
+                        <input type="text" id="noorden_produccion" name="noorden_produccion" class="form-control" value="{% if OrdenProduccion %}{{ OrdenProduccion.noordenproduccion }}{% endif %}" disabled>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label for="numero_lote" class="form-label">Número de lote:</label>
+                        <input type="text" id="numero_lote" name="numero_lote" class="form-control" value="{% if OrdenProduccion %}{{ OrdenProduccion.numerolote }}{% endif %}" placeholder="Número de Lote" disabled>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="fecha_caducidad" class="form-label">Fecha de caducidad:</label>
+                        <input type="date" id="fecha_caducidad" name="fecha_caducidad" class="form-control" value="{% if OrdenProduccion.fechacaducidad %}{{ OrdenProduccion.fechacaducidad|date:'Y-m-d' }}{% endif %}" disabled>
+                    </div>
+                </div>
+                
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label for="fechainicio_proceso" class="form-label">Fecha inicio proceso:</label>
+                        <input type="date" id="fechainicio_proceso" name="fechainicio_proceso" class="form-control" value="{% if OrdenProduccion %}{{ OrdenProduccion.fechainicioproceso|date:'Y-m-d' }}{% endif %}" disabled>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="fechatermino_proceso" class="form-label">Fecha termino de proceso:</label>
+                        <input type="date" id="fechatermino_proceso" name="fechatermino_proceso" class="form-control" value="{% if OrdenProduccion %}{{ OrdenProduccion.fechaterminoproceso|date:'Y-m-d' }}{% endif %}" disabled>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label for="rendimiento_teorico" class="form-label">Rendimiento teorico:</label>
+                        <input type="number" id="rendimiento_teorico" name="rendimiento_teorico" class="form-control" value="{% if OrdenProduccion %}{{ OrdenProduccion.rendimientoteorico }}{% endif %}" placeholder="Rendimiento teorico" disabled>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="rendimiento_real" class="form-label">Rendimiento real:</label>
+                        <input type="number" id="rendimiento_real" name="rendimiento_real" class="form-control" value="{% if OrdenProduccion %}{{ OrdenProduccion.rendimientoreal }}{% endif %}" placeholder="Rendimiento real" disabled>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
 
     <div class="container mt-5">
         <h2>Tabla de Muestras y Pesos</h2>

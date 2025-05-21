@@ -27,9 +27,18 @@
 <div class="d-flex justify-content-between mb-3">
     
     <div>
-        <a href="{% url 'orden_produccion2' %}" class="btn btn-outline-primary">Siguiente</a>
-        <a href="{% url 'export_control_aseguramiento_pdf' %}" class="btn btn-outline-primary">Descargar Control de Aseguramiento</a>
-        <a href="{% url 'export_control_aseguramiento_pdf2' %}" class="btn btn-outline-primary">Descargar Grafica</a>
+        {% comment %} <a href="{% url 'orden_produccion2' %}" class="btn btn-outline-primary">Siguiente</a> {% endcomment %}
+        {% comment %} <a href="{% url 'export_control_aseguramiento_pdf' %}" class="btn btn-outline-primary">Descargar Control de Aseguramiento</a> {% endcomment %}
+        <a href="{% url 'export_control_aseguramiento_pdf' %}?search_noorden={{ OrdenProduccion.noordenproduccion }}" class="btn btn-primary">
+            Descargar PDF Control de Aseguramiento
+        </a>
+        {% comment %} <a href="{% url 'export_control_aseguramiento_pdf2' %}" class="btn btn-outline-primary">Descargar Grafica</a> {% endcomment %}
+        {% comment %} <a href="{% url 'export_control_pdf2' orden_produccion.id %}" class="btn btn-outline-primary">Descargar PDF</a> {% endcomment %}
+        {% if OrdenProduccion %}
+            <a href="{% url 'export_control_aseguramiento_pdf2' OrdenProduccion.id %}" class="btn btn-outline-primary">Descargar PDF</a>
+        {% endif %}
+
+
 
     </div>
 </div>
@@ -288,13 +297,11 @@
             }
         </script>
 
-        
-        
-        
-<a href="#" id="descargarGrafica" class="btn btn-outline-primary">Descargar Gráfica</a>
+        <a href="#" id="descargarGrafica" class="btn btn-outline-primary">Descargar Gráfica</a>
 
-<a href="#" id="descargarTabla" class="btn btn-outline-primary">Descargar Tabla</a>
+        <a href="#" id="descargarTabla" class="btn btn-outline-primary">Descargar Tabla</a>
     </div>
+
 <script>
     document.getElementById('descargarGrafica').addEventListener('click', function() {
         const canvas = document.getElementById('graficaPromedios');

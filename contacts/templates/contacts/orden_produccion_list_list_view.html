@@ -126,9 +126,9 @@
         <input type="text" name="q" class="form-control" placeholder="Buscar por producto, clave/sku maquila, orden de producción o número de lote" value="{{ request.GET.q }}">
         <button type="submit" class="btn btn-primary ms-2">Buscar</button>
     </form>
-    <a href="{% url 'ordenproduccionview' %}" class="btn btn-outline-primary">
+    {% comment %} <a href="{% url 'ordenproduccionview' %}" class="btn btn-outline-primary">
         Crear Orden de Producción
-    </a>
+    </a> {% endcomment %}
     
     <div class="table-responsive mt-4">
         <table class="table table-hover">

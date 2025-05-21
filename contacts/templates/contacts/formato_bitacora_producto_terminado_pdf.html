@@ -100,7 +100,6 @@
         <tbody>
             {% for item in FormatoBitacoraProductoTerminadox %}
             <tr>
-                {% comment %} <td>{{ item.fechaentrada|date:'d/m/Y'}}</td> {% endcomment %}
                 <td>{{ item.fechaentrada|date:'d M Y'|upper}}</td>
                 <td>{{ item.producto }}</td>
                 <td>{{ item.lote }}</td>
@@ -109,7 +108,6 @@
                 <td>{{ item.contenedores }}</td>
                 <td>{{ item.cliente }}</td>
                 <td>{{ item.noanalisis }}</td>
-                {% comment %} <td>{{ item.fechacaducidad|date:'d/m/Y' }}</td> {% endcomment %}
                 <td>{{ item.fechacaducidad|date:'d M Y'|upper }}</td>
                 <td>{{ item.recibe }}</td>
                 <td>{{ item.observaciones }}</td>

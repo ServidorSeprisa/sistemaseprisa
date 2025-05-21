@@ -121,86 +121,165 @@
         <p>3.1 Aseguramiento de la calidad, tomará una muestra de 10 capsulas cada ______ min.</p>
         <p>Pesar y registrar los datos en la siguiente tabla, obtener el peso promedio de cada muestreo. Peso promedio: _______________±__________%% </p>
         
-        <table class="orden">
+        {% comment %} <table>
+            <tr>
+              /* <th>Fila</th> */
+              <th>Muestra</th>
+              {% for i in columnas_tabla %}
+              */ <th>Col {{ i }}</th> */
+              <th>Muestra {{ i }}</th>
+              {% endfor %}
+            </tr>
+            {% for row in tabla1_muestras %}
+            <tr>
+              <td>{{ row.fila }}</td>
+              {% for val in row.valores %}
+              <td>{{ val }}</td>
+              {% endfor %}
+            </tr>
+            {% endfor %}
+        </table> {% endcomment %}
+        {% comment %} <table class="tabla">
             <thead>
-                <tr>
-                    <th colspan="2">Muestra</th>
-                    <th>Muestra 1</th>
-                    <th>Muestra 2</th>
-                    <th>Muestra 3</th>
-                    <th>Muestra 4</th>
-                    <th>Muestra 5</th>
-                    <th>Muestra 6</th>
-                    <th>Muestra 7</th>
-                    <th>Muestra 8</th>
-                    <th>Muestra 9</th>
-                    <th>Muestra 10</th>
-                    <th>Muestra 11</th>
-                    <th>Muestra 12</th>
-                    <th>Muestra 13</th>
+                <tr class="orden">
+                    <th>Muestra</th>
+                    {% for i in columnas_tabla %}
+                    <th>Muestra {{ i }}</th>
+                    {% endfor %}
                 </tr>
             </thead>
             <tbody>
-                <tr><td colspan="2">Fecha</td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
-                <tr><td colspan="2">Hora</td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
-                <tr><td rowspan="10">Peso cápsula (g)</td>
-                    <td>1</td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td>
-                </tr>
+                {% for row in tabla1_muestras %}
                 <tr>
-                    <td>2</td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td>
+                    <td>{{ row.fila }}</td>
+                    {% for val in row.valores %}
+                    <td>{{ val }}</td>
+                    {% endfor %}
                 </tr>
-                <tr><td>3</td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
-                <tr><td>4</td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
-                <tr><td>5</td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
-                <tr><td>6</td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
-                <tr><td>7</td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
-                <tr><td>8</td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
-                <tr><td>9</td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
-                <tr><td>10</td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
-                <tr><td colspan="2">Promedio</td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
-                
+                {% endfor %}
+            </tbody>
+        </table> {% endcomment %}
+        {% comment %} <table class="tabla">
             <thead>
-                <tr>
-                    <th colspan="2">Muestra</th>
-                    {% comment %} <th>     </th> {% endcomment %}
-                    <th>Muestra 1</th>
-                    <th>Muestra 2</th>
-                    <th>Muestra 3</th>
-                    <th>Muestra 4</th>
-                    <th>Muestra 5</th>
-                    <th>Muestra 6</th>
-                    <th>Muestra 7</th>
-                    <th>Muestra 8</th>
-                    <th>Muestra 9</th>
-                    <th>Muestra 10</th>
-                    <th>Muestra 11</th>
-                    <th>Muestra 12</th>
-                    <th>Muestra 13</th>
+                <tr class="encabezado">
+                    <th>Fecha</th>
+                    <th>Hora</th>
+                    <th>Peso cápsula (g)</th>
+                    {% for i in columnas_tabla %}
+                    <th>Muestra {{ i }}</th>
+                    {% endfor %}
                 </tr>
-            
             </thead>
             <tbody>
-                <tr><td colspan="2">Fecha</td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
-                <tr><td colspan="2">Hora</td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
-                <tr><td rowspan="10">Peso cápsula (g)</td>
-                    <td>1</td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td>
+                {% for row in tabla1_muestras %}
+                <tr>
+                    <td>{{ row.fecha }}</td>
+                    <td>{{ row.hora }}</td>
+                    <td>{{ row.peso_capsula }}</td>
+                    {% for val in row.valores %}
+                    <td>{{ val }}</td>
+                    {% endfor %}
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table> {% endcomment %}
+        <table class="tabla">
+            <thead>
+                <tr class="encabezado">
+                    {% comment %} <th>Fecha</th>
+                    <th>Hora</th>
+                    <th>Peso cápsula (g)</th> {% endcomment %}
+                    <th colspan="2">Muestra</th>
+                    {% for i in columnas_tabla %}
+                    <th>Muestra {{ i }}</th>
+                    {% endfor %}
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td colspan="2">Fecha</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
                 </tr>
                 <tr>
-                    <td>2</td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td>
+                    <td colspan="2">Hora</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
                 </tr>
-                <tr><td>3</td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
-                <tr><td>4</td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
-                <tr><td>5</td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
-                <tr><td>6</td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
-                <tr><td>7</td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
-                <tr><td>8</td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
-                <tr><td>9</td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
-                <tr><td>10</td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
-                <tr><td colspan="2">Promedio</td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td><td> </td></tr>
-                
+                <tr>
+                    {% comment %} <td>Peso cápsula (g)</td> {% endcomment %}
+                    <td rowspan="11">Peso cápsula (g)</td>
+                </tr>
+                {% for row in tabla1_muestras %}
+                <tr>
+                    {% comment %} <td>{{ row.fecha }}&nbsp;</td>
+                    <td>{{ row.hora }}&nbsp;</td>
+                    <td>{{ row.peso_capsula }}&nbsp;</td> {% endcomment %}
+                    <td>{{ row.fila }}</td>
+                    {% for val in row.valores %}
+                    <td>{{ val }}</td>
+                    {% endfor %}
+                </tr>
+                {% endfor %}
+            </tbody>
+        {% comment %} </table>
+        <table class="tabla"> {% endcomment %}
+            <thead>
+                <tr class="encabezado">
+                    {% comment %} <th>Fecha</th>
+                    <th>Hora</th>
+                    <th>Peso cápsula (g)</th> {% endcomment %}
+                    <th colspan="2">Muestra</th>
+                    {% for i in columnas_tabla %}
+                    <th>Muestra {{ i }}</th>
+                    {% endfor %}
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td colspan="2">Fecha</td>
+                </tr>
+                <tr>
+                    <td colspan="2">Hora</td>
+                </tr>
+                <tr>
+                    <td rowspan="11">Peso cápsula (g)</td>
+                </tr>
+                {% for row in tabla2_muestras %}
+                <tr>
+                    {% comment %} <td>{{ row.fecha }}&nbsp;</td>
+                    <td>{{ row.hora }}&nbsp;</td>
+                    <td>{{ row.peso_capsula }}&nbsp;</td> {% endcomment %}
+                    <td>{{ row.fila }}</td>
+                    {% for val in row.valores %}
+                    <td>{{ val }}</td>
+                    {% endfor %}
+                </tr>
+                {% endfor %}
             </tbody>
         </table>
-        
         
 
         <h2>© Queda prohibida la reproducción total o parcial de este documento por cualquier medio, así como transportarlo fuera de las instalaciones SEPRISA S.A. DE C.V., sin autorización previa del Director General</h2>

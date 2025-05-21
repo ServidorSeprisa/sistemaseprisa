@@ -94,7 +94,8 @@ class FormatoRecepcionMaterialEmpaque(models.Model):
 from django.db import models
 
 class FormatoRecepcionMateriaPrima(models.Model):
-    fechaentrada = models.DateTimeField(auto_now_add=True)
+    # fechaentrada = models.DateTimeField(auto_now_add=True)
+    fechaentrada = models.DateField(null=True, blank=True)
     materiaprima = models.CharField(max_length=100, verbose_name='Materia Prima')
     loteseprisa = models.CharField(max_length=100, verbose_name="Lotes Seprisa")
     pesobruto = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
