@@ -160,7 +160,8 @@
                     <td>
                         <input type="checkbox" class="select-row" value="{{ FormatoRecepcionMaterialEmpaque.pk }}" />
                     </td>
-                    <td>{{ FormatoRecepcionMaterialEmpaque.fechaentrada|date:'d/m/Y h:i A' }}</td>
+                    {% comment %} <td>{{ FormatoRecepcionMaterialEmpaque.fechaentrada|date:'d/m/Y h:i A' }}</td> {% endcomment %}
+                    <td>{{ FormatoRecepcionMaterialEmpaque.fechaentrada|date:'d M Y'|upper }}</td>
                     <td>{{ FormatoRecepcionMaterialEmpaque.material|default:'-'}}</td>
                     <td>{{ FormatoRecepcionMaterialEmpaque.loteseprisa|default:'-' }}</td>
                     <td>{{ FormatoRecepcionMaterialEmpaque.pesobruto|default:'-' }}</td>
@@ -175,6 +176,7 @@
                     <td>
                         <div class="btn-group btn-group-sm">
                             <a href="{% url 'formatorecepcionmaterialempaque_edit' FormatoRecepcionMaterialEmpaque.pk %}" class ="btn btn-primary">Editar</a>
+                            <a href="{% url 'formatorecepcionmaterialempaque_new' %}?material={{ FormatoRecepcionMaterialEmpaque.material }}&loteseprisa={{ FormatoRecepcionMaterialEmpaque.loteseprisa }}&pesobruto={{ FormatoRecepcionMaterialEmpaque.pesobruto }}&pesoneto={{ FormatoRecepcionMaterialEmpaque.pesoneto }}&nocontenedores={{ FormatoRecepcionMaterialEmpaque.nocontenedores }}&claveproveedor={{ FormatoRecepcionMaterialEmpaque.claveproveedor }}&noanalisis={{ FormatoRecepcionMaterialEmpaque.noanalisis }}&sku={{ FormatoRecepcionMaterialEmpaque.sku }}&noloteproveedor={{ FormatoRecepcionMaterialEmpaque.noloteproveedor }}&recibe={{ FormatoRecepcionMaterialEmpaque.recibe }}" class="btn btn-success">Duplicar</a>
                             <a href="{% url 'formatorecepcionmaterialempaque_delete' FormatoRecepcionMaterialEmpaque.pk %}" class ="btn btn-danger">Eliminar</a>
                         </div>
                     </td>

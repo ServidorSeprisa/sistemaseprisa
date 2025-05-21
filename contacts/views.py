@@ -353,13 +353,30 @@ class FormatoRecepcionMaterialEmpaqueListView(ListView):
             )
         return queryset
 
+# class FormatoRecepcionMaterialEmpaqueCreateView(generic.CreateView):
+#     model = FormatoRecepcionMaterialEmpaque
+#     fields = ('material','loteseprisa','pesobruto','pesoneto','nocontenedores','claveproveedor','noanalisis','sku','noloteproveedor','recibe',)
+
+#     success_url = reverse_lazy('formatorecepcionmaterialempaque_list')
+#     template_name='contacts/formato_recepcion_material_empaque_form.html'
+
 class FormatoRecepcionMaterialEmpaqueCreateView(generic.CreateView):
     model = FormatoRecepcionMaterialEmpaque
-    fields = ('material','loteseprisa','pesobruto','pesoneto','nocontenedores','claveproveedor','noanalisis','sku','noloteproveedor','recibe',)
-
+    fields = ('fechaentrada','material', 'loteseprisa', 'pesobruto', 'pesoneto', 'nocontenedores', 'claveproveedor', 'noanalisis', 'sku', 'noloteproveedor', 'recibe')
     success_url = reverse_lazy('formatorecepcionmaterialempaque_list')
-    template_name='contacts/formato_recepcion_material_empaque_form.html'
+    template_name = 'contacts/formato_recepcion_material_empaque_form.html'
 
+    def get_initial(self):
+        initial_data = super().get_initial()
+        for field in self.fields:
+            value = self.request.GET.get(field)
+            if value:
+                initial_data[field] = value
+        return initial_data
+
+    def form_valid(self, form):
+        return super().form_valid(form)
+    
 class FormatoRecepcionMaterialEmpaqueUpdateView(generic.UpdateView):
     model = FormatoRecepcionMaterialEmpaque
     fields = ('material','loteseprisa','pesobruto','pesoneto','nocontenedores','claveproveedor','noanalisis','sku','noloteproveedor','recibe',)

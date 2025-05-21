@@ -76,13 +76,14 @@ class FormatoRecepcionMateriaAlergenos(models.Model):
 
 class FormatoRecepcionMaterialEmpaque(models.Model):
 
-    fechaentrada = models.DateTimeField(auto_now_add=True)
+    # fechaentrada = models.DateTimeField(auto_now_add=True)
+    fechaentrada = models.DateField(null=True, blank=True)
     material = models.CharField(max_length=100, verbose_name='Material')
     loteseprisa = models.CharField(max_length=100, verbose_name="Lotes Seprisa")
     pesobruto = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
     pesoneto = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
     nocontenedores = models.IntegerField(null=True, blank=True)
-    claveproveedor = models.CharField(max_length=10, null=True, blank=True)
+    claveproveedor = models.CharField(max_length=50, null=True, blank=True)
     noanalisis = models.CharField(max_length=10, null=True, blank=True)
     sku = models.CharField(max_length=10, null=True, blank=True)
     noloteproveedor = models.CharField(max_length=10, null=True, blank=True)
