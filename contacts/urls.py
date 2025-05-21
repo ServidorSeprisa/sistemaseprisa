@@ -195,8 +195,5 @@ urlpatterns = [
     path('notificacion/leida/<int:notificacion_id>/', views.marcar_notificacion_leida, name='marcar_notificacion_leida'), #si
     path('notificacion/redirigir/<int:notificacion_id>/', views.redirigir_a_orden, name='redirigir_a_orden'), #si
 
-    path('descargar_control/', views.descargar_control, name='descargar_control'),
-    path('descargar_control/', views.descargar_control, name='descargar_control'),
-    path('descargar-control/', views.descargar_control, name='descargar_control_alt'), 
 
 ]
